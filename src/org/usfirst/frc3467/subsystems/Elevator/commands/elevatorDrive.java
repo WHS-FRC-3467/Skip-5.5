@@ -3,20 +3,23 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *
  */
 public class elevatorDrive extends CommandBase {
 
-	boolean isFixedSpeed = false;
+	double fixedSpeed = 0;
 	
     public elevatorDrive() {
     	requires(elevator);
+    	fixedSpeed = 0;
     }
 
-    public elevatorDrive(boolean isFixed) {
+    public elevatorDrive(double fSpeed) {
     	requires(elevator);
-    	isFixedSpeed = isFixed;
+    	fixedSpeed = fSpeed;
     }
 
     // Called just before this Command runs the first time
@@ -26,17 +29,16 @@ public class elevatorDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (isFixedSpeed)
-    	{
-    		if (oi.getGamepad().getDpadUp())
-    			elevator.driveManual(Elevator.UP_FIXED);
-    		else if (oi.getGamepad().getDpadDown())
-    			elevator.driveManual(Elevator.DOWN_FIXED);
-    		else
-    			elevator.driveManual(Elevator.STOP);
-    	}
+    	double speed = 0;
+    	
+    	if (fixedSpeed == 0)
+			speed = -(oi.getGamepad().getLeftStickY());
     	else
-    		elevator.driveManual(-(oi.getGamepad().getLeftStickY()));
+			speed = fixedSpeed;
+
+    	SmartDashboard.putNumber("Elevator Drive Stick", speed);
+    	elevator.driveManual(speed);
+ 
     }
 
     // Make this return true when this Command no longer needs to run execute()

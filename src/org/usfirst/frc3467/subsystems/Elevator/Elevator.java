@@ -6,13 +6,14 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem {
 
 	private CANTalon winchMotor1;
 	private CANTalon winchMotor2;
 	
-	private static double topPosition = 0;
+	private static double topPosition = 5510;
 	
 	private static final boolean debugging = true;
 	
@@ -39,11 +40,12 @@ public class Elevator extends Subsystem {
 		
 	    winchMotor1.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 	    winchMotor1.setSafetyEnabled(true);
-	    winchMotor1.setExpiration(0.1);
-	    winchMotor1.setPID(Kp, Ki, Kd);
+	    winchMotor1.setExpiration(1.0);
+	    //winchMotor1.setPID(Kp, Ki, Kd);
 		
 		winchMotor2.changeControlMode(ControlMode.Follower);
 		winchMotor2.set(RobotMap.winchDriveCANTalon);
+		
 		
 	}
 	
@@ -53,20 +55,28 @@ public class Elevator extends Subsystem {
 	
 	public void zeroEncoder() {
 		winchMotor1.setPosition(0);
+		if (debugging)
+			SmartDashboard.putNumber("Elevator Position", winchMotor1.getPosition());
 	}
 	
 	public void initManualMode() {
 		winchMotor1.changeControlMode(ControlMode.PercentVbus);
-		
+		if (debugging)
+			SmartDashboard.putString("Elevator Mode", "Manual");
 	}
 	
 	public void driveManual(double speed) {
+		if (debugging)
+			SmartDashboard.putNumber("Elevator Speed Requested", speed);
+		
 		winchMotor1.set(speed);
 	
 	}
 	
 	public void initPositionalMode() {
 		winchMotor1.changeControlMode(ControlMode.Position);
+		if (debugging)
+			SmartDashboard.putString("Elevator Mode", "Positional");
 		
 	}
 	

@@ -2,6 +2,7 @@ package org.usfirst.frc3467;
 
 import org.usfirst.frc3467.triggers.DoubleButton;
 import org.usfirst.frc3467.control.Gamepad;
+import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCalibrate;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorPosition;
@@ -35,20 +36,23 @@ public class OI {
 		// Elevator Commands
 		new DoubleButton(operatorGamepad, 11, 12).whenActive(new elevatorCalibrate());
 
-		new JoystickButton(operatorGamepad, Gamepad.dPadY)
-					.whileHeld(new elevatorDrive(true));
+		new JoystickButton(operatorGamepad, Gamepad.leftBumper)
+					.whileHeld(new elevatorDrive(Elevator.UP_FIXED));
 		
+		new JoystickButton(operatorGamepad, Gamepad.rightBumper)
+			.whileHeld(new elevatorDrive(Elevator.DOWN_FIXED));
+
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
-			.whenPressed(new elevatorPosition(10));
+			.whenPressed(new elevatorPosition(1000));
 		
 		new JoystickButton(operatorGamepad, Gamepad.aButton)
-			.whenPressed(new elevatorPosition(20));
+			.whenPressed(new elevatorPosition(2000));
 	
 		new JoystickButton(operatorGamepad, Gamepad.bButton)
-			.whenPressed(new elevatorPosition(30));
+			.whenPressed(new elevatorPosition(3000));
 	
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
-			.whenPressed(new elevatorPosition(40));
+			.whenPressed(new elevatorPosition(4000));
 	
 		// Conveyor
 		

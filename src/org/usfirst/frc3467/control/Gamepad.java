@@ -13,12 +13,13 @@ public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 	public static int startButton = 10;
 	public static int leftStickPress = 11;
 	public static int rightStickPress = 12;
-	public static int leftStick_xAxis = 1;
-	public static int leftStick_yAxis = 2;
-	public static int rightStick_xAxis = 3;
-	public static int rightStick_yAxis = 4;
-	public static int dPadX = 5;
-	public static int dPadY = 6;
+	
+	public static int leftStick_xAxis = 0;
+	public static int leftStick_yAxis = 1;
+	public static int rightStick_xAxis = 2;
+	public static int rightStick_yAxis = 3;
+	public static int dPadX = 4;
+	public static int dPadY = 5;
 	
 	public Gamepad(int port) {
 		super(port);

@@ -30,23 +30,23 @@ public abstract class CommandBase extends Command {
 		subsystemList = new Vector<Subsystem>();
 
 		// Add new subsystems to the list		
-		drivebase = new DriveBase();
-		subsystemList.addElement(drivebase);
+//		drivebase = new DriveBase();
+//		subsystemList.addElement(drivebase);
 		
 		elevator = new Elevator();
 		subsystemList.addElement(elevator);
 		
-		indexer = new Indexer();
-		subsystemList.addElement(indexer);
+//		indexer = new Indexer();
+//		subsystemList.addElement(indexer);
 		
-		conveyor = new Conveyor();
-		subsystemList.addElement(conveyor);
+//		conveyor = new Conveyor();
+//		subsystemList.addElement(conveyor);
 		
-		leds = new LEDs();
-		subsystemList.addElement(leds);
+//		leds = new LEDs();
+//		subsystemList.addElement(leds);
 		
-		imu = new MXP_IMU();
-		subsystemList.addElement(imu);
+//		imu = new MXP_IMU();
+//		subsystemList.addElement(imu);
 		
 		oi = new OI();
 		oi.BindCommands();

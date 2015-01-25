@@ -8,13 +8,13 @@ package org.usfirst.frc3467;
 public class RobotMap {
 	
 	// CAN IDs
-	public static final int compressorCANId = 2;
-	public static final int driveTrainCANTalonFL = 2;
-	public static final int driveTrainCANTalonRL = 3;
-	public static final int driveTrainCANTalonFR = 4;
-	public static final int driveTrainCANTalonRR = 5;
-	public static final int winchDriveCANTalon = 6;
-	public static final int winchSlaveCANTalon = 7;
+
+	public static final int driveTrainCANTalonFL = 1;
+	public static final int driveTrainCANTalonRL = 2;
+	public static final int driveTrainCANTalonFR = 3;
+	public static final int driveTrainCANTalonRR = 4;
+	public static final int winchDriveCANTalon = 5;
+	public static final int winchSlaveCANTalon = 6;
 	
 	
 	// PWM Out

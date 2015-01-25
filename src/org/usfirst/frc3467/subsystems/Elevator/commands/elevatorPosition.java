@@ -2,6 +2,7 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -19,7 +20,7 @@ public class elevatorPosition extends CommandBase {
     // Called just before this Command runs the first time
     protected void initialize() {
     	elevator.initPositionalMode();
-//		setTimeout(2);
+		setTimeout(2);
 
     }
 
@@ -30,7 +31,9 @@ public class elevatorPosition extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return (Math.abs(position - elevator.getPosition()) <= TOLERANCE) || isTimedOut();
+    	double currPos = elevator.getPosition();
+    	SmartDashboard.putNumber("Elevator Position", currPos);
+    	return (Math.abs(position - currPos) <= TOLERANCE) || isTimedOut();
     }
 
     // Called once after isFinished returns true
