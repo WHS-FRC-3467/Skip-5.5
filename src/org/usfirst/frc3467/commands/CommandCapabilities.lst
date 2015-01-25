@@ -1,0 +1,22 @@
+Auto Mode Capabilities
+    connect 3 yellow totes and stack them in the auto zone
+    Move at least 2 cans from the step and put them on totes
+    Move at least 2 cans from the step to the auto zone and place them on the floor
+    collect 2 totes and move them to the auto zone
+
+Teleop Mode Capabilities
+    Internally build 6 high stacks with a can on top
+    Internally build 6 high stack with a can on top from the feeder station
+    Place stacks on the step
+    Place stacks on islands
+    Place cans on 6 high stacks
+    Pick up free standing cans
+    Pick up free standing totes
+    Pick up totes from the step
+    Pick up cans from the step
+    Pick up cans from the top of a stack
+    Pick up cans on the step and place them on a tote without disturbing the totes next to the step
+    Pick up 3 high stacks from the floor
+    Add to stacks on the island
+    Add to stacks on the step
+    Right cans that are on their sides
