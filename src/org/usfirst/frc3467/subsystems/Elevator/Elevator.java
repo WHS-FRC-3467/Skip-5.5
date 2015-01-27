@@ -17,9 +17,9 @@ public class Elevator extends Subsystem {
 	
 	private static final boolean debugging = true;
 	
-	private static double Kp = 0.00;
-	private static double Ki = 0.00;
-	private static double Kd = 0.00;
+	private static double Kp = 0.6;
+	private static double Ki = 0.003;
+	private static double Kd = 0.06;
 	
 	private static Elevator instance;
 

@@ -20,7 +20,7 @@ public class elevatorPosition extends CommandBase {
     // Called just before this Command runs the first time
     protected void initialize() {
     	elevator.initPositionalMode();
-		setTimeout(2);
+//		setTimeout(2);
 
     }
 

@@ -18,8 +18,8 @@ public class OI {
 	public static Gamepad operatorGamepad;
 	
 	public OI() {
-		driveJoystick = new Joystick(1);
-		operatorGamepad = new Gamepad(2);
+		driveJoystick = new Joystick(0);
+		operatorGamepad = new Gamepad(1);
 		
 	}
 
