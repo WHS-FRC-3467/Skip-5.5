@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
 	
+	//inputs
 	public static Joystick driveJoystick;
 	public static Gamepad operatorGamepad;
 	
