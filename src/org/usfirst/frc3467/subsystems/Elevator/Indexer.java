@@ -2,6 +2,7 @@ package org.usfirst.frc3467.subsystems.Elevator;
 
 import org.usfirst.frc3467.RobotMap;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -10,6 +11,7 @@ public class Indexer extends Subsystem {
 	private DoubleSolenoid sIndexer;
 	private Boolean engaged;
 	private static Indexer instance;
+	private Compressor mainCompressor;
 	
 	public static Indexer getInstance() {
 		return instance;
@@ -21,6 +23,7 @@ public class Indexer extends Subsystem {
 		sIndexer = new DoubleSolenoid(RobotMap.indexerEngage, RobotMap.indexerDisengage);
 		sIndexer.set(DoubleSolenoid.Value.kForward);
 		engaged = true;
+		mainCompressor = new Compressor(0);
 	}
 	
 	public void disengageIndexer() {

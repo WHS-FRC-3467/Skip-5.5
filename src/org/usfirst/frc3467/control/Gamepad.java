@@ -18,8 +18,6 @@ public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 	public static int leftStick_yAxis = 1;
 	public static int rightStick_xAxis = 2;
 	public static int rightStick_yAxis = 3;
-	public static int dPadX = 4;
-	public static int dPadY = 5;
 	
 	public Gamepad(int port) {
 		super(port);
@@ -89,30 +87,21 @@ public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 		return getRawButton(backButton);
 	}
 	
-	public boolean getDpadLeft() {
-		return isDown(dPadX, true);
+	public boolean getDpadUp() {
+		return(getPOV(0) == 0 ? true : false);
 	}
 	
 	public boolean getDpadRight() {
-		return isDown(dPadX, false);
-	}
-	
-	public boolean getDpadUp() {
-		return isDown(dPadY, true);
+		return(getPOV(2) == 90 ? true : false);
 	}
 	
 	public boolean getDpadDown() {
-		return isDown(dPadY, false);
+		return(getPOV(4) == 180 ? true : false);
+	}
+
+	public boolean getDpadLeft() {
+		return(getPOV(6) == -1 ? false : true);
 	}
 	
-	private boolean isDown(int pad, boolean isNeg) {
-		double axis = getRawAxis(pad);
-		if (isNeg && axis < -0.5)
-			return true;
-		if (!isNeg && axis > 0.5)
-			return true;
-		else
-			return false;
-	}
 	
 }

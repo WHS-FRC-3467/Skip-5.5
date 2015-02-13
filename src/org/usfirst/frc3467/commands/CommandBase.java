@@ -36,8 +36,8 @@ public abstract class CommandBase extends Command {
 		elevator = new Elevator();
 		subsystemList.addElement(elevator);
 		
-//		indexer = new Indexer();
-//		subsystemList.addElement(indexer);
+		indexer = new Indexer();
+		subsystemList.addElement(indexer);
 		
 //		conveyor = new Conveyor();
 //		subsystemList.addElement(conveyor);

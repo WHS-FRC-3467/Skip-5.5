@@ -2,19 +2,16 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  *
  */
-public class elevatorPosition extends CommandBase {
+public class elevatorToLevel extends CommandBase {
 
-	double	position;
-	private final double TOLERANCE = 5;
+	int	m_level;
 	
-    public elevatorPosition(double pos) {
+    public elevatorToLevel(int level) {
     	requires(elevator);
-    	position = pos;
+    	m_level = level;
     }
 
     // Called just before this Command runs the first time
@@ -26,14 +23,14 @@ public class elevatorPosition extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	elevator.gotoPosition(position);
+    	elevator.gotoLevel(m_level);
     }
 
     // Make this return true when this Command no longer needs to run execute()
+    // When this command is finished, the default command (elevatorDrive) will take
+    // over and switch the CANTalon to PercentVBus mode.
     protected boolean isFinished() {
-    	double currPos = elevator.getPosition();
-    	SmartDashboard.putNumber("Elevator Position", currPos);
-    	return (Math.abs(position - currPos) <= TOLERANCE) || isTimedOut();
+    	return (elevator.onTarget() || isTimedOut());
     }
 
     // Called once after isFinished returns true
