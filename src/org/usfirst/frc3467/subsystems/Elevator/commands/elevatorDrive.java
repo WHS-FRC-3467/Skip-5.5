@@ -36,19 +36,21 @@ public class elevatorDrive extends CommandBase {
     	else
 			speed = fixedSpeed;
 
-    	SmartDashboard.putNumber("Elevator Drive Stick", speed);
     	elevator.driveManual(speed);
  
     }
 
-    // Make this return true when this Command no longer needs to run execute()
+    // This method will never return true; this command must always be interrupted.
+    // However, since it will be called regularly, use the opportunity to update SDB.
     protected boolean isFinished() {
+    	double currPos = elevator.getPosition();
+    	SmartDashboard.putNumber("Elevator Position", currPos);
         return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	elevator.driveManual(Elevator.STOP);
+    	elevator.driveManual(Elevator.kStop);
     }
 
     // Called when another command which requires one or more of the same
