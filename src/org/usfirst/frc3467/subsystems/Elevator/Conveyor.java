@@ -4,6 +4,7 @@ import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorSetState;
 
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Conveyor extends Subsystem {
@@ -21,7 +22,8 @@ public class Conveyor extends Subsystem {
 	};
 
 	private static Conveyor instance;
-	private Talon conveyorMotor;
+	public VictorSP conveyorMotor;
+	public static VictorSP flippyThingMotor;
 
 	public static Conveyor getInstance() {
 		return instance;
@@ -29,7 +31,8 @@ public class Conveyor extends Subsystem {
 	
 	public Conveyor() {
 		instance = this;
-		conveyorMotor = new Talon(RobotMap.conveyorTalon);
+		conveyorMotor = new VictorSP(RobotMap.conveyorVSP);
+		flippyThingMotor = new VictorSP(RobotMap.flippyThingMotor);
 	}
 	
 	protected void initDefaultCommand() {
