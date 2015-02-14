@@ -10,8 +10,16 @@ Conveyor
     The roller platform that intakes and discharges totes & cans
     One Talon control w / current sensing to determine load/unload completion
     
-Pawls
+Indexer
     The arms that lock onto the bottom-most tote or a can and hold it up so more totes can be
     brought in below.
     Pneumatic control (engage / disengage)
     (Note: stack will need to be lifted before engage / disengage action & then lowered again)
+    
+LIDAR
+
+LEDs
+
+MXP_IMU
+
+

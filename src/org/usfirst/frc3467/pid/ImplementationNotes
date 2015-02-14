@@ -13,6 +13,10 @@ Manages PIDF constants:
     Constructor & updateDisplay calls should be contingent on debugging flag
     
 ------------------------------    
+    PID Tuning:
+    https://www.youtube.com/watch?v=UOuRx9Ujsog&index=2&list=PL8BLGj0RyhMzNXX9gHBosWPRbqqn0gJUQ
+------------------------------    
+    
     
     driveMecanum command -
     set up CANTalons for Speed PID and manage each with a PIDFManage object
@@ -33,13 +37,16 @@ Manages PIDF constants:
     PowerMonitor subsystem - wrapper around PowerDistributionModule
     Method to get current reading on given channel
     Debug mode & default command to update SDB
+    State: current condition defined by battery voltage (green, yellow, orange, red?)
+    "Cooperative Subsystem" registration method
+    "Cooperating Subsystem" notification when current condition changes
     
 -------------------------------
 
     IMU subsystem - wrapper around navX IMU board    
     Method to get current reading on given channel
     Command to run calibration
-    Debug mode & default command to update SDB
+    Debug mode & default command to periodically update SDB
 
 -------------------------------
 

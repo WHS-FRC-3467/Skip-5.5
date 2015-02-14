@@ -1,7 +1,7 @@
 package org.usfirst.frc3467.subsystems.DriveBase;
 
 import org.usfirst.frc3467.RobotMap;
-//import org.usfirst.frc3467.pid.PIDFManager;
+//import org.usfirst.frc3467.pid.PIDF_CANTalon;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveMecanum;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -39,7 +39,7 @@ public class DriveBase extends Subsystem {
 	    drive = new RobotDrive(CANTalonFL, CANTalonRL, CANTalonFR, CANTalonRR);
 	    
 		drive.setSafetyEnabled(true);
-        drive.setExpiration(0.1);
+        drive.setExpiration(1.0);
         drive.setSensitivity(0.5);
         drive.setMaxOutput(1.0);
 		drive.setInvertedMotor(MotorType.kFrontLeft, false);
@@ -98,7 +98,7 @@ public class DriveBase extends Subsystem {
         // Determine maximum velocity of our wheels
 	    drive.setMaxOutput(20.0);
 
-        // TODO: Set PIDs using PIDFManager...
+        // TODO: Set PIDs using PIDF_CANTalon...
 	    // CANTalonFL.setPID(0.0, 0.0, 0.0, 0.0, 0, 0, 0);
 		
 	}
