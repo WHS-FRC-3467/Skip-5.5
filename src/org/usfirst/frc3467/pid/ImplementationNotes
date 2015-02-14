@@ -1,17 +1,4 @@
-class PIDFManager
-constructor takes: Subsystemname, (PIDController  or CANTalon)
-Manages PIDF constants:
-    Display on SDB
-    
-    updateDisplay: Refresh SDB display only
-    updatePIDF: Take values from SDB and write to prefs
-    initPIDF: Read values from Prefs and update controller
-            If Prefs is empty, default to 0's to start
-            
-    Put button on SDB to do updatePIDF
-    
-    Constructor & updateDisplay calls should be contingent on debugging flag
-    
+
 ------------------------------    
     PID Tuning:
     https://www.youtube.com/watch?v=UOuRx9Ujsog&index=2&list=PL8BLGj0RyhMzNXX9gHBosWPRbqqn0gJUQ
@@ -31,6 +18,12 @@ Manages PIDF constants:
     The velocity units of a Quadrature Encoder is the change in Encoder Position per TvelMea
     (TvelMeas=0.1sec). For example, if a US Digital Encoder (CPR=360) spins at 20 rotations per
     second, this will result in a velocity of 2880 (28800 position units per second).
+    
+    Grayhill Encoders: 256 counts/rotation  
+    Wheel Diam = 6 in, Circum = 6 x 3.14159 = 18.85 in = 1.57 ft
+    Max Velocity = 12 ft/sec   Rotations/sec = 12 / 1.57 = 7.64
+    Max EncCounts/sec = 7.64 * (256 * 4) = 7823 
+    Encoder velocity = counts per 0.1 sec = 7823/10 = 782 ~= 780
     
 ------------------------------
 
@@ -83,7 +76,7 @@ Manages PIDF constants:
     
     Zero encoder using simultaneous press of buttons 11 & 12. 
     
-    When a ceratin button is pressed, go into positional PID and run until target is set.
+    When a certain button is pressed, go into positional PID and run until target is set.
     Select 4 targets and assign to buttons 1 -> 4.
     
                

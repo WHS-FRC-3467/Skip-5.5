@@ -39,14 +39,14 @@ public abstract class CommandBase extends Command {
 		indexer = new Indexer();
 		subsystemList.addElement(indexer);
 		
-//		conveyor = new Conveyor();
-//		subsystemList.addElement(conveyor);
+		conveyor = new Conveyor();
+		subsystemList.addElement(conveyor);
 		
 //		leds = new LEDs();
 //		subsystemList.addElement(leds);
 		
-//		imu = new MXP_IMU();
-//		subsystemList.addElement(imu);
+		imu = new MXP_IMU();
+		subsystemList.addElement(imu);
 		
 		oi = new OI();
 		oi.BindCommands();
