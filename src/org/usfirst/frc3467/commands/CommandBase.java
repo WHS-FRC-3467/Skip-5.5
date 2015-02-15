@@ -30,8 +30,8 @@ public abstract class CommandBase extends Command {
 		subsystemList = new Vector<Subsystem>();
 
 		// Add new subsystems to the list		
-//		drivebase = new DriveBase();
-//		subsystemList.addElement(drivebase);
+		drivebase = new DriveBase();
+		subsystemList.addElement(drivebase);
 		
 		elevator = new Elevator();
 		subsystemList.addElement(elevator);
