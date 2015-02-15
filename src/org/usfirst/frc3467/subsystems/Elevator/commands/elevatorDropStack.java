@@ -13,7 +13,7 @@ public class elevatorDropStack extends CommandGroup {
         //      addSequential(new Command2());
         // these will run in order.
     	addSequential(new elevatorToLevel(1800));
-    	addSequential(new indexerOperate(false));
+    	addSequential(new indexerOperate(false), 1); 
     	addSequential(new elevatorToLevel(0));
         // To run multiple commands at the same time,
         // use addParallel()

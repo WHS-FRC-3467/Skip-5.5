@@ -1,7 +1,6 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.commands.CommandBase;
 
 /**
@@ -20,7 +19,7 @@ public class intakeandLick extends CommandGroup {
         // e.g. addParallel(new Command1());
         //      addSequential(new Command2());
         // Command1 and Command2 will run in parallel.
-    	addParallel(new conveyorDrive(0.4));
+    	addParallel(new conveyorDrive(0.25), 3);
     	addSequential(new flippyThingFlip(0.3, -0.3));
         // A command group will require all of the subsystems that each member
         // would require.

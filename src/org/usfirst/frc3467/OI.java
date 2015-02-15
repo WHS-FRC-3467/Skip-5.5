@@ -8,6 +8,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCalibrate;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDropStack;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorLevelsUpDown;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToLevel;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
@@ -71,11 +72,19 @@ public class OI {
 			new elevatorAddTote();
 		}
 		
-		if(operatorGamepad.getDpadDown() == false)
+		if(operatorGamepad.getDpadDown() == true)
 		{
 			new elevatorDropStack();
 		}
 		
+		if(operatorGamepad.getDpadLeft() == true)
+		{
+			new elevatorLevelsUpDown(false);
+		}
+		if(operatorGamepad.getDpadRight() == true)
+		{
+			new elevatorLevelsUpDown(true);
+		}
 		// SmartDashboard Buttons
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		

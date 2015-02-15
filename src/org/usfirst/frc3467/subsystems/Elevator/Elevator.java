@@ -87,17 +87,23 @@ public class Elevator extends Subsystem {
 		
 	    // winch motor 1 is the master device
 		m_winchMotor1.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+
+		// winch motor 2 is the slave device - it will follow winch motor 1
+	    m_winchMotor2.changeControlMode(ControlMode.Follower);
+		m_winchMotor2.set(RobotMap.winchDriveCANTalon);
+
+		// Set parameters for master talon; slave will follow suit
 		m_winchMotor1.setIZone(IZONE);
 		m_winchMotor1.setCloseLoopRampRate(RAMPRATE);
+		m_winchMotor1.setForwardSoftLimit(9000);
+		m_winchMotor1.setReverseSoftLimit(0);
+		m_winchMotor1.enableForwardSoftLimit(true);
+		m_winchMotor1.enableReverseSoftLimit(true);
 
 	    // Turn off motor safety until we get the system tuned
 		m_winchMotor1.setSafetyEnabled(false);
 		//m_winchMotor1.setExpiration(1.0);
 
-		// winch motor 2 is the slave device - it will follow winch motor 1
-	    m_winchMotor2.changeControlMode(ControlMode.Follower);
-		m_winchMotor2.set(RobotMap.winchDriveCANTalon);
-		
 		// Put a wrapper around winch motor 1 for managing the PID
 		m_pidfCAN = new PIDF_CANTalon("Elevator", m_winchMotor1, TOLERANCE, false);
 		m_pidfCAN.setPID(KP, KI, KD);
