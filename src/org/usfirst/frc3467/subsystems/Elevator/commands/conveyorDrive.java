@@ -1,11 +1,15 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
-import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 
 public class conveyorDrive extends CommandBase {
 	
 	private double m_speed;
+	
+	public conveyorDrive(){
+		requires(conveyor);
+		m_speed = 0;
+	}
 	
 	public conveyorDrive(double speed) {
 		requires(conveyor);
@@ -17,8 +21,18 @@ public class conveyorDrive extends CommandBase {
 	}
 	
 	protected void execute() {
-
-		conveyor.conveyorMotor.set(m_speed);
+		double speed = 0;
+    	
+		if (m_speed == 0)
+		{
+			speed = (oi.getGamepad().getLeftStickX());
+		}
+		else
+		{
+			speed = m_speed;		
+		}
+		
+		conveyor.conveyorMotor.set(speed);
 		
 	}
 	

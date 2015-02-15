@@ -8,7 +8,8 @@ Elevator
 	
 Conveyor
     The roller platform that intakes and discharges totes & cans
-    One Talon control w / current sensing to determine load/unload completion
+    One Victor SP control w / current sensing to determine load/unload completion
+    Also includes FlippyThing currently on a VSP.
     
 Indexer
     The arms that lock onto the bottom-most tote or a can and hold it up so more totes can be
