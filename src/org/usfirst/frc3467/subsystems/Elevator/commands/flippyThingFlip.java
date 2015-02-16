@@ -2,8 +2,6 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.commands.CommandBase;
-import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
-
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public class flippyThingFlip extends CommandBase {
@@ -39,17 +37,17 @@ public class flippyThingFlip extends CommandBase {
 		
 		if((timesStalled) == 0)
 		{
-			Conveyor.flippyThingMotor.set(m_speedtoflipIn);
+			conveyor.driveFlippyThing(m_speedtoflipIn);
 		}
 		
 		//When I stall the first time reverse my direction.
 		if(timesStalled == 1)
 		{
-			Conveyor.flippyThingMotor.set(m_speedtoflipOut);
+			conveyor.driveFlippyThing(m_speedtoflipOut);
 		}
 		if(timesStalled > 1)
 		{
-			Conveyor.flippyThingMotor.set(0);
+			conveyor.driveFlippyThing(0);
 		}
 	}
 	
@@ -60,7 +58,7 @@ public class flippyThingFlip extends CommandBase {
 	}
 	
 	protected void end() {
-		Conveyor.flippyThingMotor.set(0);
+		conveyor.driveFlippyThing(0);
 	}
 	
 	protected void interrupted() {
