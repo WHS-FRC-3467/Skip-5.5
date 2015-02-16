@@ -19,6 +19,8 @@ public class DriveMecanum extends CommandBase {
 	
 	protected void execute() {
 
+		double x, y, rotation;
+		
 		// Ken's Drive code
 		/*
 		 public static void driveFieldOrientedMecanum() {
@@ -27,8 +29,15 @@ public class DriveMecanum extends CommandBase {
 		 }
 		 */
 		 
-		drivebase.driveMecanum(OI.driveJoystick.getX(), OI.driveJoystick.getY(),
-				OI.driveJoystick.getZ(), imu.getYaw());
+		x = OI.driveJoystick.getX();
+		y = OI.driveJoystick.getY();
+		rotation = OI.driveJoystick.getZ();
+
+		if (x < 0.08) x = 0;
+		if (y < 0.08) y = 0;
+		if (rotation < 0.08) rotation = 0;
+
+		drivebase.driveMecanum(x, y, rotation / 2.0, imu.getYaw());
 
 	}
 	

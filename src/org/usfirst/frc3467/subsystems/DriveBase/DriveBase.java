@@ -62,11 +62,11 @@ public class DriveBase extends PIDSubsystem {
 		instance = this;
 
 		// Instantiate motor controllers
-		CANTalon CANTalonFL = new CANTalon(RobotMap.driveTrainCANTalonFL);		
-		CANTalon CANTalonRL = new CANTalon(RobotMap.driveTrainCANTalonRL);
-	    CANTalon CANTalonFR = new CANTalon(RobotMap.driveTrainCANTalonFR);
-	    CANTalon CANTalonRR = new CANTalon(RobotMap.driveTrainCANTalonRR);
-	    		
+		CANTalonFL = new CANTalon(RobotMap.driveTrainCANTalonFL);		
+		CANTalonRL = new CANTalon(RobotMap.driveTrainCANTalonRL);
+	    CANTalonFR = new CANTalon(RobotMap.driveTrainCANTalonFR);
+	    CANTalonRR = new CANTalon(RobotMap.driveTrainCANTalonRR);
+		
 	    // Using Grayhill 256 encoders
 	    CANTalonFL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 	    CANTalonRL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);

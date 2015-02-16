@@ -21,8 +21,8 @@ public class Conveyor extends Subsystem {
 	};
 
 	private static Conveyor instance;
-	public VictorSP conveyorMotor;
-	public static VictorSP flippyThingMotor;
+	private VictorSP conveyorMotor;
+	private VictorSP flippyThingMotor;
 
 	public static Conveyor getInstance() {
 		return instance;
@@ -38,7 +38,13 @@ public class Conveyor extends Subsystem {
 		this.setDefaultCommand(new conveyorDrive());
 	}
 	
-
+	public void driveManual(double speed) {
+		conveyorMotor.set(speed);
+	}
+	
+	public void driveFlippyThing(double speed) {
+		flippyThingMotor.set(speed);
+	}
 		
 	
 }

@@ -32,7 +32,7 @@ public class conveyorDrive extends CommandBase {
 			speed = m_speed;		
 		}
 		
-		conveyor.conveyorMotor.set(speed);
+		conveyor.driveManual(speed);
 		
 	}
 	
@@ -42,6 +42,7 @@ public class conveyorDrive extends CommandBase {
 	}
 	
 	protected void end() {
+		conveyor.driveManual(0);
 	}
 	
 	protected void interrupted() {

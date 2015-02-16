@@ -32,7 +32,8 @@ public class RobotMap {
 	public static final int dbGyro = 1; // ////////// Gyro
 	
 	// Digital I/0
-	
+	public static final int elevBottomLimitSwitch = 0;
+
 	// Constants
 	public static final double armMaxSpeed = 0.5;
 	public static double pickUpMaxSpeed = 0.3;

@@ -6,6 +6,7 @@ import org.usfirst.frc3467.pid.PIDF_CANTalon;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,7 +17,7 @@ public class Elevator extends Subsystem {
 	private CANTalon 		m_winchMotor1;
 	private CANTalon 		m_winchMotor2;
 	private PIDF_CANTalon	m_pidfCAN;
-	
+	private DigitalInput 	m_limitSwitch;
 	private double m_topPosition = 0;
 	
 	// Controls display to SmartDashboard
@@ -62,6 +63,10 @@ public class Elevator extends Subsystem {
 	public static final int kAdd4Platform = 300;
 	public static final int kAdd4Step = 700;
 	
+	// Other useful levels
+	public static final int kLevelIndexTote = 1600;
+	public static final int kLevelIndexBin = 1000;
+	
 	// Constants for some useful speeds
 	public static final double kUp_Fixed = 0.2;
 	public static final double kStop = 0;
@@ -82,6 +87,7 @@ public class Elevator extends Subsystem {
 		m_stackingOnPlatform = false;
 		m_stackingOnStep = false;
 		
+		m_limitSwitch = new DigitalInput(RobotMap.elevBottomLimitSwitch);
 		m_winchMotor1 = new CANTalon(RobotMap.winchDriveCANTalon);
 		m_winchMotor2 = new CANTalon(RobotMap.winchSlaveCANTalon);
 		
@@ -91,6 +97,7 @@ public class Elevator extends Subsystem {
 		// winch motor 2 is the slave device - it will follow winch motor 1
 	    m_winchMotor2.changeControlMode(ControlMode.Follower);
 		m_winchMotor2.set(RobotMap.winchDriveCANTalon);
+		m_winchMotor2.reverseOutput(true);
 
 		// Set parameters for master talon; slave will follow suit
 		m_winchMotor1.setIZone(IZONE);
@@ -121,9 +128,17 @@ public class Elevator extends Subsystem {
 	}
 	
 	public void driveManual(double speed) {
+		
+		if((m_limitSwitch.get() == true) && speed < 0)
+		{
+			speed = 0;
+		}
+		
 		m_winchMotor1.set(speed);
-		if (debugging)
+		if (debugging) {
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
+			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
+		}
 	
 	}
 	
@@ -136,6 +151,7 @@ public class Elevator extends Subsystem {
 	
 	public void zeroEncoder() {
 		m_pidfCAN.setPosition(0);
+		this.setLevel(kLevelZero);
 
 	}
 	

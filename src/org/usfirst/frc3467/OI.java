@@ -58,16 +58,17 @@ public class OI {
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
 			.whileHeld(new conveyorDrive(0.25));
 		
-		new JoystickButton(operatorGamepad, Gamepad.aButton)
-			.whileHeld (new intakeandLick());
+//		new JoystickButton(operatorGamepad, Gamepad.aButton)
+//			.whileHeld (new intakeandLick());
 	
 		new JoystickButton(operatorGamepad, Gamepad.bButton)
 			.whenPressed(new conveyorDrive(-0.25));
 	
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
 			.whenPressed(new conveyorDrive(0.5));
-	
-		if(operatorGamepad.getDpadUp() == true)
+		
+		
+/*		if(operatorGamepad.getDpadUp() == true)
 		{
 			new elevatorAddTote();
 		}
@@ -85,6 +86,8 @@ public class OI {
 		{
 			new elevatorLevelsUpDown(true);
 		}
+*/
+		
 		// SmartDashboard Buttons
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		

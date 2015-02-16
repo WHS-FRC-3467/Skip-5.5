@@ -3,8 +3,6 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  *
  */
@@ -32,7 +30,7 @@ public class elevatorDrive extends CommandBase {
     	double speed = 0;
     	
     	if (fixedSpeed == 0)
-			speed = -((oi.getGamepad().getRightStickY())/10);
+			speed = -((oi.getGamepad().getRightStickY())/2.5);
     	else
 			speed = fixedSpeed;
 
@@ -41,10 +39,7 @@ public class elevatorDrive extends CommandBase {
     }
 
     // This method will never return true; this command must always be interrupted.
-    // However, since it will be called regularly, use the opportunity to update SDB.
-    protected boolean isFinished() {
-    	double currPos = elevator.getPosition();
-    	SmartDashboard.putNumber("Elevator Position", currPos);
+     protected boolean isFinished() {
         return false;
     }
 
