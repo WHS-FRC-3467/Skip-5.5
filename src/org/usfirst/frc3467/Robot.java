@@ -44,8 +44,8 @@ public class Robot extends IterativeRobot {
 		
 		// Add autonomous selector
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("0", new AutoNon());
-//		autoChooser.addObject("0", new AutoNon());
+		autoChooser.addDefault("Default Auto", new AutoNon());
+//		autoChooser.addObject("LIDAR Auto", new AutoLIDAR());
 		
 		SmartDashboard.putData("Auto", autoChooser);
 
@@ -77,7 +77,7 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		// if (autonomousCommand != null)  autonomousCommand.cancel();
+		if (autonomousCommand != null)  autonomousCommand.cancel();
 		
 		// Resets all integral terms in pid controllers
 		for (int i = 0; i < PIDList.size(); i++) {
@@ -92,7 +92,7 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledInit() {
 		if (CommandBase.leds != null) {
-			CommandBase.leds.setState("Teleop init", LEDs.REG3, 1);
+			CommandBase.leds.setState("Disabled init", LEDs.REG3, 1);
 		}
 	}
 	

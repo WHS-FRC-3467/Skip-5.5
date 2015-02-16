@@ -15,10 +15,14 @@ public class RobotMap {
 	public static final int driveTrainCANTalonRR = 4;
 	public static final int winchDriveCANTalon = 5;
 	public static final int winchSlaveCANTalon = 6;
-	
+	public static final int cangrabWinchCANTalon = 7;
 	
 	// PWM Out
-	public static final int conveyorTalon = 2;
+	public static final int conveyorVSP = 0;
+	public static final int flippyThingMotor = 1;
+	
+	//PDP Slots
+	public static final int flippyThingMotorPDPCHANNEL = 0;
 	
 	// Solenoid
 	public static final int indexerDisengage = 0;

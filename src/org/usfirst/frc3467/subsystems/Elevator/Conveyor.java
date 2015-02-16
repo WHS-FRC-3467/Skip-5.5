@@ -1,9 +1,9 @@
 package org.usfirst.frc3467.subsystems.Elevator;
 
 import org.usfirst.frc3467.RobotMap;
-import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorSetState;
+import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Conveyor extends Subsystem {
@@ -21,7 +21,8 @@ public class Conveyor extends Subsystem {
 	};
 
 	private static Conveyor instance;
-	private Talon conveyorMotor;
+	public VictorSP conveyorMotor;
+	public static VictorSP flippyThingMotor;
 
 	public static Conveyor getInstance() {
 		return instance;
@@ -29,28 +30,15 @@ public class Conveyor extends Subsystem {
 	
 	public Conveyor() {
 		instance = this;
-		conveyorMotor = new Talon(RobotMap.conveyorTalon);
+		conveyorMotor = new VictorSP(RobotMap.conveyorVSP);
+		flippyThingMotor = new VictorSP(RobotMap.flippyThingMotor);
 	}
 	
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new conveyorSetState(ConveyorState.kOff, 0.0));
+		this.setDefaultCommand(new conveyorDrive());
 	}
 	
-	public void setState(Conveyor.ConveyorState state, double power) {
-		switch (state) {
-		case kIntake:
-			conveyorMotor.set(power);
-			break;
-		case kDischarge:
-			conveyorMotor.set(-power);
-			break;
-		case kOff:
-		default:
-			conveyorMotor.set(0.0);
-			break;
-		}
-		
-	}
 
+		
 	
 }

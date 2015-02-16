@@ -14,6 +14,7 @@ public class DriveMecanum extends CommandBase {
 	protected void initialize() {
 		
 		drivebase.initMecanum();
+		
 	}
 	
 	protected void execute() {

@@ -3,10 +3,16 @@ package org.usfirst.frc3467;
 import org.usfirst.frc3467.triggers.DoubleButton;
 import org.usfirst.frc3467.control.Gamepad;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
+import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCalibrate;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDropStack;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorLevelsUpDown;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToLevel;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
+import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
+import org.usfirst.frc3467.subsystems.Elevator.commands.intakeandLick;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -34,32 +40,51 @@ public class OI {
 	
 	public void BindCommands() {
 
-		// Elevator Commands
+		// Elevator/Conveyor/Indexer Commands
 		new DoubleButton(operatorGamepad, 11, 12).whenActive(new elevatorCalibrate());
 
 		new JoystickButton(operatorGamepad, Gamepad.leftBumper)
-					.whileHeld(new elevatorDrive(Elevator.kUp_Fixed));
+			.whileHeld(new elevatorDrive(Elevator.kUp_Fixed));
 		
 		new JoystickButton(operatorGamepad, Gamepad.rightBumper)
 			.whileHeld(new elevatorDrive(Elevator.kDown_Fixed));
-
+		
+		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
+			.whenPressed(new indexerOperate(true));
+		
+		new JoystickButton(operatorGamepad, Gamepad.rightTrigger)
+			.whenPressed(new indexerOperate(false));
+		
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
-			.whenPressed(new elevatorToLevel(Elevator.kLevelOne));
+			.whileHeld(new conveyorDrive(0.25));
 		
 		new JoystickButton(operatorGamepad, Gamepad.aButton)
-			.whenPressed(new elevatorToLevel(Elevator.kLevelTwo));
+			.whileHeld (new intakeandLick());
 	
 		new JoystickButton(operatorGamepad, Gamepad.bButton)
-			.whenPressed(new elevatorToLevel(Elevator.kLevelThree));
+			.whenPressed(new conveyorDrive(-0.25));
 	
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
-			.whenPressed(new elevatorToLevel(Elevator.kLevelFour));
+			.whenPressed(new conveyorDrive(0.5));
 	
-		// Conveyor
+		if(operatorGamepad.getDpadUp() == true)
+		{
+			new elevatorAddTote();
+		}
 		
-		// Indexer
-
+		if(operatorGamepad.getDpadDown() == true)
+		{
+			new elevatorDropStack();
+		}
 		
+		if(operatorGamepad.getDpadLeft() == true)
+		{
+			new elevatorLevelsUpDown(false);
+		}
+		if(operatorGamepad.getDpadRight() == true)
+		{
+			new elevatorLevelsUpDown(true);
+		}
 		// SmartDashboard Buttons
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		
