@@ -4,11 +4,13 @@ import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-//import com.kauailabs.nav6.frc.IMU; 
-import com.kauailabs.nav6.frc.IMUAdvanced;
+
+
+import com.kauailabs.nav6.frc.IMU; 
+//import com.kauailabs.nav6.frc.IMUAdvanced;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,8 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MXP_IMU extends Subsystem {
    
     SerialPort serial_port;
-    //IMU imu;  // Alternatively, use IMUAdvanced for advanced features
-    IMUAdvanced imu;
+    IMU imu;  // Alternatively, use IMUAdvanced for advanced features
+    //IMUAdvanced imu;
     boolean first_iteration;
 	
     private static final boolean debugging = true;
@@ -40,8 +42,13 @@ public class MXP_IMU extends Subsystem {
 		instance = this;
 		
 		try {
-	    	serial_port = new SerialPort(57600,SerialPort.Port.kOnboard);
+	    	serial_port = new SerialPort(57600,SerialPort.Port.kMXP);
 			
+			if (serial_port == null)
+				System.out.println("**** serial port is null :-\\");
+			else
+				System.out.println("**** serial port is good!");
+
 			// You can add a second parameter to modify the 
 			// update rate (in hz) from 4 to 100.  The default is 100.
 			// If you need to minimize CPU load, you can set it to a
@@ -51,10 +58,18 @@ public class MXP_IMU extends Subsystem {
 			// features.
 			
 			byte update_rate_hz = 50;
-			//imu = new IMU(serial_port,update_rate_hz);
-			imu = new IMUAdvanced(serial_port,update_rate_hz);
+			imu = new IMU(serial_port,update_rate_hz);
+			//imu = new IMUAdvanced(serial_port, update_rate_hz);
 
-		} catch( Exception ex ) {}
+			if (imu == null)
+				System.out.println("**** imu is null :-\\");
+			else
+				System.out.println("**** imu is good!");
+			
+		} catch( Exception ex ) {
+			System.out.println("**** Error instantiating IMU");
+			ex.printStackTrace();
+		}
 		
         if ( imu != null ) {
             LiveWindow.addSensor("IMU", "Gyro", imu);
@@ -62,21 +77,26 @@ public class MXP_IMU extends Subsystem {
         first_iteration = true;
     }
 		   
-    public float getYaw() {
+    public double getYaw() {
     
-    	return imu.getYaw();
+    	if (imu != null)
+    		return (double)(imu.getYaw());
+    	else
+    		return 0.0;
     }
     
 	public void update() {
 
-        // When calibration has completed, zero the yaw
+//		System.out.println("MXP_IMU.update() called..");
+		
+		// When calibration has completed, zero the yaw
         // Calibration is complete approximately 20 seconds
         // after the robot is powered on.
     	// During calibration, the robot should be still
         
         boolean is_calibrating = imu.isCalibrating();
         if ( first_iteration && !is_calibrating ) {
-            Timer.delay( 0.3 );
+//            Timer.delay( 0.3 );
             imu.zeroYaw();
             first_iteration = false;
         }
@@ -99,12 +119,12 @@ public class MXP_IMU extends Subsystem {
 	        // additional functions, at the expense of some extra processing
 	        // that occurs on the CRio processor
 	        
-	        SmartDashboard.putNumber(   "IMU_Accel_X",          imu.getWorldLinearAccelX());
-	        SmartDashboard.putNumber(   "IMU_Accel_Y",          imu.getWorldLinearAccelY());
-	        SmartDashboard.putBoolean(  "IMU_IsMoving",         imu.isMoving());
-	        SmartDashboard.putNumber(   "IMU_Temp_C",           imu.getTempC());
+//	        SmartDashboard.putNumber(   "IMU_Accel_X",          imu.getWorldLinearAccelX());
+//	        SmartDashboard.putNumber(   "IMU_Accel_Y",          imu.getWorldLinearAccelY());
+//	        SmartDashboard.putBoolean(  "IMU_IsMoving",         imu.isMoving());
+//	        SmartDashboard.putNumber(   "IMU_Temp_C",           imu.getTempC());
 	        
-	        Timer.delay(0.2);
+//	        Timer.delay(0.2);
         }
     }
 }

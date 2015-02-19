@@ -4,7 +4,7 @@ import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
 /**
- *
+ *  Drive elevator manually, either by joystick or by fixed rate.
  */
 public class elevatorDrive extends CommandBase {
 

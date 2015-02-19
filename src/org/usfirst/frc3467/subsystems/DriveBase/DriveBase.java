@@ -28,21 +28,29 @@ public class DriveBase extends PIDSubsystem {
 	// Default Ramp Rate for Closed-Loop operation
 	private final double RAMPRATE = 2;
 	
-	// Default PID Constants
-	private final double KP = 0.2;
-	private final double KI = 0.0;
-	private final double KD = 0.0;
-	private final double KF = 1.0;
+	// Default CANTalon PID constants
+	private final double KP_V = 0.2;
+	private final double KI_V = 0.0;
+	private final double KD_V = 0.0;
+	private final double KF_V = 1.0;
+
+	// Positional CANTalon PID constants
+	private final double KP_P = 0.5;
+	private final double KI_P = 0.0;
+	private final double KD_P = 0.0;
+	private final double KF_P = 0.0;
 
 	private CANTalon 				CANTalonFL, CANTalonRL, CANTalonFR, CANTalonRR; 
 	private RobotDrive 				m_drive;
 	private CANTalon.ControlMode	m_ctrlMode;
 	
+	private double					m_positionalDistance;
+	
 	private PIDF_CANTalon			m_pidfDriveFL;
 	private PIDF_CANTalon			m_pidfDriveRL;
 	private PIDF_CANTalon			m_pidfDriveFR;
 	private PIDF_CANTalon			m_pidfDriveRR;
-
+	
 	private static DriveBase 		instance;
 	
 	public static DriveBase getInstance() {
@@ -50,13 +58,15 @@ public class DriveBase extends PIDSubsystem {
 	}
 	
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new DriveMecanum());
+		// Argument to DriveMecanum() says whether to use Voltage (PercentVBus) or not
+		this.setDefaultCommand(new DriveMecanum(true));
 	}
 	
 	public DriveBase() {
 		
 		// Call PIDSubsystem constructor
 		// Use PID for turning drivebase by gyro
+		// TODO: Tune these PID constants for turning in place
 		super("DriveBase", 1.0, 0.0, 0.0);
 		
 		instance = this;
@@ -117,10 +127,10 @@ public class DriveBase extends PIDSubsystem {
 		m_pidfDriveRR = new PIDF_CANTalon("Drive RR", CANTalonRR, TOLERANCE, true);
 
 		// Set PIDF constants for each controller
-		m_pidfDriveFL.setPID(KP, KI, KD, KF);
-		m_pidfDriveRL.setPID(KP, KI, KD, KF);
-		m_pidfDriveFR.setPID(KP, KI, KD, KF);
-		m_pidfDriveRR.setPID(KP, KI, KD, KF);
+		m_pidfDriveFL.setPID(KP_V, KI_V, KD_V, KF_V);
+		m_pidfDriveRL.setPID(KP_V, KI_V, KD_V, KF_V);
+		m_pidfDriveFR.setPID(KP_V, KI_V, KD_V, KF_V);
+		m_pidfDriveRR.setPID(KP_V, KI_V, KD_V, KF_V);
 		
 	}
 	
@@ -140,7 +150,7 @@ public class DriveBase extends PIDSubsystem {
 		
 	}
 		
-	// Use arcade mode to m_drive
+	// Use arcade mode to drive
 	public void driveArcade(double speed, double angle) {
 		m_drive.arcadeDrive(speed, angle);
 
@@ -160,70 +170,145 @@ public class DriveBase extends PIDSubsystem {
 		
 	}
 
-	// Use standard tank m_drive
+	// Use standard tank drive
 	public void driveTank(double left, double right) {
 		m_drive.tankDrive(left, right);
 
 	}
-	
-	// Set up for mecanum driving by Velocity
-	public void initMecanum() {
-		
-		if (m_ctrlMode != ControlMode.Speed) {
 
-			CANTalonFL.changeControlMode(ControlMode.Speed);
-		    CANTalonRL.changeControlMode(ControlMode.Speed);
-		    CANTalonFR.changeControlMode(ControlMode.Speed);
-		    CANTalonRR.changeControlMode(ControlMode.Speed);
-		    m_ctrlMode = ControlMode.Speed;
+	// Set up for distance driving by PercentVBus
+	public void initDistance(double distance) {
+
+		m_positionalDistance = distance;
+		
+		if (m_ctrlMode != ControlMode.Position) {
+
+		    // CANTalonFL is the master device
+			CANTalonFL.changeControlMode(ControlMode.Position);
+			
+			// All others are slave devices - they will follow CANTalonFL
+		    CANTalonRL.changeControlMode(ControlMode.Follower);
+		    CANTalonFR.changeControlMode(ControlMode.Follower);
+		    CANTalonRR.changeControlMode(ControlMode.Follower);
+		    
+		    CANTalonRL.set(RobotMap.driveTrainCANTalonFL);
+		    CANTalonFR.set(RobotMap.driveTrainCANTalonFL);
+		    CANTalonRR.set(RobotMap.driveTrainCANTalonFL);
+		    CANTalonFR.reverseOutput(true);
+		    CANTalonRR.reverseOutput(true);
+
+			// Initialize encoder and setpoint
+		    CANTalonFL.setPosition(0);
+		    CANTalonFL.set(0);
+		    
+		    // Set parameters for master talon; slaves will follow suit
+		    CANTalonFL.setIZone(IZONE);
+		    CANTalonFL.setCloseLoopRampRate(RAMPRATE);
+
+		    // Turn off motor safety until we get the system tuned
+			CANTalonFL.setSafetyEnabled(false);
+			//CANTalonFL.setExpiration(1.0);
+
+			// Set PID constants
+			m_pidfDriveFL.setPID(KP_P, KI_P, KD_P, KF_P);
+			
+		    m_ctrlMode = ControlMode.Position;
 		}
-	    
-        /*
-         *  Set maximum velocity of our wheels (in counts per 0.1 second)
-	     *	12fps -> ~780 counts/0.1 seconds
-		 *
-		 *	Values computed by the RobotDrive code from the OI input (usually -1 -> +1)
-		 *	will be multiplied by this value before being sent to the controllers' set() methods.
-		 *
-		 *	If drive stick(s) max out too early, lower this value.
-	     */
-		m_drive.setMaxOutput(780.0);
 		
 	}
 
-	// Use mecanum
+	// Drive specified distance
+	public void driveDistance() {
+		
+		m_pidfDriveFL.setSetpoint(m_positionalDistance);
+
+	}
+
+	// Have we driven specified distance?
+	public boolean onPosition() {
+		
+		return m_pidfDriveFL.onTarget();
+
+	}
+
+	// Set up for mecanum driving by either Velocity or Voltage
+	public void initMecanum(boolean useVoltage) {
+		
+		if (useVoltage == true) {
+
+			// Arcade driving uses PercentVBus
+			initArcade();
+		}
+		else
+		{
+			if (m_ctrlMode != ControlMode.Speed) {
+	
+				CANTalonFL.changeControlMode(ControlMode.Speed);
+			    CANTalonRL.changeControlMode(ControlMode.Speed);
+			    CANTalonFR.changeControlMode(ControlMode.Speed);
+			    CANTalonRR.changeControlMode(ControlMode.Speed);
+			    m_ctrlMode = ControlMode.Speed;
+			}
+		    
+	        /*
+	         *  Set maximum velocity of our wheels (in counts per 0.1 second)
+		     *	12fps -> ~780 counts/0.1 seconds
+			 *
+			 *	Values computed by the RobotDrive code from the OI input (usually -1 -> +1)
+			 *	will be multiplied by this value before being sent to the controllers' set() methods.
+			 *
+			 *	If drive stick(s) max out too early, lower this value.
+		     */
+			m_drive.setMaxOutput(780.0);
+		}
+		
+	}
+
+	// Use mecanum drive
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
 		m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
 
 	}
 
+	/*
+	 * Use PID loop on roboRio to turn robot to specified target angle
+	 */
 	private double pidTurnToAngleInput(double angle, boolean clockWise) {
 		double correctedGyroAngle = CommandBase.imu.getYaw() + 180;
 		boolean wrapAround = ((clockWise == true && correctedGyroAngle < angle && angle
 				- correctedGyroAngle > 180) || (clockWise = true
 				&& correctedGyroAngle > angle
 				&& angle - correctedGyroAngle <= 180));
-		if (clockWise == true && wrapAround) {
-			angle = angle + 360;
-		}
-		if (clockWise == false && wrapAround) {
-			angle = angle - 360;
+		if (wrapAround) {
+			if (clockWise == true)
+				angle = angle + 360;
+			else
+				angle = angle - 360;
 		}
 		double pidInputValue = (angle - correctedGyroAngle) / 180;
 		return pidInputValue;
 	}
 	
+	/*
+	 * Calculate quickest direction from current orientation to a given angle
+	 * 
+	 * @returns: 	true = turn clockwise
+	 * 				false = turn counterclockwise
+	 */
 	private boolean shortestTurnDirection(double angle){
 		boolean turnClockWise = true;
 		double correctedGyroAngle = CommandBase.imu.getYaw() + 180;
 		if ((correctedGyroAngle >= angle && correctedGyroAngle - angle <= 180)
 				|| (correctedGyroAngle < angle && angle - correctedGyroAngle > 180)) {
-		turnClockWise = false;
+			turnClockWise = false;
 		}
 		return turnClockWise;
 	}
 	
-
+	/*
+	 * Methods used by PID subsystem to control DriveTurnToAngle
+	 * @see edu.wpi.first.wpilibj.command.PIDSubsystem#returnPIDInput()
+	 */
 	@Override
 	protected double returnPIDInput() {
 		
