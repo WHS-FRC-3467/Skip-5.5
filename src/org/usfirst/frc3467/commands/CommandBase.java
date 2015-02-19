@@ -3,6 +3,7 @@ package org.usfirst.frc3467.commands;
 import java.util.Vector;
 
 import org.usfirst.frc3467.OI;
+import org.usfirst.frc3467.Robot;
 import org.usfirst.frc3467.subsystems.DriveBase.DriveBase;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
@@ -11,6 +12,9 @@ import org.usfirst.frc3467.subsystems.LEDs.LEDs;
 import org.usfirst.frc3467.subsystems.MXP.MXP_IMU;
 
 
+
+
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -32,6 +36,7 @@ public abstract class CommandBase extends Command {
 		// Add new subsystems to the list		
 		drivebase = new DriveBase();
 		subsystemList.addElement(drivebase);
+		Robot.PIDList.addElement((PIDController)drivebase.getPIDController());
 		
 		elevator = new Elevator();
 		subsystemList.addElement(elevator);

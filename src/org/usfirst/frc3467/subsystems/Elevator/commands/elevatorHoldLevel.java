@@ -3,32 +3,48 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 import org.usfirst.frc3467.commands.CommandBase;
 
 /**
- *	Move elevator to a specified position (units = encoder counts)
+ *	Drive to an elevator level and stay there until interrupted
  */
-public class elevatorToPosition extends CommandBase {
+public class elevatorHoldLevel extends CommandBase {
 
-	double	position;
+	int	m_level;
+	double m_position;
 	
-    public elevatorToPosition(double pos) {
+    public elevatorHoldLevel(int level) {
     	requires(elevator);
-    	position = pos;
-    	if (position < 0) position = 0;	// Never go below zero
+    	this.setInterruptible(true);
+    	m_level = level;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	m_position = elevator.getPositionForLevel(m_level);
+    	if (m_position == -1)	// Bad level specified
+    		return;
+
     	elevator.initPositionalMode();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	elevator.gotoPosition(position);
+    	if (m_position == -1)	// Bad level specified
+    		return;
+
+    	elevator.gotoPosition(m_level);
     }
 
     // This command will never finish - it always must be interrupted.
     // The one exception is when it is at the very bottom (zero) position,
     // in which case it does not need to continue running.
     protected boolean isFinished() {
+    	if (m_position == -1)	// Bad level specified
+    		return true;
+  
+    	if (elevator.onTarget())
+    		// Be sure to set the current level
+    		elevator.setLevel(m_level);
+
     	if (elevator.isZero())
     		return true;
     	else

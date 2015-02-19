@@ -2,9 +2,12 @@ package org.usfirst.frc3467.subsystems.DriveBase.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.PIDController;
+
 public class DriveTurnToAngle extends CommandBase {
 	
 	double m_target;
+	PIDController m_pc;
 	
 	public DriveTurnToAngle(double targetangle) {
 		requires(drivebase);
@@ -12,27 +15,30 @@ public class DriveTurnToAngle extends CommandBase {
 //		setTimeout(2);
 		
 		m_target = targetangle;
+		m_pc = drivebase.getPIDController();
+
 	}
 
 	protected void initialize() {
 		
 		// Use standard mecanum drive
-		drivebase.initMecanum();
+		drivebase.initMecanum(false);
 		
 		/*
 		 *  Enable drivebase rotational PID
 		 */
 		// Set target angle
-		drivebase.setSetpoint(m_target);
+		m_pc.setSetpoint(m_target);
 		
 		// Throttle down the max allowed speed
-		drivebase.setOutputRange(-0.5, 0.5);
+		m_pc.setOutputRange(-0.5, 0.5);
 		
 		// Set tolerance around the target angle
-		drivebase.setAbsoluteTolerance(5);
+		m_pc.setAbsoluteTolerance(5);
 		
-		// Enable PID controller
-		drivebase.enable();
+		// Reset and enable PID controller
+		m_pc.reset();
+		m_pc.enable();
 	
 	}
 	
@@ -45,7 +51,7 @@ public class DriveTurnToAngle extends CommandBase {
 		if (drivebase.onTarget() || isTimedOut())
 		{
 			// Disable PID controller
-			drivebase.disable();
+			m_pc.disable();
 			return true;
 		}
 		else

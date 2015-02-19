@@ -1,5 +1,7 @@
 package org.usfirst.frc3467.control;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 	public static int xButton = 1;
 	public static int aButton = 2;
@@ -92,15 +94,15 @@ public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 	}
 	
 	public boolean getDpadRight() {
-		return(getPOV(2) == 90 ? true : false);
+		return(getPOV(0) == 90 ? true : false);
 	}
 	
 	public boolean getDpadDown() {
-		return(getPOV(4) == 180 ? true : false);
+		return(getPOV(0) == 180 ? true : false);
 	}
 
 	public boolean getDpadLeft() {
-		return(getPOV(6) == -1 ? false : true);
+		return(getPOV(0) == 270 ? true : false);
 	}
 	
 	

@@ -16,9 +16,6 @@ public class elevatorCalibrate extends CommandBase {
 		
 		2.	Zero encoder count
 		
-		3.	Go to top until limit switch is hit
-		
-		4. Record encoder count at top with Elevator.setTop()
 */	
 	
 	protected void initialize() {

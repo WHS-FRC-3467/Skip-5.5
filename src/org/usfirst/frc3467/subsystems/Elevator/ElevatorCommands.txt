@@ -1,0 +1,14 @@
+Elevator Commands:
+
+elevatorCalibrate - Zero elevator encoder
+
+elevatorDrive - Drive elevator manually, either by joystick or by fixed rate.
+
+elevatorHoldLevel - drive to an elevator level and stay there until interrupted
+
+elevatorLevelsUpDown - drive up or down to next level and stay there until interrupted
+
+elevatorToPosition - drive to specified encoder position and stay there until interrupted
+
+elevatorUpdatePIDF - Command used by SmartDashboard to update elevator PIDF constants
+

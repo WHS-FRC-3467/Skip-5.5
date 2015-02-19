@@ -7,20 +7,20 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class elevatorAddTote extends CommandGroup {
+public class elevatorCGAddTote extends CommandGroup {
     
 
 	
-    public  elevatorAddTote() {
+    public  elevatorCGAddTote() {
         
     	// Make sure Indexer is  engaged
     	addSequential(new indexerOperate(true));
     	
     	// Lift tote above Indexer
-    	addSequential(new elevatorToLevel(Elevator.kLevelIndexTote));
+    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote));
 
     	// Lower conveyor back to bottom
-    	addSequential(new elevatorToLevel(Elevator.kLevelZero));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero));
     	
     	// TODO: Add to tote count in Elevator
         

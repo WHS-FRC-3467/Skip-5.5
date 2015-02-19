@@ -5,15 +5,18 @@ import org.usfirst.frc3467.commands.CommandBase;
 
 public class DriveMecanum extends CommandBase {
 	
+	boolean m_useVoltage = false;
 	
-	public DriveMecanum() {
+	public DriveMecanum(boolean useVoltage) {
 		requires(drivebase);
 		this.setInterruptible(true);
+	
+		m_useVoltage = useVoltage;
 	}
 
 	protected void initialize() {
 		
-		drivebase.initMecanum();
+		drivebase.initMecanum(m_useVoltage);
 		
 	}
 	
@@ -33,9 +36,10 @@ public class DriveMecanum extends CommandBase {
 		y = OI.driveJoystick.getY();
 		rotation = OI.driveJoystick.getZ();
 
-		if (x < 0.08) x = 0;
-		if (y < 0.08) y = 0;
-		if (rotation < 0.08) rotation = 0;
+		// Deadband
+		if (x > -0.08 && x < 0.08) x = 0;
+		if (y > -0.08 && y < 0.08) y = 0;
+		if (rotation > -0.08 && rotation < 0.08) rotation = 0;
 
 		drivebase.driveMecanum(x, y, rotation / 2.0, imu.getYaw());
 

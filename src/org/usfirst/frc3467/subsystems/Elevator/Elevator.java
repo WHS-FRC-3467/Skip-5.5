@@ -1,5 +1,7 @@
 package org.usfirst.frc3467.subsystems.Elevator;
 
+import java.util.Vector;
+
 import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
 import org.usfirst.frc3467.pid.PIDF_CANTalon;
@@ -18,54 +20,60 @@ public class Elevator extends Subsystem {
 	private CANTalon 		m_winchMotor2;
 	private PIDF_CANTalon	m_pidfCAN;
 	private DigitalInput 	m_limitSwitch;
-	private double m_topPosition = 0;
 	
 	// Controls display to SmartDashboard
 	private static final boolean debugging = true;
 	
 	// State Info
-	private int		m_numTotes;
-	private double	m_currLevel;
-	private boolean	m_haveBin;
-	private boolean m_stackingOnPlatform;
-	private boolean m_stackingOnStep;
+	private int				m_numTotes;
+	private int				m_currLevel;
+	private boolean			m_haveBin;
+	private boolean 		m_stackingOnPlatform;
+	private boolean 		m_stackingOnStep;
 	
 	// Default PID Constants
-	private final double KP = 0.6;
-	private final double KI = 0.003;
-	private final double KD = 0.06;
+	// TODO: Tune these!
+	private final double 	KP = 0.3;
+	private final double 	KI = 0.003;
+	private final double 	KD = 0.00;
 	
 	/* Default iZone
 	 * The iZone is the zone around the target setpoint in which the I term
 	 * is actually used. This number defines the size of the iZone ON EACH SIDE
 	 * of the desired setpoint.
 	 */
-	private final int IZONE = 100;
+	private final int 		IZONE = 200;
 	
 	// Default Tolerance for position  error
-	private final double TOLERANCE = 5;
+	private final double 	TOLERANCE = 50;
+	
+	// Default Ramp Rate for PercentVBus operation
+	private final double	RAMPRATE_PVB = 2.0;
 	
 	// Default Ramp Rate for Closed-Loop operation
-	private final double RAMPRATE = 2;
+	private final double 	RAMPRATE_CL = 1.2;
 	
 	// TODO: Review and tune all these constants
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
 	public static final int kLevelZero = 0;
-	public static final int kLevelOne = 1000;
-	public static final int kLevelTwo = 2000;
-	public static final int kLevelThree = 3000;
-	public static final int kLevelFour = 4000;
-	public static final int kLevelFive = 5000;
+	public static final int kLevelOne = 2500;
+	public static final int kLevelTwo = 4500;
+	public static final int kLevelThree = 6600;
+	public static final int kLevelFour = 8900;
+	public static final int kLevelFive = 11000;
+	
+	public static Vector<Double> LevelList;
+	
 	
 	// Additions to level for platform and step
 	public static final int kAdd4Platform = 300;
 	public static final int kAdd4Step = 700;
 	
 	// Other useful levels
-	public static final int kLevelIndexTote = 1600;
-	public static final int kLevelIndexBin = 1000;
+	public static final int kLevelIndexTote = 3000;
+	public static final int kLevelIndexBin = 2000;
 	
 	// Constants for some useful speeds
 	public static final double kUp_Fixed = 0.2;
@@ -83,10 +91,18 @@ public class Elevator extends Subsystem {
 		// Init state info
 		m_numTotes = 0;
 		m_haveBin = false;
-		m_currLevel = kLevelZero;
+		m_currLevel = 0;
 		m_stackingOnPlatform = false;
 		m_stackingOnStep = false;
-		
+
+		LevelList = new Vector<Double>();
+		LevelList.addElement(new Double(kLevelZero));
+		LevelList.addElement(new Double(kLevelOne));
+		LevelList.addElement(new Double(kLevelTwo));
+		LevelList.addElement(new Double(kLevelThree));
+		LevelList.addElement(new Double(kLevelFour));
+		LevelList.addElement(new Double(kLevelFive));
+
 		m_limitSwitch = new DigitalInput(RobotMap.elevBottomLimitSwitch);
 		m_winchMotor1 = new CANTalon(RobotMap.winchDriveCANTalon);
 		m_winchMotor2 = new CANTalon(RobotMap.winchSlaveCANTalon);
@@ -101,10 +117,16 @@ public class Elevator extends Subsystem {
 
 		// Set parameters for master talon; slave will follow suit
 		m_winchMotor1.setIZone(IZONE);
-		m_winchMotor1.setCloseLoopRampRate(RAMPRATE);
-		m_winchMotor1.setForwardSoftLimit(9000);
-		m_winchMotor1.setReverseSoftLimit(0);
+		m_winchMotor1.setVoltageRampRate(RAMPRATE_PVB);
+		m_winchMotor1.setCloseLoopRampRate(RAMPRATE_CL);
+		
+		//m_winchMotor1.setForwardSoftLimit(12000);
+		// PID Testing mode - limit top
+		m_winchMotor1.setForwardSoftLimit(5000);
 		m_winchMotor1.enableForwardSoftLimit(true);
+
+		// For Testing Only - set bottom limit to position of conveyor on boot
+		m_winchMotor1.setReverseSoftLimit(0);
 		m_winchMotor1.enableReverseSoftLimit(true);
 
 	    // Turn off motor safety until we get the system tuned
@@ -123,6 +145,10 @@ public class Elevator extends Subsystem {
 	
 	public void initManualMode() {
 		m_winchMotor1.changeControlMode(ControlMode.PercentVbus);
+		
+		// Stop motor until we are ready to set speed
+		m_winchMotor1.set(0);
+		
 		if (debugging)
 			SmartDashboard.putString("Elevator Mode", "Manual");
 	}
@@ -135,6 +161,7 @@ public class Elevator extends Subsystem {
 		}
 		
 		m_winchMotor1.set(speed);
+		
 		if (debugging) {
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
 			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
@@ -144,6 +171,10 @@ public class Elevator extends Subsystem {
 	
 	public void initPositionalMode() {
 		m_winchMotor1.changeControlMode(ControlMode.Position);
+		
+		// Disable for safety until we are ready to set the setpoint
+		m_pidfCAN.disable();
+		
 		if (debugging)
 			SmartDashboard.putString("Elevator Mode", "Positional");
 		
@@ -151,18 +182,30 @@ public class Elevator extends Subsystem {
 	
 	public void zeroEncoder() {
 		m_pidfCAN.setPosition(0);
-		this.setLevel(kLevelZero);
+		this.setLevel(0);
 
 	}
+	
+	public boolean isZero() {
+		return m_limitSwitch.get();
+	}
+	
 	
 	public void updatePIDFfromSDB() {
 		m_pidfCAN.updatePIDF();
 		
 	}
 	
-	public void gotoLevel(int level) {
+	public double getPositionForLevel(int level) {
 		
 		double target = 0;
+		
+		// If requested level is out of bounds, return -1
+		if (level < 0 || level > 5)
+			return (-1);
+		
+		// Get encoder value for requested level
+		target = ((Double) LevelList.elementAt(level)).doubleValue();
 		
 		// Add increments if we are stacking on platform or step, rather than floor
 		if (m_stackingOnPlatform == true)
@@ -170,36 +213,63 @@ public class Elevator extends Subsystem {
 		else if (m_stackingOnStep == true)
 			target += kAdd4Step;
 		
-		// Add in the distance to the desired level
-		switch (level)
-		{
-		case kLevelOne:
-			target += kLevelOne; 
-			break;
-		case kLevelTwo:
-			target += kLevelTwo; 
-			break;
-		case kLevelThree:
-			target += kLevelThree; 
-			break;
-		case kLevelFour:
-			target += kLevelFour; 
-			break;
-		case kLevelFive:
-			target += kLevelFive; 
-			break;
-		case kLevelZero:
-		default:
-			target = 0;
-		}
-		
-		// Command elevator to go to determined position
-		m_pidfCAN.setSetpoint(target);
+		return target;
 	}
 	
+	public double getPositionForOneLevelUp() {
+
+		verifyCurrentLevel();
+		return getPositionForLevel(m_currLevel + 1);
+	}
+	
+	public double getPositionForOneLevelDown(){
+		
+		verifyCurrentLevel();
+		return getPositionForLevel(m_currLevel - 1);
+	}
+	
+	private void verifyCurrentLevel() {
+		double currpos = m_pidfCAN.getPosition();
+		int actual_level = 0;
+		int add2lvl = 0;
+		
+		// Add increments if we are stacking on platform or step, rather than floor
+		if (m_stackingOnPlatform == true)
+			add2lvl = kAdd4Platform;
+		else if (m_stackingOnStep == true)
+			add2lvl = kAdd4Step;
+		
+		/*
+		 *  Find out if current encoder position matches the level we THINK we are on
+		 *  
+		 *  1. Loop through each level
+		 *  2. Compare current position to position reading for the level
+		 *  3. If current position is <= to expected position reading, then break out of loop
+		 *  4. Else if current position > expected position reading (+ tolerance), then
+		 *     bump actual_level counter and go to next level
+		 */
+		for (int i = 0; i <= 5; i++) {
+			double lvlpos = ((Double)LevelList.elementAt(i)).doubleValue() + add2lvl;
+			if (currpos <= (lvlpos + TOLERANCE))
+				break;
+			else
+				actual_level++;
+		}
+		
+		if (m_currLevel != actual_level)
+			SmartDashboard.putString("Elevator Verify", "OUT OF SYNC");
+		else
+			SmartDashboard.putString("Elevator Verify", "Level OK");
+			
+		m_currLevel = actual_level;
+	}
 	
 	public void gotoPosition(double position) {
 		m_pidfCAN.setSetpoint(position);		
+
+		// Re-enable PID
+		if (!m_pidfCAN.isEnabled())
+			m_pidfCAN.enable();
 	}
 	
 	public double getPosition() {
@@ -210,13 +280,7 @@ public class Elevator extends Subsystem {
 		return m_pidfCAN.onTarget();
 	}
 	
-	public void gotoTop() {
-		m_pidfCAN.setSetpoint(m_topPosition);		
-	}
-	
-	public void setTop(double topPos) {
-		m_topPosition = topPos;
-	}
+
 	
 	/*
 	 * Methods to handle elevator state data
@@ -249,12 +313,20 @@ public class Elevator extends Subsystem {
 		return m_haveBin;
 	}
 
-	public void setLevel(double level) {
+	public void setLevel(int level) {
 		m_currLevel = level;
 	}
 	
-	public double getLevel() {
+	public int getLevel() {
 		return m_currLevel;
+	}
+	
+	public void levelUp() {
+		m_currLevel++;
+	}
+	
+	public void levelDown() {
+		m_currLevel--;
 	}
 	
 	public void setStackingOnPlatform(boolean onPlatform) {

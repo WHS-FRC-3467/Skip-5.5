@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Indexer extends Subsystem {
 
 	private DoubleSolenoid sIndexer;
-	private Boolean engaged;
+	private boolean engaged;
 	private static Indexer instance;
 	private Compressor mainCompressor;
 	
