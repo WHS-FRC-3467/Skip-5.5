@@ -91,7 +91,10 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_I = i;
         m_D = d;
 
-        m_talon.setPID(p, i, d);
+        m_talon.setProfile(0);
+        m_talon.setP(p);
+        m_talon.setI(i);
+        m_talon.setD(d);
         
         if (table != null) {
             table.putNumber("p", p);
@@ -120,7 +123,10 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_D = d;
         m_F = f;
 
-        m_talon.setPID(p, i, d);
+        m_talon.setProfile(0);
+        m_talon.setP(p);
+        m_talon.setI(i);
+        m_talon.setD(d);
         m_talon.setF(f);
         
         if (table != null) {
