@@ -46,9 +46,10 @@ public class DriveTurnToAngle extends CommandBase {
 
 	}
 	
+
 	protected boolean isFinished() {
-    	
-		if (drivebase.onTarget() || isTimedOut())
+ 
+		if (drivebase.onTarget() || isTimedOut())	
 		{
 			// Disable PID controller
 			m_pc.disable();
@@ -57,8 +58,7 @@ public class DriveTurnToAngle extends CommandBase {
 		else
 			return false;
 	}
-	
-	
+
 	protected void end() {
 		
 	}

@@ -77,6 +77,9 @@ public class DriveBase extends PIDSubsystem {
 	    CANTalonFR = new CANTalon(RobotMap.driveTrainCANTalonFR);
 	    CANTalonRR = new CANTalon(RobotMap.driveTrainCANTalonRR);
 		
+	    // Default mode (set in CANTalon constructor) is PercentVBus
+	    m_ctrlMode = ControlMode.PercentVbus;
+	    
 	    // Using Grayhill 256 encoders
 	    CANTalonFL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 	    CANTalonRL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -109,17 +112,11 @@ public class DriveBase extends PIDSubsystem {
         m_drive.setExpiration(1.0);
         m_drive.setSensitivity(0.5);
         m_drive.setMaxOutput(1.0);
-		m_drive.setInvertedMotor(MotorType.kFrontLeft, false);
-		m_drive.setInvertedMotor(MotorType.kRearLeft, false);
-		m_drive.setInvertedMotor(MotorType.kFrontRight, true);
-		m_drive.setInvertedMotor(MotorType.kRearRight, true);
-		
-		// Disable all controllers for now
-		CANTalonFL.changeControlMode(ControlMode.Disabled);
-	    CANTalonRL.changeControlMode(ControlMode.Disabled);
-	    CANTalonFR.changeControlMode(ControlMode.Disabled);
-	    CANTalonRR.changeControlMode(ControlMode.Disabled);
-	    
+		m_drive.setInvertedMotor(MotorType.kFrontLeft, true);
+		m_drive.setInvertedMotor(MotorType.kRearLeft, true);
+		m_drive.setInvertedMotor(MotorType.kFrontRight, false);
+		m_drive.setInvertedMotor(MotorType.kRearRight, false);
+ 
 	    // Create PID management wrappers around controllers
 	    m_pidfDriveFL = new PIDF_CANTalon("Drive FL", CANTalonFL, TOLERANCE, true);
 		m_pidfDriveRL = new PIDF_CANTalon("Drive RL", CANTalonRL, TOLERANCE, true);
@@ -131,7 +128,6 @@ public class DriveBase extends PIDSubsystem {
 		m_pidfDriveRL.setPID(KP_V, KI_V, KD_V, KF_V);
 		m_pidfDriveFR.setPID(KP_V, KI_V, KD_V, KF_V);
 		m_pidfDriveRR.setPID(KP_V, KI_V, KD_V, KF_V);
-		
 	}
 	
 	// Set up for arcade driving by PercentVBus
@@ -318,7 +314,7 @@ public class DriveBase extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		m_drive.mecanumDrive_Cartesian(0, 0, output, CommandBase.imu.getYaw());
+		m_drive.mecanumDrive_Cartesian(0, 0, output, 0);
 		
 	}
 	
