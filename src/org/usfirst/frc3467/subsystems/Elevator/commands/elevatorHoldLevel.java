@@ -2,6 +2,8 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *	Drive to an elevator level and stay there until interrupted
  */
@@ -19,6 +21,7 @@ public class elevatorHoldLevel extends CommandBase {
     // Called just before this Command runs the first time
     protected void initialize() {
     	m_position = elevator.getPositionForLevel(m_level);
+    	SmartDashboard.putNumber("elevatorHold", m_position);
     	if (m_position == -1)	// Bad level specified
     		return;
 
@@ -53,6 +56,9 @@ public class elevatorHoldLevel extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
+    	
+    	elevator.disablePID();
+    
     }
 
     // Called when another command which requires one or more of the same

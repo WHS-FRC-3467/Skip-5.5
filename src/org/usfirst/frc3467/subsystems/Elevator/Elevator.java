@@ -117,7 +117,7 @@ public class Elevator extends Subsystem {
 
 		// Set parameters for master talon; slave will follow suit
 		m_winchMotor1.setIZone(IZONE);
-		m_winchMotor1.setVoltageRampRate(RAMPRATE_PVB);
+//		m_winchMotor1.setVoltageRampRate(RAMPRATE_PVB);
 		m_winchMotor1.setCloseLoopRampRate(RAMPRATE_CL);
 		
 		//m_winchMotor1.setForwardSoftLimit(12000);
@@ -163,6 +163,7 @@ public class Elevator extends Subsystem {
 		m_winchMotor1.set(speed);
 		
 		if (debugging) {
+	    	SmartDashboard.putBoolean("Elevator Enabled", m_winchMotor1.isControlEnabled());
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
 			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
 		}
@@ -265,11 +266,12 @@ public class Elevator extends Subsystem {
 	}
 	
 	public void gotoPosition(double position) {
-		m_pidfCAN.setSetpoint(position);		
 
 		// Re-enable PID
 		if (!m_pidfCAN.isEnabled())
 			m_pidfCAN.enable();
+
+		m_pidfCAN.setSetpoint(position);		
 	}
 	
 	public double getPosition() {
@@ -280,7 +282,9 @@ public class Elevator extends Subsystem {
 		return m_pidfCAN.onTarget();
 	}
 	
-
+	public void disablePID() {
+		m_pidfCAN.disable();
+	}
 	
 	/*
 	 * Methods to handle elevator state data
