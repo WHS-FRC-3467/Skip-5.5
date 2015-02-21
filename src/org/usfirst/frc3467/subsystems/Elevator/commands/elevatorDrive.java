@@ -29,8 +29,11 @@ public class elevatorDrive extends CommandBase {
     protected void execute() {
     	double speed = 0;
     	
-    	if (fixedSpeed == 0)
+    	if (fixedSpeed == 0) {
 			speed = -((oi.getGamepad().getRightStickY())/2.5);
+			if (speed > -0.08 && speed < 0.08)
+				speed = 0.0;
+    	}
     	else
 			speed = fixedSpeed;
 
