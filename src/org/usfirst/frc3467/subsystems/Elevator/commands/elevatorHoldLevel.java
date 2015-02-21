@@ -34,7 +34,7 @@ public class elevatorHoldLevel extends CommandBase {
     	if (m_position == -1)	// Bad level specified
     		return;
 
-    	elevator.gotoPosition(m_level);
+    	elevator.gotoPosition(m_position);
     }
 
     // This command will never finish - it always must be interrupted.

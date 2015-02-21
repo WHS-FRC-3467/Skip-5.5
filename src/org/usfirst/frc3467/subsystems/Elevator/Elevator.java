@@ -33,16 +33,16 @@ public class Elevator extends Subsystem {
 	
 	// Default PID Constants
 	// TODO: Tune these!
-	private final double 	KP = 0.3;
-	private final double 	KI = 0.003;
-	private final double 	KD = 0.00;
+	private final double 	KP = 0.300;
+	private final double 	KI = 0.001;
+	private final double 	KD = 0.012;
 	
 	/* Default iZone
 	 * The iZone is the zone around the target setpoint in which the I term
 	 * is actually used. This number defines the size of the iZone ON EACH SIDE
 	 * of the desired setpoint.
 	 */
-	private final int 		IZONE = 200;
+	private final int 		IZONE = 1500;
 	
 	// Default Tolerance for position  error
 	private final double 	TOLERANCE = 50;
@@ -51,7 +51,7 @@ public class Elevator extends Subsystem {
 	private final double	RAMPRATE_PVB = 2.0;
 	
 	// Default Ramp Rate for Closed-Loop operation
-	private final double 	RAMPRATE_CL = 1.2;
+	private final double 	RAMPRATE_CL = 2.0;
 	
 	// TODO: Review and tune all these constants
 	
@@ -122,7 +122,7 @@ public class Elevator extends Subsystem {
 		
 		//m_winchMotor1.setForwardSoftLimit(12000);
 		// PID Testing mode - limit top
-		m_winchMotor1.setForwardSoftLimit(5000);
+		m_winchMotor1.setForwardSoftLimit(8000);
 		m_winchMotor1.enableForwardSoftLimit(true);
 
 		// For Testing Only - set bottom limit to position of conveyor on boot
@@ -144,7 +144,9 @@ public class Elevator extends Subsystem {
 	}
 	
 	public void initManualMode() {
+
 		m_winchMotor1.changeControlMode(ControlMode.PercentVbus);
+		m_winchMotor1.enableControl();
 		
 		// Stop motor until we are ready to set speed
 		m_winchMotor1.set(0);
