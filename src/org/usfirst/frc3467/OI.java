@@ -80,10 +80,10 @@ public class OI {
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
 			.whileHeld(new conveyorDrive(0.5));
 		
- 		new DPadUp(operatorGamepad).whenActive(new elevatorHoldLevel(1));
- 		new DPadRight(operatorGamepad).whenActive(new elevatorHoldLevel(2));
- 		new DPadDown(operatorGamepad).whenActive(new elevatorHoldLevel(3));
- 		new DPadLeft(operatorGamepad).whenActive(new elevatorHoldLevel(4));
+ 		new DPadUp(operatorGamepad).whenActive(new elevatorHoldLevel(0));
+ 		new DPadRight(operatorGamepad).whenActive(new elevatorHoldLevel(1));
+ 		new DPadDown(operatorGamepad).whenActive(new elevatorHoldLevel(2));
+ 		new DPadLeft(operatorGamepad).whenActive(new elevatorHoldLevel(3));
  		
  		{
 //			new elevatorCGAddTote();
