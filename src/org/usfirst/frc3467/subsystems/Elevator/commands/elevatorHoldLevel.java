@@ -38,8 +38,6 @@ public class elevatorHoldLevel extends CommandBase {
     }
 
     // This command will never finish - it always must be interrupted.
-    // The one exception is when it is at the very bottom (zero) position,
-    // in which case it does not need to continue running.
     protected boolean isFinished() {
     	if (m_position == -1)	// Bad level specified
     		return true;
@@ -48,10 +46,7 @@ public class elevatorHoldLevel extends CommandBase {
     		// Be sure to set the current level
     		elevator.setLevel(m_level);
 
-    	if (elevator.isZero())
-    		return true;
-    	else
-        	return false;
+       	return false;
     }
 
     // Called once after isFinished returns true

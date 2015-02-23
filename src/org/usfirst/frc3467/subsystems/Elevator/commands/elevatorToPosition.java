@@ -15,6 +15,13 @@ public class elevatorToPosition extends CommandBase {
     	if (position < 0) position = 0;	// Never go below zero
     }
 
+    public elevatorToPosition(double pos, double timeout) {
+    	requires(elevator);
+    	position = pos;
+    	if (position < 0) position = 0;	// Never go below zero
+		setTimeout(timeout);
+    }
+
     // Called just before this Command runs the first time
     protected void initialize() {
     	elevator.initPositionalMode();
@@ -25,11 +32,10 @@ public class elevatorToPosition extends CommandBase {
     	elevator.gotoPosition(position);
     }
 
-    // This command will never finish - it always must be interrupted.
-    // The one exception is when it is at the very bottom (zero) position,
-    // in which case it does not need to continue running.
+    // Usually this command will never finish - it always must be interrupted.
+    // Exception - if a timeout is set
     protected boolean isFinished() {
-    	if (elevator.isZero())
+    	if (isTimedOut())
     		return true;
     	else
         	return false;

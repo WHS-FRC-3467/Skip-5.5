@@ -2,6 +2,8 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  *	Drive up or down to next level and stay there until interrupted
  */
@@ -9,6 +11,7 @@ public class elevatorLevelsUpDown extends CommandBase {
 
 	boolean m_elevUp;
 	double m_position;
+	boolean	m_onTarget = false;
 	
     public elevatorLevelsUpDown(boolean moveUp) {
        	requires(elevator);
@@ -29,6 +32,7 @@ public class elevatorLevelsUpDown extends CommandBase {
     		m_position = elevator.getPositionForOneLevelDown();
     	}
 
+    	SmartDashboard.putNumber("elevatorLevelsUpDown: Requested Position", m_position);
     	if (m_position == -1)	// Already at top/bottom or Bad level
     		return;
 
@@ -48,7 +52,10 @@ public class elevatorLevelsUpDown extends CommandBase {
     	if (m_position == -1)	// Already at top/bottom or Bad level
     		return true;
     	
-    	if (elevator.onTarget()) {
+    	if (!m_onTarget && elevator.onTarget()) {
+    		
+    		m_onTarget = true;
+    		
     		// Be sure to set the current level
         	if(m_elevUp == true)
         		elevator.levelUp();

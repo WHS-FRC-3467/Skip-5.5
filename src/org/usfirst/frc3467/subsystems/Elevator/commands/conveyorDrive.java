@@ -26,6 +26,18 @@ public class conveyorDrive extends CommandBase {
 		if (m_speed == 0)
 		{
 			speed = (oi.getGamepad().getLeftStickX());
+
+			// Deadband
+			if (speed > -0.08 && speed < 0.08) speed = 0;
+
+	        // Square the inputs (while preserving the sign) to increase
+			// fine control while permitting full power
+	        if (speed >= 0.0)
+	            speed = (speed * speed);
+	        else
+	            speed = -(speed * speed);
+	        
+
 		}
 		else
 		{
@@ -33,6 +45,7 @@ public class conveyorDrive extends CommandBase {
 		}
 		
 		conveyor.driveManual(speed);
+		
 		
 	}
 	
