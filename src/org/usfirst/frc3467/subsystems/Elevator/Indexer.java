@@ -22,7 +22,7 @@ public class Indexer extends Subsystem {
 		instance = this;		
 		sIndexer = new DoubleSolenoid(RobotMap.indexerEngage, RobotMap.indexerDisengage);
 		sIndexer.set(DoubleSolenoid.Value.kReverse);
-		engaged = true;
+		engaged = false;
 		mainCompressor = new Compressor(0);
 	}
 	

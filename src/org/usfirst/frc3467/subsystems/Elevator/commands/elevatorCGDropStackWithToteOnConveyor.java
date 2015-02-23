@@ -9,21 +9,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class elevatorCGDropStack extends CommandGroup {
+public class elevatorCGDropStackWithToteOnConveyor extends CommandGroup {
     
-    public  elevatorCGDropStack() {
+    public  elevatorCGDropStackWithToteOnConveyor() {
 
     	// Lift stack above Indexer
-    	SmartDashboard.putString("elevatorCGDropStack", "elevatorToPosition(indexTote, 3.0)");
-    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote, 3.0));
+    	SmartDashboard.putString("elevatorCGDropStack", "elevatorToPosition(LevelOne, 3.0)");
+    	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor , 3.0));
 
     	// Unengage Indexer
     	SmartDashboard.putString("elevatorCGDropStack", "indexerOperate(false)");
     	addSequential(new indexerOperate(false));
     	
-    	// Wait a couple secs
-    	SmartDashboard.putString("elevatorCGDropStack", "WaitCommand(2.0)");
-    	addSequential(new WaitCommand(2.0));
+    	// Wait a sec
+    	SmartDashboard.putString("elevatorCGDropStack", "WaitCommand(1.0)");
+    	addSequential(new WaitCommand(1.0));
     	
     	// Lower conveyor back to "resting position"
     	SmartDashboard.putString("elevatorCGDropStack", "elevatorToPosition(LevelZero, 3.0)");
