@@ -11,6 +11,8 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGNextLevel;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexSidewaysRC;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexUprightRC;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCalibrate;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
@@ -78,11 +80,11 @@ public class OI {
 		
 		// Conveyor - Intake Slow
 		new JoystickButton(operatorGamepad, Gamepad.aButton)
-			.whileHeld (new conveyorDrive(-0.25));
+			.whileHeld (new conveyorDrive(-0.30));
 	
 		// Conveyor Intake - Fast
 		new JoystickButton(operatorGamepad, Gamepad.bButton)
-			.whileHeld(new conveyorDrive(-0.5));
+			.whileHeld(new conveyorDrive(-0.60));
 	
 		// Conveyor - Spit Out Fast
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
@@ -115,7 +117,9 @@ public class OI {
 		SmartDashboard.putData("Update IMU Display", new imuUpdateDisplay());
 		SmartDashboard.putData("Indexer Engage", new indexerOperate(true));
 		SmartDashboard.putData("Indexer Retract", new indexerOperate(false));
-
+		SmartDashboard.putData("Drop Stack (no tote on conveyor)", new elevatorCGDropStack());
+		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
+		SmartDashboard.putData("IndexsidewaysRC", new elevatorCGIndexUprightRC());
 		/*
  		SmartDashboard.putData("Drive Backward", new DriveForward(-2.25));
 		SmartDashboard.putData("Start Rollers", new SetCollectionSpeed(Collector.FORWARD));

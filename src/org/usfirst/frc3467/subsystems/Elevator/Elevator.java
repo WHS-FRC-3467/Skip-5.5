@@ -57,7 +57,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 265;  // Platform eject height
+	public static final int kLevelZero = 300;  // Platform eject height
 	public static final int kLevelOne = 2500;
 	public static final int kLevelTwo = 4500;
 	public static final int kLevelThree = 6600;
@@ -72,9 +72,10 @@ public class Elevator extends Subsystem {
 	public static final int kAdd4Step = 700;
 	
 	// Other useful levels
-	public static final int kLevelIndexTote = 3300;
-	public static final int kLevelDropStackWithToteOnConveyor = 1200;
-	public static final int kLevelIndexBin = 2000;
+	public static final int kLevelIndexTote = 3400;
+	public static final int kLevelDropStackWithToteOnConveyor = 1400;
+	public static final int kLevelIndexUprightRC = 3800;
+	public static final int kLevelIndexSidewaysRC = 6000;
 	public static final int kLevelIndexUpsideDownTote = 3800;
 	
 	// Constants for some useful speeds
@@ -161,33 +162,45 @@ public class Elevator extends Subsystem {
 		
 		m_winchMotor1.set(speed);
 		
-		if (debugging) {
-	    	SmartDashboard.putBoolean("Elevator Enabled", m_winchMotor1.isControlEnabled());
-			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
-			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
-		}
-	
+		manualDriveSDUpdates(speed);
+			
 	}
 	
-	public boolean driveToFloor() {
+	public boolean driveToPosition(double speed, double position) {
 
-		double speed = Elevator.kDown_Fixed;
+		double currPos;
 		
-		if(m_limitSwitch.get() == true) {
+		if(isZero()) {
 			speed = 0.0;
+			zeroEncoder();
 			return true;
 		}
 		
-		m_winchMotor1.set(speed);
+		currPos = m_pidfCAN.getPosition();
+
+		// Look at direction and current position to determine if we need to stop
+		if ((speed >= 0.0 && currPos >= position) ||
+			(speed < 0.0 && currPos <= position)) {
+
+			m_winchMotor1.set(0.0);
+			return true;
+		}
+		else
+			m_winchMotor1.set(speed);
 		
+		manualDriveSDUpdates(speed);
+		
+		return false;
+	}
+
+	
+	private void manualDriveSDUpdates(double speed) {
 		if (debugging) {
 	    	SmartDashboard.putBoolean("Elevator Enabled", m_winchMotor1.isControlEnabled());
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
 			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
 		}
 		
-		return false;
-	
 	}
 	
 	public void initPositionalMode() {

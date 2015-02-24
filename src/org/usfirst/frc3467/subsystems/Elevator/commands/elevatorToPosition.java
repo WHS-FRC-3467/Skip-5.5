@@ -16,10 +16,8 @@ public class elevatorToPosition extends CommandBase {
     }
 
     public elevatorToPosition(double pos, double timeout) {
-    	requires(elevator);
-    	position = pos;
-    	if (position < 0) position = 0;	// Never go below zero
-		setTimeout(timeout);
+		this(pos);
+    	setTimeout(timeout);
     }
 
     // Called just before this Command runs the first time

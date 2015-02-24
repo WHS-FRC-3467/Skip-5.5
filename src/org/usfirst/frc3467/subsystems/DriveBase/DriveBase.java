@@ -234,6 +234,9 @@ public class DriveBase extends PIDSubsystem {
 
 			// Arcade driving uses PercentVBus
 			initArcade();
+
+			// Limit max speed
+			m_drive.setMaxOutput(0.75);
 		}
 		else
 		{

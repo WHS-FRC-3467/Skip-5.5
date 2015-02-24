@@ -25,9 +25,12 @@ public class elevatorCGDropStack extends CommandGroup {
     	SmartDashboard.putString("elevatorCGDropStack", "WaitCommand(2.0)");
     	addSequential(new WaitCommand(2.0));
     	
-    	// Lower conveyor back to "resting position"
+    	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
+    	SmartDashboard.putString("elevatorCGDropStack", "elevatorDriveToPosition(LevelZero, kDown_Fixed)");
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed, Elevator.kLevelZero));
+    	
     	SmartDashboard.putString("elevatorCGDropStack", "elevatorToPosition(LevelZero, 3.0)");
-    	addSequential(new elevatorToPosition(Elevator.kLevelZero, 3.0));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero));
     	
     }
 }
