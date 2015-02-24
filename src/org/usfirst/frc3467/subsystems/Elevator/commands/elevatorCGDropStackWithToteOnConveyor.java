@@ -22,12 +22,15 @@ public class elevatorCGDropStackWithToteOnConveyor extends CommandGroup {
     	addSequential(new indexerOperate(false));
     	
     	// Wait a sec
-    	SmartDashboard.putString("elevatorCGDropStack", "WaitCommand(1.0)");
-    	addSequential(new WaitCommand(1.0));
+    	SmartDashboard.putString("elevatorCGDropStack", "WaitCommand(2.0)");
+    	addSequential(new WaitCommand(2.0));
     	
-    	// Lower conveyor back to "resting position"
+    	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
+    	SmartDashboard.putString("elevatorCGDropStack", "elevatorDriveToPosition(LevelZero, kDown_Fixed - 0.1)");
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.1, Elevator.kLevelZero));
+    	
     	SmartDashboard.putString("elevatorCGDropStack", "elevatorToPosition(LevelZero, 3.0)");
-    	addSequential(new elevatorToPosition(Elevator.kLevelZero, 3.0));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero));
     	
     }
 }

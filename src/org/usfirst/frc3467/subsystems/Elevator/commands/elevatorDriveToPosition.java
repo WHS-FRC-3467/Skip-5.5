@@ -6,12 +6,16 @@ import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 /**
  *  Drive elevator manually, either by joystick or by fixed rate.
  */
-public class elevatorDriveToFloor extends CommandBase {
+public class elevatorDriveToPosition extends CommandBase {
 
 	boolean isFinished = false;
+	private double m_position;
+	private double m_speed;
 	
-	public elevatorDriveToFloor() {
+	public elevatorDriveToPosition(double speed, double position) {
     	requires(elevator);
+    	m_speed = speed;
+    	m_position = position;
     }
 
     // Called just before this Command runs the first time
@@ -21,7 +25,7 @@ public class elevatorDriveToFloor extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	isFinished = elevator.driveToPosition(Elevator.kDown_Fixed, 0.0);
+    	isFinished = elevator.driveToPosition(m_speed, m_position);
     }
 
     // This method will never return true; this command must always be interrupted.

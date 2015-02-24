@@ -6,10 +6,11 @@
     
     
     driveMecanum command -
-    set up CANTalons for Speed PID and manage each with a PIDFManage object
+    set up CANTalons for Speed PID and manage each with a PIDF_CANTalon object
     
     Use setMaxOutput() on RobotDrive to set max velocity.
     
+    (from Talon SRX Software Reference:)
     17.1. (Quadrature) Encoder Position
     When measuring the position of a Quadrature Encoder, the position is measured in 4X encoder
     edges. For example, if a US Digital Encoder with a 360 cycles per revolution (CPR) will count
@@ -18,6 +19,7 @@
     The velocity units of a Quadrature Encoder is the change in Encoder Position per TvelMea
     (TvelMeas=0.1sec). For example, if a US Digital Encoder (CPR=360) spins at 20 rotations per
     second, this will result in a velocity of 2880 (28800 position units per second).
+    --- end quote ----
     
     Grayhill Encoders: 256 counts/rotation  
     Wheel Diam = 6 in, Circum = 6 x 3.14159 = 18.85 in = 1.57 ft
@@ -37,14 +39,14 @@
 -------------------------------
 
     IMU subsystem - wrapper around navX IMU board    
-    Method to get current reading on given channel
+    Method to get yaw reading (-180 -> 180)
     Command to run calibration
     Debug mode & default command to periodically update SDB
 
 -------------------------------
 
     Elevator Control:
-    set up a CANTalon for Positional PID and manage with a PIDFManage object
+    set up a CANTalon for Positional PID and manage with a PIDF_CANTalon object
     
     On Instantiation: Read top encoder count from Prefs
     
@@ -70,13 +72,7 @@
     Elevator Testing:
     
     Startup in manual mode.
-    Drive elevator at constant speed using Gamecontroller POD (D-Pad).
-    Drive at variable speed using stick1 y-axis (negate value).
-    Still need to zero & track with encoder.
     
     Zero encoder using simultaneous press of buttons 11 & 12. 
-    
-    When a certain button is pressed, go into positional PID and run until target is set.
-    Select 4 targets and assign to buttons 1 -> 4.
     
                

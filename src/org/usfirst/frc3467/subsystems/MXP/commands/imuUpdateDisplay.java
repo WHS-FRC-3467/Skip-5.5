@@ -10,7 +10,7 @@ public class imuUpdateDisplay extends CommandBase {
 
     public imuUpdateDisplay() {
         requires(imu);
-		this.setInterruptible(true);
+//		this.setInterruptible(true);
     }
 
     // Called just before this Command runs the first time

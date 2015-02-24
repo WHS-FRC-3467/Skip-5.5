@@ -1,0 +1,60 @@
+
+/*
+ *  TODO List:
+ */
+ 
+ Updated:     2/23/15
+
+Controls:
+- Move some functions to driver joystick:
+    Conveyor intake (variable speeds)
+    Drop conveyor to floor (to initiate pickup)
+
+Auto Routines (use in auto or teleop):
+- (done) elevatorCGAddTote: Index a tote
+- (done) elevatorCGDropStack: Drop entire stack down on conveyor
+- (done) elevatorCGDropStackWithToteOnConveyor: Just what it says ;-) 
+
+- Drive straight/left/right/back for distance
+- Turn to desired angle
+
+- Pickup RC (roll in and drive forward)
+- Upright an RC (drop conveyor on bottom and drive backwards)
+
+
+Elevator:
+- When lowering stack off the indexers, drive slowly down at fixed speed, monitoring position.
+    When position is hit or passed, switch to PID to hold position
+- Fix the "go up/down" command
+- Provide commands for counting totes (and RC)
+- Index RC command
+
+
+
+
+Conveyor:
+- Vary eject speed based on number of totes aboard
+- Investigate current loads when intaking a tote
+
+
+Drivebase:
+ - Test and implement Speed PID for mecanum driving
+ 
+
+Power Distribution:
+ - create wrapper class
+ - provide enums for controller channels
+ - provide current readings
+ - allow subsytems to register for brownout notifications
+
+
+LEDs:
+ - create service class
+ - provide API for lighting LED indicator strips 
+
+
+
+
+
+
+
