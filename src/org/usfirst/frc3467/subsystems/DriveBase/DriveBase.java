@@ -29,7 +29,7 @@ public class DriveBase extends PIDSubsystem {
 	private final double RAMPRATE = 2;
 	
 	// Default CANTalon PID constants
-	private final double KP_V = 0.2;
+	private final double KP_V = 0.4;
 	private final double KI_V = 0.0;
 	private final double KD_V = 0.0;
 	private final double KF_V = 1.0;
@@ -59,7 +59,7 @@ public class DriveBase extends PIDSubsystem {
 	
 	protected void initDefaultCommand() {
 		// Argument to DriveMecanum() says whether to use Voltage (PercentVBus) or not
-		this.setDefaultCommand(new DriveMecanum(true));
+		this.setDefaultCommand(new DriveMecanum(false));
 	}
 	
 	public DriveBase() {
@@ -179,34 +179,34 @@ public class DriveBase extends PIDSubsystem {
 		
 		if (m_ctrlMode != ControlMode.Position) {
 
-		    // CANTalonFL is the master device
-			CANTalonFL.changeControlMode(ControlMode.Position);
+		    // CANTalonFR is the master device
+			CANTalonFR.changeControlMode(ControlMode.Position);
 			
 			// All others are slave devices - they will follow CANTalonFL
+		    CANTalonFL.changeControlMode(ControlMode.Follower);
 		    CANTalonRL.changeControlMode(ControlMode.Follower);
-		    CANTalonFR.changeControlMode(ControlMode.Follower);
 		    CANTalonRR.changeControlMode(ControlMode.Follower);
 		    
-		    CANTalonRL.set(RobotMap.driveTrainCANTalonFL);
-		    CANTalonFR.set(RobotMap.driveTrainCANTalonFL);
-		    CANTalonRR.set(RobotMap.driveTrainCANTalonFL);
-		    CANTalonFR.reverseOutput(true);
-		    CANTalonRR.reverseOutput(true);
+		    CANTalonFL.set(RobotMap.driveTrainCANTalonFR);
+		    CANTalonRL.set(RobotMap.driveTrainCANTalonFR);
+		    CANTalonRR.set(RobotMap.driveTrainCANTalonFR);
+		    CANTalonFL.reverseOutput(true);
+		    CANTalonRL.reverseOutput(true);
 
 			// Initialize encoder and setpoint
-		    CANTalonFL.setPosition(0);
-		    CANTalonFL.set(0);
+		    CANTalonFR.setPosition(0);
+		    CANTalonFR.set(0);
 		    
 		    // Set parameters for master talon; slaves will follow suit
-		    CANTalonFL.setIZone(IZONE);
-		    CANTalonFL.setCloseLoopRampRate(RAMPRATE);
+		    CANTalonFR.setIZone(IZONE);
+		    CANTalonFR.setCloseLoopRampRate(RAMPRATE);
 
 		    // Turn off motor safety until we get the system tuned
-			CANTalonFL.setSafetyEnabled(false);
+			CANTalonFR.setSafetyEnabled(false);
 			//CANTalonFL.setExpiration(1.0);
 
 			// Set PID constants
-			m_pidfDriveFL.setPID(KP_P, KI_P, KD_P, KF_P);
+			m_pidfDriveFR.setPID(KP_P, KI_P, KD_P, KF_P);
 			
 		    m_ctrlMode = ControlMode.Position;
 		}
@@ -216,14 +216,14 @@ public class DriveBase extends PIDSubsystem {
 	// Drive specified distance
 	public void driveDistance() {
 		
-		m_pidfDriveFL.setSetpoint(m_positionalDistance);
+		m_pidfDriveFR.setSetpoint(m_positionalDistance);
 
 	}
 
 	// Have we driven specified distance?
 	public boolean onPosition() {
 		
-		return m_pidfDriveFL.onTarget();
+		return m_pidfDriveFR.onTarget();
 
 	}
 
@@ -258,7 +258,8 @@ public class DriveBase extends PIDSubsystem {
 			 *
 			 *	If drive stick(s) max out too early, lower this value.
 		     */
-			m_drive.setMaxOutput(780.0);
+			m_drive.setMaxOutput(550.0);
+//			m_drive.setMaxOutput(780.0);
 		}
 		
 	}
