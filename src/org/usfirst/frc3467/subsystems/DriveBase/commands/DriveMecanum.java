@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveMecanum extends CommandBase {
 	
 	boolean m_useVoltage = false;
+	double m_lastX = 0.0, m_lastY = 0.0, m_lastRot = 0.0;
 	
 	public DriveMecanum(boolean useVoltage) {
 		requires(drivebase);
@@ -30,31 +31,49 @@ public class DriveMecanum extends CommandBase {
 		y = OI.driveJoystick.getY();
 		rotation = OI.driveJoystick.getZ();
 
-		// Deadband
-		if (x > -0.08 && x < 0.08) x = 0;
-		if (y > -0.08 && y < 0.08) y = 0;
-		if (rotation > -0.08 && rotation < 0.08) rotation = 0;
-
-        // Square the inputs (while preserving the sign) to increase
-		// fine control while permitting full power
-        if (x >= 0.0)
-            x = (x * x);
-        else
-            x = -(x * x);
-        
-        if (y >= 0.0)
-            y = (y * y);
-        else
-            y = -(y * y);
-        
-        if (rotation >= 0.0)
-        	rotation = (rotation * rotation);
-        else
-        	rotation = -(rotation * rotation);
-        
+		// Adjust stick values for better control
+		x = m_lastX = adjustStick(x, m_lastX);
+		y = m_lastY = adjustStick(y, m_lastY);
+		rotation = m_lastRot = adjustStick(rotation, m_lastRot);
+		
 		SmartDashboard.putNumber(   "IMU_Yaw", imu.getYaw());
 		drivebase.driveMecanum(x, y, rotation / 2.0, imu.getYaw());
+//		drivebase.driveMecanum(x, y, rotation, 0);
+	}
+	
+	private double adjustStick(double input, double lastVal) {
+		
+		double val = input;
+		double change;
+		final double changeLimit = 0.03;
+		
+		/*
+		 *  Deadband limit
+		 */
+		if (val > -0.08 && val < 0.08) {
+			return 0.0;
+		}
 
+        /*
+         *  Square the inputs (while preserving the sign) to increase
+		 *  fine control while permitting full power
+         */
+        if (val > 0.0)
+            val = (val * val);
+        else
+            val = -(val * val);
+        
+		/*
+         *  Slew rate limiter - limit rate of change
+         */
+		change = val - lastVal;
+		
+		if (change > changeLimit)
+			change = changeLimit;
+		else if (change < -changeLimit)
+			change = -changeLimit;
+		
+		return (lastVal += change);
 	}
 	
 	protected boolean isFinished() {

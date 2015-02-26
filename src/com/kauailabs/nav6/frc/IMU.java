@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
@@ -46,10 +47,10 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
     Thread m_thread;
     protected byte update_rate_hz;
 
-    volatile float yaw;
-    volatile float pitch;
-    volatile float roll;
-    volatile float compass_heading;
+    protected volatile float yaw;
+    protected volatile float pitch;
+    protected volatile float roll;
+    protected volatile float compass_heading;
     volatile int update_count = 0;
     volatile int byte_count = 0;
     volatile float nav6_yaw_offset_degrees;
@@ -343,7 +344,15 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
 
         stop = false;
         boolean stream_response_received = false;
+        double last_valid_packet_time = 0.0;
+        int partial_binary_packet_count = 0;
+        int stream_response_receive_count = 0;
+        int timeout_count = 0;
+        int discarded_bytes_count = 0;
+        int port_reset_count = 0;
         double last_stream_command_sent_timestamp = 0.0;
+        int updates_in_last_second = 0;
+        double last_second_start_time = 0;
         try {
             serial_port.setReadBufferSize(512);
             serial_port.setTimeout(1.0);
@@ -363,6 +372,8 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
             serial_port.reset();
             serial_port.write( stream_command, cmd_packet_length );
             serial_port.flush();
+            port_reset_count++;
+	        //SmartDashboard.putNumber("nav6_PortResets", (double)port_reset_count);
             last_stream_command_sent_timestamp = Timer.getFPGATimestamp();
         } catch (RuntimeException ex) {
         	ex.printStackTrace();
@@ -375,7 +386,7 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
                 // bytes have arrived.
                 
                 while ( !stop && ( serial_port.getBytesReceived() < 1 ) ) {
-                    Timer.delay(0.1);
+                    Timer.delay(1.0/update_rate_hz);
                 }
 
                 int packets_received = 0;
@@ -390,10 +401,57 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
                         // Attempt to decode a packet
                         
                         int bytes_remaining = bytes_read - i;
+
+                    	if ( received_data[i] != IMUProtocol.PACKET_START_CHAR ) {
+                    		/* Skip over received bytes until a packet start is detected. */
+                    		i++;
+                    		discarded_bytes_count++;
+        			        //SmartDashboard.putNumber("nav6 Discarded Bytes", (double)discarded_bytes_count);
+                    		continue;
+                    	} else {
+                    		if ( ( bytes_remaining > 2 ) && 
+                    			 ( received_data[i+1] == (byte)'#' ) ) {
+                    			/* Binary packet received; next byte is packet length-2 */
+                    			byte total_expected_binary_data_bytes = received_data[i+2];
+                    			total_expected_binary_data_bytes += 2;
+                    			while ( bytes_remaining < total_expected_binary_data_bytes ) {
+                    				
+                    				/* This binary packet contains an embedded     */
+                    				/* end-of-line character.  Continue to receive */
+                    				/* more data until entire packet is received.  */
+                    				byte[] additional_received_data = serial_port.read(256);
+                    				byte_count += additional_received_data.length;
+                    				bytes_remaining += additional_received_data.length;
+                    				
+                    				/* Resize array to hold existing and new data */
+                    				byte[] c = new byte[received_data.length + additional_received_data.length];
+                    				if ( c.length > 0 ) {
+	                    				System.arraycopy(received_data, 0, c, 0, received_data.length);
+	                    				System.arraycopy(additional_received_data, 0, c, received_data.length, additional_received_data.length);
+	                    				received_data = c;
+                    				} else {
+                    					/* Timeout waiting for remainder of binary packet */
+                    					i++;
+                    					bytes_remaining--;
+                    			        partial_binary_packet_count++;
+                    			        //SmartDashboard.putNumber("nav6 Partial Binary Packets", (double)partial_binary_packet_count);
+                    					continue;
+                    				}
+                    			}
+                    		}
+                    	}
+                        
                         int packet_length = decodePacketHandler(received_data,i,bytes_remaining);
                         if (packet_length > 0) {
                             packets_received++;
                             update_count++;
+                            last_valid_packet_time = Timer.getFPGATimestamp();
+                            updates_in_last_second++;
+                            if ((last_valid_packet_time - last_second_start_time ) > 1.0 ) {
+                            	//SmartDashboard.putNumber("nav6 UpdatesPerSec", (double)updates_in_last_second);
+                            	updates_in_last_second = 0;
+                            	last_second_start_time = last_valid_packet_time;
+                            }
                             i += packet_length;
                         } 
                         else 
@@ -404,6 +462,8 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
                                 setStreamResponse(response);
                                 stream_response_received = true;
                                 i += packet_length;
+                                stream_response_receive_count++;
+                            	//SmartDashboard.putNumber("nav6 Stream Responses", (double)stream_response_receive_count);                                
                             }
                             else {
                                 // current index is not the start of a valid packet; increment
@@ -413,11 +473,13 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
                     }
                 
                     if ( ( packets_received == 0 ) && ( bytes_read == 256 ) ) {
-                        // Workaround for issue found in Java SerialPort implementation:
+                        // Workaround for issue found in SerialPort implementation:
                         // No packets received and 256 bytes received; this
-                        // condition occurs in the Java SerialPort.  In this case,
+                        // condition occurs in the SerialPort.  In this case,
                         // reset the serial port.
                         serial_port.reset();
+                        port_reset_count++;                        
+        		        //SmartDashboard.putNumber("nav6_PortResets", (double)port_reset_count);
                     }
                     
                     // If a stream configuration response has not been received within three seconds
@@ -439,11 +501,23 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
                             Timer.delay(1.0/update_rate_hz);
                         }        
                     }
+                    
+                    /* If receiving data, but no valid packets have been received in the last second */
+                    /* the navX MXP may have been reset, but no exception has been detected.         */
+                    /* In this case , trigger transmission of a new stream_command, to ensure the    */
+                    /* streaming packet type is configured correctly.                                */
+                    
+                    if ( ( Timer.getFPGATimestamp() - last_valid_packet_time ) > 1.0 ) {
+                    	stream_response_received = false;
+                    }
                 }
             } catch (RuntimeException ex) {
                 // This exception typically indicates a Timeout
                 stream_response_received = false;
-                ex.printStackTrace();
+		        timeout_count++;
+		        //SmartDashboard.putNumber("nav6 Serial Port Timeouts", (double)timeout_count);
+                //SmartDashboard.putString("LastNavExceptionBacktrace",ex.getStackTrace().toString());
+                //SmartDashboard.putString("LastNavException", ex.getMessage() + "; " + ex.toString());
             }
         }
     }

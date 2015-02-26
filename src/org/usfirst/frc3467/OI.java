@@ -6,6 +6,8 @@ import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
 import org.usfirst.frc3467.control.Gamepad;
+import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
+import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
@@ -21,7 +23,6 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorHoldLevel;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorLevelsUpDown;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
-import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorCGIntakeandLick;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -74,21 +75,21 @@ public class OI {
 		new JoystickButton(operatorGamepad, Gamepad.rightTrigger)
 			.whenPressed(new elevatorCGDropStackWithToteOnConveyor());
 		
-		// Conveyor - Spit Out Slow
+		// Conveyor - Eject Slow
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
-			.whileHeld(new conveyorDrive(0.25));
+			.whileHeld(new conveyorDrive(Conveyor.kEjectSlow));
 		
-		// Conveyor - Intake Slow
+		// Conveyor - Intake to Pickup
 		new JoystickButton(operatorGamepad, Gamepad.aButton)
-			.whileHeld (new conveyorDrive(-0.30));
+			.whileHeld (new conveyorDrive(Conveyor.kIntakePickup));
 	
-		// Conveyor Intake - Fast
+		// Conveyor Intake Fast
 		new JoystickButton(operatorGamepad, Gamepad.bButton)
-			.whileHeld(new conveyorDrive(-0.60));
+			.whileHeld(new conveyorDrive(Conveyor.kIntakeFast));
 	
-		// Conveyor - Spit Out Fast
+		// Conveyor - Eject Fast
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
-			.whileHeld(new conveyorDrive(0.5));
+			.whileHeld(new conveyorDrive(Conveyor.kEjectFast));
 		
  		new DPadUp(operatorGamepad).whenActive(new elevatorCGNextLevel(true));
  		new DPadRight(operatorGamepad).whenActive(new elevatorHoldLevel(0));
@@ -119,12 +120,8 @@ public class OI {
 		SmartDashboard.putData("Indexer Retract", new indexerOperate(false));
 		SmartDashboard.putData("Drop Stack (no tote on conveyor)", new elevatorCGDropStack());
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
-		SmartDashboard.putData("IndexsidewaysRC", new elevatorCGIndexUprightRC());
-		/*
- 		SmartDashboard.putData("Drive Backward", new DriveForward(-2.25));
-		SmartDashboard.putData("Start Rollers", new SetCollectionSpeed(Collector.FORWARD));
-		SmartDashboard.putData("Stop Rollers", new SetCollectionSpeed(Collector.STOP));
-		SmartDashboard.putData("Reverse Rollers", new SetCollectionSpeed(Collector.REVERSE));
-		 */
+		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
+		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
+
 	}
 }

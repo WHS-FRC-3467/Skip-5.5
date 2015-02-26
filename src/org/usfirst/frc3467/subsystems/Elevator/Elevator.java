@@ -48,7 +48,7 @@ public class Elevator extends Subsystem {
 	private final double 	TOLERANCE = 50;
 	
 	// Default Ramp Rate for PercentVBus operation
-	private final double	RAMPRATE_PVB = 2.0;
+//	private final double	RAMPRATE_PVB = 2.0;
 	
 	// Default Ramp Rate for Closed-Loop operation
 	private final double 	RAMPRATE_CL = 2.0;
@@ -79,9 +79,13 @@ public class Elevator extends Subsystem {
 	public static final int kLevelIndexUpsideDownTote = 3800;
 	
 	// Constants for some useful speeds
+	public static final double kUp_FixedPlus = 0.3;
 	public static final double kUp_Fixed = 0.2;
+	public static final double kUp_FixedSlow = 0.1;
 	public static final double kStop = 0;
+	public static final double kDown_FixedSlow = -0.1;
 	public static final double kDown_Fixed = -0.2;
+	public static final double kDown_FixedPlus = -0.3;
 	
 
 	public static Elevator getInstance() {
