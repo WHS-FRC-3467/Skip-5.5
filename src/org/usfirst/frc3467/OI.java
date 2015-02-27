@@ -12,6 +12,7 @@ import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGGoToTop;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGNextLevel;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexSidewaysRC;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexUprightRC;
@@ -21,6 +22,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorHoldLevel;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorLevelsUpDown;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
@@ -91,10 +93,30 @@ public class OI {
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
 			.whileHeld(new conveyorDrive(Conveyor.kEjectFast));
 		
- 		new DPadUp(operatorGamepad).whenActive(new elevatorCGNextLevel(true));
- 		new DPadRight(operatorGamepad).whenActive(new elevatorHoldLevel(0));
- 		new DPadDown(operatorGamepad).whenActive(new elevatorCGNextLevel(false));
- 		new DPadLeft(operatorGamepad).whenActive(new elevatorDriveToFloor());
+		new JoystickButton(operatorGamepad, Gamepad.startButton)
+			.whenPressed(new indexerOperate(true));
+	
+		new JoystickButton(operatorGamepad, Gamepad.backButton)
+			.whenPressed(new indexerOperate(false));
+	
+// 		new DPadUp(operatorGamepad).whenActive(new elevatorCGNextLevel(true));
+// 		new DPadDown(operatorGamepad).whenActive(new elevatorCGNextLevel(false));
+
+		// Go to Top
+		new DPadUp(operatorGamepad)
+			.whenActive(new elevatorCGGoToTop());
+
+		// Go to Level 0 (platform height)
+		new DPadRight(operatorGamepad)
+			.whenActive(new elevatorToPosition(Elevator.kLevelZero));
+ 		
+		// Go to Step Height
+		new DPadDown(operatorGamepad)
+			.whenActive(new elevatorToPosition(Elevator.kLevelStep));
+ 		
+		// Drive slowly to floor
+		new DPadLeft(operatorGamepad)
+			.whenActive(new elevatorDriveToFloor());
  		
  		{
 //			new elevatorCGAddTote();
@@ -121,7 +143,7 @@ public class OI {
 		SmartDashboard.putData("Drop Stack (no tote on conveyor)", new elevatorCGDropStack());
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
-		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
+//		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
 
 	}
 }

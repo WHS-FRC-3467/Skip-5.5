@@ -11,6 +11,7 @@ public class elevatorToPosition extends CommandBase {
 	
     public elevatorToPosition(double pos) {
     	requires(elevator);
+    	setInterruptible(true);
     	position = pos;
     	if (position < 0) position = 0;	// Never go below zero
     }

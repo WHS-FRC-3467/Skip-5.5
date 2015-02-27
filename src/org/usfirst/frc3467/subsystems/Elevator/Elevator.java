@@ -63,6 +63,7 @@ public class Elevator extends Subsystem {
 	public static final int kLevelThree = 6600;
 	public static final int kLevelFour = 8900;
 	public static final int kLevelFive = 11000;
+	public static final int kLevelTop = 13500;
 	
 	public static Vector<Double> LevelList;
 	
@@ -72,6 +73,7 @@ public class Elevator extends Subsystem {
 	public static final int kAdd4Step = 700;
 	
 	// Other useful levels
+	public static final int kLevelStep = 1150;
 	public static final int kLevelIndexTote = 3400;
 	public static final int kLevelDropStackWithToteOnConveyor = 1400;
 	public static final int kLevelIndexUprightRC = 3800;
