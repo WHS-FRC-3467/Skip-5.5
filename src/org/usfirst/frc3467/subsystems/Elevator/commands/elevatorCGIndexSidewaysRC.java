@@ -26,12 +26,12 @@ public class elevatorCGIndexSidewaysRC extends CommandGroup {
     	// Wait half a sec
     	addSequential(new WaitCommand(0.5));
     	
-    	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
-    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.1, Elevator.kLevelTwo));
-    	addSequential(new elevatorToPosition(Elevator.kLevelZero, 2.0));
-
     	// Turn off conveyor
     	addSequential(new conveyorDrive(Conveyor.kStop));
+
+    	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed, Elevator.kLevelTwo));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero));
 
     	// TODO: Add command to add 1 to tote count in Elevator
     }
