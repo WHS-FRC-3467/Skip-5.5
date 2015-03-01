@@ -8,18 +8,28 @@ import org.usfirst.frc3467.commands.CommandBase;
  */
 public class imuUpdateDisplay extends CommandBase {
 
-    public imuUpdateDisplay() {
+    private int counter;
+    
+	public imuUpdateDisplay() {
         requires(imu);
-//		this.setInterruptible(true);
+		this.setInterruptible(true);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	counter = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	imu.update();
+    	
+    	// Only run the update on every 50th pass (about once per second)
+    	if (counter < 50)
+    		counter++;
+    	else {
+        	imu.update();
+        	counter = 0;
+    	}
     	
     }
 

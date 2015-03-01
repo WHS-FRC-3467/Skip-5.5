@@ -5,6 +5,21 @@
  
  Updated:     2/23/15
 
+
+Latest software versions:
+https://wpilib.screenstepslive.com/s/4485/m/13503/l/305566-current-software-revisions
+
+
+On Thursday:
+    - Update roboRio firmware:  C:\Program Files (x86)\National Instruments\Shared\Firmware\cRIO\76F2
+    - Update PCM
+    
+Bag Time:
+    - Update roboRio
+    - Update Talons
+    - Update PDP
+    - Update PCM
+
 Controls:
 - Move some functions to driver joystick:
     Conveyor intake (variable speeds)
@@ -20,14 +35,14 @@ Auto Routines (use in auto or teleop):
 
 - Pickup RC (roll in and drive forward)
 - Upright an RC (drop conveyor on bottom and drive backwards)
-
+- Use pickup arms to grab all three RCs in auto and drive forward.
 
 Elevator:
-- When lowering stack off the indexers, drive slowly down at fixed speed, monitoring position.
+- (Done) When lowering stack off the indexers, drive slowly down at fixed speed, monitoring position.
     When position is hit or passed, switch to PID to hold position
 - Fix the "go up/down" command
 - Provide commands for counting totes (and RC)
-- Index RC command
+- Index RC commands
 
 
 
@@ -39,10 +54,10 @@ Conveyor:
 
 Drivebase:
  - Test and implement Speed PID for mecanum driving
- 
+ - Get MXP working
 
 Power Distribution:
- - create wrapper class
+ - (Done) create wrapper class around PowerDistributionPanel singleton
  - provide enums for controller channels
  - provide current readings
  - allow subsytems to register for brownout notifications

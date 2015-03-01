@@ -4,7 +4,7 @@ import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
 /**
- *  Drive elevator manually, either by joystick or by fixed rate.
+ *  Drive elevator by fixed rate to a specified position.
  */
 public class elevatorDriveToPosition extends CommandBase {
 
@@ -14,6 +14,7 @@ public class elevatorDriveToPosition extends CommandBase {
 	
 	public elevatorDriveToPosition(double speed, double position) {
     	requires(elevator);
+    	setInterruptible(true);
     	m_speed = speed;
     	m_position = position;
     }

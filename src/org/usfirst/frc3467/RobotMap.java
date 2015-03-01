@@ -39,12 +39,4 @@ public class RobotMap {
 	public static double pickUpMaxSpeed = 0.3;
 	public static double softShotSpeed = 0.2;
 	
-	public static void updateSensors() {
-		// SmartDashboard.putNumber("Indexer Pot", Indexer.getInstance().pot.pidGet());
-		// SmartDashboard.putNumber("Arm Pot", Elevator.getInstance().pot.pidGet());
-		// SmartDashboard.putNumber("Back Pickup Pot", RollerBack.getInstance().pot.pidGet());
-		// SmartDashboard.putNumber("Front Pickup Pot", Conveyor.getInstance().frontPot.pidGet());
-		// SmartDashboard.putNumber("Front Pickup Pot", Conveyor.getInstance().frontPot.get());
-	}
-	
 }
