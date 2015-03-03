@@ -57,7 +57,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 300;  // Platform eject height
+	public static final int kLevelZero = 150;  // Platform eject height
 	public static final int kLevelOne = 2500;
 	public static final int kLevelTwo = 4500;
 	public static final int kLevelThree = 6600;

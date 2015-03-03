@@ -101,7 +101,11 @@ public class MXP_IMU extends Subsystem {
     		return 0.0;
     }
     
-	public void update() {
+	public void zeroYaw() {
+        imu.zeroYaw();
+	}
+		
+		public void update() {
 
         // When calibration has completed, zero the yaw
         // Calibration is complete approaximately 20 seconds
