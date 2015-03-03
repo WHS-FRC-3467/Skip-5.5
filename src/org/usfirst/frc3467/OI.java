@@ -6,7 +6,9 @@ import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
 import org.usfirst.frc3467.control.Gamepad;
+import org.usfirst.frc3467.subsystems.DriveBase.DriveBase;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
+import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
@@ -26,6 +28,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
+import org.usfirst.frc3467.subsystems.MXP.commands.imuZeroYaw;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -63,11 +66,11 @@ public class OI {
 
 		// Drive Elevator Up - Fixed Speed
 		new JoystickButton(operatorGamepad, Gamepad.leftBumper)
-			.whileHeld(new elevatorDrive(Elevator.kUp_Fixed));
+			.whileHeld(new elevatorDrive(0));
 		
 		// Drive Elevator Down - Fixed Speed
 		new JoystickButton(operatorGamepad, Gamepad.rightBumper)
-			.whileHeld(new elevatorDrive(Elevator.kDown_Fixed));
+			.whenPressed(new elevatorCGDropStack());
 		
 		// Index Tote
 		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
@@ -91,17 +94,19 @@ public class OI {
 	
 		// Conveyor - Eject Fast
 		new JoystickButton(operatorGamepad, Gamepad.yButton)
-			.whileHeld(new conveyorDrive(Conveyor.kEjectFast));
+			.whileHeld(new conveyorDrive(Conveyor.kEjectFast - 0.1));
 		
 		new JoystickButton(operatorGamepad, Gamepad.startButton)
 			.whenPressed(new indexerOperate(true));
 	
 		new JoystickButton(operatorGamepad, Gamepad.backButton)
 			.whenPressed(new indexerOperate(false));
-	
+	 
+		
 // 		new DPadUp(operatorGamepad).whenActive(new elevatorCGNextLevel(true));
 // 		new DPadDown(operatorGamepad).whenActive(new elevatorCGNextLevel(false));
 
+		
 		// Go to Top
 		new DPadUp(operatorGamepad)
 			.whenActive(new elevatorCGGoToTop());
@@ -117,25 +122,22 @@ public class OI {
 		// Drive slowly to floor
 		new DPadLeft(operatorGamepad)
 			.whenActive(new elevatorDriveToFloor());
+		
+		new JoystickButton(driveJoystick, 2)
+			.whenPressed(new imuZeroYaw());
  		
- 		{
-//			new elevatorCGAddTote();
-		}
-
-		{
-//			new elevatorCGDropStack();
-		}
+		/*
+		new JoystickButton(driveJoystick, 3)
+			.whenPressed(new DriveSetFieldCentricState(true));
 		
-		{
-//			new elevatorLevelsUpDown(false);
-		}
-		
-		{
-//			new elevatorLevelsUpDown(true);
-		}
+		new JoystickButton(driveJoystick, 4)
+			.whenPressed(new DriveSetFieldCentricState(false));
+		*/
 
 		
 		// SmartDashboard Buttons
+		
+		SmartDashboard.putBoolean("Field Centric Enabled", DriveBase.m_fieldCentricEnabled);
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		SmartDashboard.putData("Update IMU Display", new imuUpdateDisplay());
 		SmartDashboard.putData("Indexer Engage", new indexerOperate(true));
