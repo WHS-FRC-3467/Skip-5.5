@@ -44,6 +44,8 @@ public class DriveBase extends PIDSubsystem {
 	private RobotDrive 				m_drive;
 	private CANTalon.ControlMode	m_ctrlMode;
 	
+	public static boolean m_fieldCentricEnabled = true;
+	
 	private double					m_positionalDistance;
 	
 	private PIDF_CANTalon			m_pidfDriveFL;
@@ -59,7 +61,7 @@ public class DriveBase extends PIDSubsystem {
 	
 	protected void initDefaultCommand() {
 		// Argument to DriveMecanum() says whether to use Voltage (PercentVBus) or not
-		this.setDefaultCommand(new DriveMecanum(false));
+		this.setDefaultCommand(new DriveMecanum(true));
 	}
 	
 	public DriveBase() {
@@ -267,7 +269,19 @@ public class DriveBase extends PIDSubsystem {
 	// Use mecanum drive
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
 		m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
-
+		
+		if(m_fieldCentricEnabled == true){
+			m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
+		}
+		else{
+			m_drive.mecanumDrive_Cartesian(x, y, rotation, 0);
+		}
+	}
+	
+	public void setFieldCentricState(boolean state)
+	{
+		
+		m_fieldCentricEnabled = state;
 	}
 
 	/*

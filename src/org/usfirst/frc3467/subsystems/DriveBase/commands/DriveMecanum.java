@@ -37,7 +37,7 @@ public class DriveMecanum extends CommandBase {
 		rotation = m_lastRot = adjustStick(rotation, m_lastRot);
 		
 		SmartDashboard.putNumber(   "IMU_Yaw", imu.getYaw());
-		drivebase.driveMecanum(x, y, rotation / 2.0, imu.getYaw());
+		drivebase.driveMecanum(x, y, rotation, imu.getYaw());
 //		drivebase.driveMecanum(x, y, rotation, 0);
 	}
 	
@@ -45,7 +45,7 @@ public class DriveMecanum extends CommandBase {
 		
 		double val = input;
 		double change;
-		final double changeLimit = 0.03;
+		final double changeLimit = 0.30;
 		
 		/*
 		 *  Deadband limit
@@ -66,6 +66,7 @@ public class DriveMecanum extends CommandBase {
 		/*
          *  Slew rate limiter - limit rate of change
          */
+        /*
 		change = val - lastVal;
 		
 		if (change > changeLimit)
@@ -74,6 +75,9 @@ public class DriveMecanum extends CommandBase {
 			change = -changeLimit;
 		
 		return (lastVal += change);
+		*/
+        return val;
+		
 	}
 	
 	protected boolean isFinished() {
