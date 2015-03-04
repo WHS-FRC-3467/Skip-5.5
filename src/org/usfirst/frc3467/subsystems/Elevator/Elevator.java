@@ -3,7 +3,7 @@ package org.usfirst.frc3467.subsystems.Elevator;
 import java.util.Vector;
 
 import org.usfirst.frc3467.RobotMap;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrive;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrivePID;
 import org.usfirst.frc3467.pid.PIDF_CANTalon;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -26,10 +26,7 @@ public class Elevator extends Subsystem {
 	
 	// State Info
 	private int				m_numTotes;
-	private int				m_currLevel;
 	private boolean			m_haveBin;
-	private boolean 		m_stackingOnPlatform;
-	private boolean 		m_stackingOnStep;
 	
 	// Default PID Constants
 	// TODO: Tune these!
@@ -58,23 +55,22 @@ public class Elevator extends Subsystem {
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
 	public static final int kLevelZero = 150;  // Platform eject height
+	public static final int kLevelStepZero = 700;
 	public static final int kLevelOne = 2500;
+	public static final int kLevelStepOne = 3450;
 	public static final int kLevelTwo = 4500;
+	public static final int kLevelStepTwo = 5600;
 	public static final int kLevelThree = 6600;
+	public static final int kLevelStepThree = 7700;
 	public static final int kLevelFour = 8900;
 	public static final int kLevelFive = 11000;
 	public static final int kLevelTop = 13500;
 	
-	public static Vector<Double> LevelList;
-	
-	
-	// Additions to level for platform and step
-	public static final int kAdd4Platform = 300;
-	public static final int kAdd4Step = 700;
 	
 	// Other useful levels
 	public static final int kLevelStep = 1150;
 	public static final int kLevelIndexTote = 3400;
+	public static final int kLevelIndexToteTopOfIndexers = 5660;
 	public static final int kLevelDropStackWithToteOnConveyor = 1400;
 	public static final int kLevelIndexUprightRC = 3800;
 	public static final int kLevelIndexSidewaysRC = 6000;
@@ -100,17 +96,6 @@ public class Elevator extends Subsystem {
 		// Init state info
 		m_numTotes = 0;
 		m_haveBin = false;
-		m_currLevel = 0;
-		m_stackingOnPlatform = false;
-		m_stackingOnStep = false;
-
-		LevelList = new Vector<Double>();
-		LevelList.addElement(new Double(kLevelZero));
-		LevelList.addElement(new Double(kLevelOne));
-		LevelList.addElement(new Double(kLevelTwo));
-		LevelList.addElement(new Double(kLevelThree));
-		LevelList.addElement(new Double(kLevelFour));
-		LevelList.addElement(new Double(kLevelFive));
 
 		m_limitSwitch = new DigitalInput(RobotMap.elevBottomLimitSwitch);
 		m_winchMotor1 = new CANTalon(RobotMap.winchDriveCANTalon);
@@ -149,7 +134,7 @@ public class Elevator extends Subsystem {
 	}
 	
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new elevatorDrive());
+		this.setDefaultCommand(new elevatorDrivePID());
 	}
 	
 	public void initManualMode() {
@@ -222,7 +207,6 @@ public class Elevator extends Subsystem {
 	
 	public void zeroEncoder() {
 		m_pidfCAN.setPosition(0);
-		this.setLevel(0);
 
 	}
 	
@@ -235,77 +219,7 @@ public class Elevator extends Subsystem {
 		m_pidfCAN.updatePIDF();
 		
 	}
-	
-	public double getPositionForLevel(int level) {
 		
-		double target = 0;
-		
-		// If requested level is out of bounds, return -1
-		if (level < 0 || level > 5)
-			return (-1);
-		
-		// Get encoder value for requested level
-		target = ((Double) LevelList.elementAt(level)).doubleValue();
-		
-		// Add increments if we are stacking on platform or step, rather than floor
-		if (m_stackingOnPlatform == true)
-			target += kAdd4Platform;
-		else if (m_stackingOnStep == true)
-			target += kAdd4Step;
-		
-		return target;
-	}
-	
-	public double getPositionForOneLevelUp() {
-
-		verifyCurrentLevel();
-		return getPositionForLevel(m_currLevel + 1);
-	}
-	
-	public double getPositionForOneLevelDown(){
-		
-		verifyCurrentLevel();
-		return getPositionForLevel(m_currLevel - 1);
-	}
-	
-	private void verifyCurrentLevel() {
-		double currpos = m_pidfCAN.getPosition();
-		int actual_level = 0;
-		int add2lvl = 0;
-		
-		// Add increments if we are stacking on platform or step, rather than floor
-		if (m_stackingOnPlatform == true)
-			add2lvl = kAdd4Platform;
-		else if (m_stackingOnStep == true)
-			add2lvl = kAdd4Step;
-		
-		/*
-		 *  Find out if current encoder position matches the level we THINK we are on
-		 *  
-		 *  1. Loop through each level
-		 *  2. Compare current position to position reading for the level
-		 *  3. If current position is <= to expected position reading, then break out of loop
-		 *  4. Else if current position > expected position reading (+ tolerance), then
-		 *     bump actual_level counter and go to next level
-		 */
-		for (int i = 0; i <= 5; i++) {
-			double lvlpos = ((Double)LevelList.elementAt(i)).doubleValue() + add2lvl;
-			if (currpos <= (lvlpos + TOLERANCE))
-				break;
-			else
-				actual_level++;
-		}
-		
-		if (m_currLevel != actual_level)
-			SmartDashboard.putString("Elevator Verify", "OUT OF SYNC");
-		else
-			SmartDashboard.putString("Elevator Verify", "Level OK");
-		
-		SmartDashboard.putNumber("Elevator Current Level", actual_level);
-		
-		m_currLevel = actual_level;
-	}
-	
 	public void gotoPosition(double position) {
 
 		// Re-enable PID
@@ -357,47 +271,5 @@ public class Elevator extends Subsystem {
 	public boolean hasBin() {
 		return m_haveBin;
 	}
-
-	public void setLevel(int level) {
-		m_currLevel = level;
-	}
-	
-	public int getLevel() {
-		return m_currLevel;
-	}
-	
-	public void levelUp() {
-		m_currLevel++;
-	}
-	
-	public void levelDown() {
-		m_currLevel--;
-	}
-	
-	public void setStackingOnPlatform(boolean onPlatform) {
-		m_stackingOnPlatform = onPlatform;
-		if (onPlatform == true)
-			m_stackingOnStep = false;
-	}
-	
-	public boolean getStackingOnPlatform() {
-		return m_stackingOnPlatform;
-	}
-	
-	public void setStackingOnStep(boolean onStep) {
-		m_stackingOnStep = onStep;
-		if (onStep == true)
-			m_stackingOnPlatform = false;
-	}
-	
-	public boolean getStackingOnStep() {
-		return m_stackingOnStep;
-	}
-	
-	
-	
-
-
-
 
 }

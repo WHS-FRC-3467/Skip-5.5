@@ -3,7 +3,8 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 import org.usfirst.frc3467.commands.CommandBase;
 
 /**
- *	Move elevator to a specified position (units = encoder counts)
+ *	Move elevator to a specified position under PID control
+ *	(units = encoder counts)
  */
 public class elevatorToPosition extends CommandBase {
 
