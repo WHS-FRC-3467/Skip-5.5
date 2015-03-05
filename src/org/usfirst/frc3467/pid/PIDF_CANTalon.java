@@ -270,7 +270,8 @@ public class PIDF_CANTalon implements LiveWindowSendable {
      * Stop running the PIDController, this sets the output to zero before stopping.
      */
     public synchronized void disable() {
-        m_talon.disableControl();
+        m_talon.ClearIaccum();
+    	m_talon.disableControl();
 
         if (table != null) {
             table.putBoolean("enabled", false);
@@ -302,6 +303,9 @@ public class PIDF_CANTalon implements LiveWindowSendable {
 		} else
 			setPID(p, i, d);
 		
+    	// Update Tolerance
+		setTolerance(SmartDashboard.getNumber(m_name + " Tolerance"));
+	
 	}
 
     
