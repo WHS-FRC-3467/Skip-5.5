@@ -32,7 +32,7 @@ public class Elevator extends Subsystem {
 	// Default PID Constants
 	// TODO: Tune these!
 	private final double 	KP = 0.300;
-	private final double 	KI = 0.002;
+	private final double 	KI = 0.001;
 	private final double 	KD = 0.012;
 	
 	/* Default iZone
