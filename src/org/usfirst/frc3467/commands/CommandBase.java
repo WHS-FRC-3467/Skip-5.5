@@ -10,20 +10,11 @@ import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.Indexer;
 import org.usfirst.frc3467.subsystems.LEDs.LEDs;
 import org.usfirst.frc3467.subsystems.MXP.MXP_IMU;
-
-
-
-
-
-
 import org.usfirst.frc3467.subsystems.RobotCamera.RobotCamera;
-
-import com.ni.vision.NIVision;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public abstract class CommandBase extends Command {
 	public static OI oi;
@@ -55,10 +46,11 @@ public abstract class CommandBase extends Command {
 		conveyor = new Conveyor();
 		subsystemList.addElement(conveyor);
 		
-	//	usbcamera = new RobotCamera();
-	//	subsystemList.addElement(usbcamera);
+//		usbcamera = new RobotCamera();
+//		subsystemList.addElement(usbcamera);
 				
-		//		subsystemList.addElement(leds);
+//		leds = new LEDs(); 
+//		subsystemList.addElement(leds);
 		
 		imu = new MXP_IMU();
 		subsystemList.addElement(imu);

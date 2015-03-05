@@ -61,7 +61,7 @@ public class DriveBase extends PIDSubsystem {
 	
 	protected void initDefaultCommand() {
 		// Argument to DriveMecanum() says whether to use Voltage (PercentVBus) or not
-		this.setDefaultCommand(new DriveMecanum(true));
+		this.setDefaultCommand(new DriveMecanum(false));
 	}
 	
 	public DriveBase() {
@@ -260,7 +260,7 @@ public class DriveBase extends PIDSubsystem {
 			 *
 			 *	If drive stick(s) max out too early, lower this value.
 		     */
-			m_drive.setMaxOutput(550.0);
+			m_drive.setMaxOutput(650.0);
 //			m_drive.setMaxOutput(780.0);
 		}
 		

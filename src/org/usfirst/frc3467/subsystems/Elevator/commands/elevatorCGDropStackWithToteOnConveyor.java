@@ -16,7 +16,7 @@ public class elevatorCGDropStackWithToteOnConveyor extends CommandGroup {
     	addSequential(new indexerOperate(false));
     	
     	// Lift stack above Indexer
-    	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor, 2.0));
+    	addSequential(new elevatorToPosition(Elevator.kLevelIndexToteTopOfIndexers, 2.0));
 
 
     	
