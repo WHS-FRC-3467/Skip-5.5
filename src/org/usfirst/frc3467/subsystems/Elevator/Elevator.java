@@ -2,6 +2,7 @@ package org.usfirst.frc3467.subsystems.Elevator;
 
 import java.util.Vector;
 
+
 import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrivePID;
 import org.usfirst.frc3467.pid.PIDF_CANTalon;
@@ -42,7 +43,7 @@ public class Elevator extends Subsystem {
 	private final int 		IZONE = 1500;
 	
 	// Default Tolerance for position  error
-	private final double 	TOLERANCE = 50;
+	private final double 	TOLERANCE = 30;
 	
 	// Default Ramp Rate for PercentVBus operation
 //	private final double	RAMPRATE_PVB = 2.0;
@@ -54,7 +55,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 150;  // Platform eject height
+	public static final int kLevelZero = 260;  // Platform eject height
 	public static final int kLevelStepZero = 700;
 	public static final int kLevelOne = 2500;
 	public static final int kLevelStepOne = 3450;
@@ -64,7 +65,7 @@ public class Elevator extends Subsystem {
 	public static final int kLevelStepThree = 7700;
 	public static final int kLevelFour = 8900;
 	public static final int kLevelFive = 11000;
-	public static final int kLevelTop = 13500;
+	public static final int kLevelTop = 13300;
 	
 	
 	// Other useful levels
@@ -72,7 +73,7 @@ public class Elevator extends Subsystem {
 	public static final int kLevelIndexTote = 3400;
 	public static final int kLevelIndexToteTopOfIndexers = 5660;
 	public static final int kLevelDropStackWithToteOnConveyor = 1400;
-	public static final int kLevelIndexUprightRC = 3800;
+	public static final int kLevelIndexUprightRC = 3600;
 	public static final int kLevelIndexSidewaysRC = 6000;
 	public static final int kLevelIndexUpsideDownTote = 3800;
 	
@@ -136,7 +137,7 @@ public class Elevator extends Subsystem {
 	protected void initDefaultCommand() {
 		this.setDefaultCommand(new elevatorDrivePID());
 	}
-	
+	 
 	public void initManualMode() {
 
 		m_winchMotor1.changeControlMode(ControlMode.PercentVbus);
@@ -184,14 +185,24 @@ public class Elevator extends Subsystem {
 		return false;
 	}
 
-	
 	private void manualDriveSDUpdates(double speed) {
 		if (debugging) {
 	    	SmartDashboard.putBoolean("Elevator Enabled", m_winchMotor1.isControlEnabled());
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
 			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
+			SmartDashboard.putBoolean("Elevator At Bottom", isZero());
 		}
 		
+	}
+	
+	public void reportPosition(){
+		m_pidfCAN.getPosition();
+		if (debugging) {
+	    	SmartDashboard.putBoolean("Elevator Enabled", m_winchMotor1.isControlEnabled());
+			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
+			SmartDashboard.putBoolean("Elevator At Bottom", isZero());
+		}
+
 	}
 	
 	public void initPositionalMode() {

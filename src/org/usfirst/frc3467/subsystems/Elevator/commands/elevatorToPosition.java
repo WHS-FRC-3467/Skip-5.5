@@ -35,7 +35,7 @@ public class elevatorToPosition extends CommandBase {
     // Usually this command will never finish - it always must be interrupted.
     // Exception - if a timeout is set
     protected boolean isFinished() {
-    	if (isTimedOut())
+    	if (elevator.onTarget() || isTimedOut())
     		return true;
     	else
         	return false;

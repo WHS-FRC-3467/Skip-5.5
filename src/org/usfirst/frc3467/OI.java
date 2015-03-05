@@ -127,6 +127,9 @@ public class OI {
 		// Go to Step Level + 3
 		new JoystickButton(operatorJoystick, 11)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelStepThree));
+		// Index Upright RC
+		new JoystickButton(operatorJoystick, 12)
+			.whenPressed(new elevatorCGIndexUprightRC());
 		// Go to Step Height
 		new DPadDown(operatorGamepad)
 			.whenActive(new elevatorToPosition(Elevator.kLevelStep));

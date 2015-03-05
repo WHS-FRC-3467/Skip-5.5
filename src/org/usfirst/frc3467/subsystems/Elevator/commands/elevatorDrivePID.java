@@ -11,10 +11,11 @@ public class elevatorDrivePID extends CommandBase {
 
 	/* 
 	 * This is the factor by which the joystick value (-1.0 -> + 1.0)
-	 * is divided before being added to the setpoint.
+	 * is multiplied before being added to the setpoint.
 	 * Modify it to change the maximum speed at which the elevator is driven.
+	 * Know that the bigger the number, the faster the elevator.
 	 */
-	static final double kDeltaFactor = 20;
+	static final double kDeltaFactor = 80;
 	
 	double m_pidSetpoint;
 	double m_positionDelta = 0;
@@ -38,21 +39,21 @@ public class elevatorDrivePID extends CommandBase {
 
 		m_positionDelta = -(oi.getGamepad().getRightStickY());
 
-		if (m_positionDelta > -0.08 && m_positionDelta < 0.08) {
-			// No change in position
-			m_positionDelta = 0.0;
-		}
-		else
-		{
-			// add delta to old setpoint and give new setpoint to elevator
-			m_pidSetpoint += m_positionDelta / kDeltaFactor;
+		if (m_positionDelta < -0.08 || m_positionDelta > 0.08) {
+
+			// If outside deadband, add delta to old setpoint
+			m_pidSetpoint += m_positionDelta * kDeltaFactor;
 			if (m_pidSetpoint < 0.0) m_pidSetpoint = 0.0;
-			elevator.gotoPosition(m_pidSetpoint);					
 		}
+
+		//  Give new setpoint to elevator
+		elevator.gotoPosition(m_pidSetpoint);							
+		
     }
 
     // This method will never return true; this command must always be interrupted.
      protected boolean isFinished() {
+    	 elevator.reportPosition();
         return false;
     }
 
