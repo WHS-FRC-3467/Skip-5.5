@@ -70,7 +70,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
 		SmartDashboard.putNumber(m_name + " D", m_talon.getD());
 		SmartDashboard.putNumber(m_name + " F", m_talon.getF());
 		
-    	SmartDashboard.putNumber(m_name + " Setpoint", m_setpoint);
+    	SmartDashboard.putNumber(m_name + " Talon Setpoint", m_setpoint);
     	SmartDashboard.putNumber(m_name + " Position", m_talon.getPosition());
     	SmartDashboard.putNumber(m_name + " Tolerance", m_tolerance);
     	SmartDashboard.putNumber(m_name + " Error", m_talon.getClosedLoopError());
@@ -190,7 +190,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
             table.putNumber("setpoint", m_setpoint);
         
         if (debugging)
-        	SmartDashboard.putNumber(m_name + " Setpoint", m_setpoint);
+        	SmartDashboard.putNumber(m_name + " Talon Setpoint", m_setpoint);
 
     }
 

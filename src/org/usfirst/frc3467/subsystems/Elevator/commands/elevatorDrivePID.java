@@ -30,14 +30,15 @@ public class elevatorDrivePID extends CommandBase {
     
     	elevator.initPositionalMode();
 
-    	// Set setpoint to current encoder value
-		m_pidSetpoint = elevator.getPosition();
+    	// Get current elevator setpoint
+		m_pidSetpoint = elevator.getElevatorSetpoint();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-		m_positionDelta = -(oi.getGamepad().getRightStickY());
+		m_positionDelta = -(oi.getGamepad().getLeftStickY());
 
 		if (m_positionDelta < -0.08 || m_positionDelta > 0.08) {
 
@@ -60,7 +61,7 @@ public class elevatorDrivePID extends CommandBase {
     // Called once after isFinished returns true or when interrupted
     protected void end() {
 		// disable PID before ending
-		elevator.disablePID();
+		// elevator.disablePID();
     }
 
     // Called when another command which requires one or more of the same

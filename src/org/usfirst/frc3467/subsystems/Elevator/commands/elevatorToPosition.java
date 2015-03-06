@@ -44,7 +44,7 @@ public class elevatorToPosition extends CommandBase {
     // Called once after isFinished returns true
     protected void end() {
     	
-    	elevator.disablePID();
+//    	elevator.disablePID();
     	
     }
 
