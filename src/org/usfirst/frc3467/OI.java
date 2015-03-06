@@ -6,6 +6,7 @@ import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
 import org.usfirst.frc3467.control.Gamepad;
+import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
@@ -161,7 +162,7 @@ public class OI {
 		SmartDashboard.putData("Drop Stack (no tote on conveyor)", new elevatorCGDropStack());
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
-//		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
+		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
 
 	}
 }

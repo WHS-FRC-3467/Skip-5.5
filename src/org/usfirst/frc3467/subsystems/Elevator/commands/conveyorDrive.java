@@ -25,7 +25,7 @@ public class conveyorDrive extends CommandBase {
     	
 		if (m_speed == 0)
 		{
-			speed = (oi.getGamepad().getLeftStickX());
+			speed = (oi.getGamepad().getRightStickX());
 
 			// Deadband
 			if (speed > -0.08 && speed < 0.08) speed = 0;

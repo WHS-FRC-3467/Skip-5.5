@@ -26,6 +26,8 @@ public class Elevator extends Subsystem {
 	private static final boolean debugging = true;
 	
 	// State Info
+	private double			m_elevatorSetpoint;
+	private boolean			m_isPositional;
 	private int				m_numTotes;
 	private boolean			m_haveBin;
 	
@@ -55,7 +57,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 260;  // Platform eject height
+	public static final int kLevelZero = 250;  // Platform eject height
 	public static final int kLevelStepZero = 700;
 	public static final int kLevelOne = 2500;
 	public static final int kLevelStepOne = 3450;
@@ -95,6 +97,8 @@ public class Elevator extends Subsystem {
 		instance = this;
 		
 		// Init state info
+		m_elevatorSetpoint = 0.0;
+		m_isPositional = true;
 		m_numTotes = 0;
 		m_haveBin = false;
 
@@ -140,20 +144,27 @@ public class Elevator extends Subsystem {
 	 
 	public void initManualMode() {
 
-		m_winchMotor1.changeControlMode(ControlMode.PercentVbus);
-		m_winchMotor1.enableControl();
-		
-		// Stop motor until we are ready to set speed
-		m_winchMotor1.set(0);
-		
-		if (debugging)
-			SmartDashboard.putString("Elevator Mode", "Manual");
+		if (m_isPositional) {
+			m_isPositional = false;
+			m_winchMotor1.changeControlMode(ControlMode.PercentVbus);
+			m_winchMotor1.enableControl();
+			
+			// Stop motor until we are ready to set speed
+			m_winchMotor1.set(0);
+			
+			if (debugging)
+				SmartDashboard.putString("Elevator Mode", "Manual");
+		}
 	}
 	
 	public void driveManual(double speed) {
 		
 		m_winchMotor1.set(speed);
 		
+		// Update the elevator setpoint even while in manual mode
+		// to avoid surprises when returning to PID control
+		m_elevatorSetpoint = m_pidfCAN.getPosition();
+
 		manualDriveSDUpdates(speed);
 			
 	}
@@ -169,6 +180,10 @@ public class Elevator extends Subsystem {
 		}
 		
 		currPos = m_pidfCAN.getPosition();
+		
+		// Update the elevator setpoint even while in manual mode
+		// to avoid surprises when returning to PID control
+		m_elevatorSetpoint = currPos;
 
 		// Look at direction and current position to determine if we need to stop
 		if ((speed >= 0.0 && currPos >= position) ||
@@ -206,13 +221,17 @@ public class Elevator extends Subsystem {
 	}
 	
 	public void initPositionalMode() {
-		m_winchMotor1.changeControlMode(ControlMode.Position);
+
+		if (!m_isPositional) {
+			m_isPositional = true;
+			m_winchMotor1.changeControlMode(ControlMode.Position);
 		
-		// Disable for safety until we are ready to set the setpoint
-		m_pidfCAN.disable();
-		
-		if (debugging)
-			SmartDashboard.putString("Elevator Mode", "Positional");
+			// Disable for safety until we are ready to set the setpoint
+			m_pidfCAN.disable();
+			
+			if (debugging)
+				SmartDashboard.putString("Elevator Mode", "Positional");
+		}
 		
 	}
 	
@@ -237,10 +256,32 @@ public class Elevator extends Subsystem {
 		if (!m_pidfCAN.isEnabled())
 			m_pidfCAN.enable();
 
-		m_pidfCAN.setSetpoint(position);		
+		m_pidfCAN.setSetpoint(position);
+		
+		// Save the position
+		m_elevatorSetpoint = position;
+		
+		if (debugging)
+			SmartDashboard.putNumber("Elevator Setpoint", m_elevatorSetpoint);
+	}
+	
+	/*
+	 *  Return our own internal copy of the setpoint
+	 *  
+	 *  We need to do this because the Talon's setpoint gets set to zero
+	 *  whenever we change modes
+	 */
+	public double getElevatorSetpoint() {
+
+		if (debugging)
+			SmartDashboard.putNumber("Elevator Setpoint", m_elevatorSetpoint);
+
+		return m_elevatorSetpoint;				
+
 	}
 	
 	public double getPosition() {
+	
 		return m_pidfCAN.getPosition();				
 	}
 	
