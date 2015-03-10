@@ -45,17 +45,18 @@ public class PIDF_CANTalon implements LiveWindowSendable {
     private double m_setpoint = 0.0;
     
 	// Controls display to SmartDashboard
-	private static final boolean debugging = true;
+	private boolean m_debugging = false;
 	
 
 	public PIDF_CANTalon(String name, CANTalon talon, double tolerance,
-							boolean hasFeedForward) {
+							boolean hasFeedForward, boolean m_debugging) {
 		this.m_name = name;
 		this.m_talon = talon;
 	    this.m_tolerance = tolerance;
 		this.m_hasFeedForward = hasFeedForward;
-	
-		if (debugging)
+		this.m_debugging = m_debugging;
+		
+		if (m_debugging)
 			initSmartDashboard();
 	}
 
@@ -102,7 +103,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
             table.putNumber("d", d);
         }
 
-        if (debugging) {
+        if (m_debugging) {
     		SmartDashboard.putNumber(m_name + " P", m_talon.getP());
     		SmartDashboard.putNumber(m_name + " I", m_talon.getI());
     		SmartDashboard.putNumber(m_name + " D", m_talon.getD());
@@ -135,7 +136,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
             table.putNumber("d", d);
             table.putNumber("f", f);
         }
-        if (debugging) {
+        if (m_debugging) {
     		SmartDashboard.putNumber(m_name + " P", m_talon.getP());
     		SmartDashboard.putNumber(m_name + " I", m_talon.getI());
     		SmartDashboard.putNumber(m_name + " D", m_talon.getD());
@@ -189,7 +190,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         if (table != null)
             table.putNumber("setpoint", m_setpoint);
         
-        if (debugging)
+        if (m_debugging)
         	SmartDashboard.putNumber(m_name + " Talon Setpoint", m_setpoint);
 
     }
@@ -229,7 +230,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         if (table != null)
             table.putNumber("position", position);
         
-        if (debugging)
+        if (m_debugging)
         	SmartDashboard.putNumber(m_name + " Position", position);
 
     }
@@ -241,7 +242,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
     public void setTolerance (double tolerance) {
         m_tolerance = tolerance;
         
-        if (debugging)
+        if (m_debugging)
         	SmartDashboard.putNumber(m_name + " Tolerance", m_tolerance);
 
     }
@@ -256,13 +257,13 @@ public class PIDF_CANTalon implements LiveWindowSendable {
      * Begin running the PIDController
      */
     public synchronized void enable() {
-        
+        m_talon.ClearIaccum();        
     	m_talon.enableControl();
 
         if (table != null) {
             table.putBoolean("enabled", true);
         }
-        if (debugging)
+        if (m_debugging)
         	SmartDashboard.putBoolean(m_name + " Enabled", true);
     }
 
@@ -276,7 +277,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         if (table != null) {
             table.putBoolean("enabled", false);
         }
-        if (debugging)
+        if (m_debugging)
         	SmartDashboard.putBoolean(m_name + " Enabled", false);
     }
 

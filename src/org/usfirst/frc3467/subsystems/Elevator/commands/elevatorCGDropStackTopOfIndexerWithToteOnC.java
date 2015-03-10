@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 /**
  *
  */
-public class elevatorCGDropStackTopOfIndexer extends CommandGroup {
+public class elevatorCGDropStackTopOfIndexerWithToteOnC extends CommandGroup {
     
-    public  elevatorCGDropStackTopOfIndexer() {
+    public  elevatorCGDropStackTopOfIndexerWithToteOnC() {
 
     	// Unengage Indexer
     	addSequential(new indexerOperate(false));
     	
     	// addParallel(new conveyorDrive(Conveyor.kIntakeHold + 0.15));
     	// Lift stack above Indexer
-    	addSequential(new elevatorToPosition(Elevator.kLevelIndexToteTopOfIndexers - 450, 2.0));
+    	addSequential(new elevatorToPosition(Elevator.kLevelIndexToteTopOfIndexers - 2150, 2.0));
 
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
     	addSequential(new elevatorDriveToPosition((Elevator.kDown_Fixed - 0.1), Elevator.kLevelZero));

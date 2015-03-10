@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.commands.autonomous.AutoNon;
+import org.usfirst.frc3467.commands.autonomous.AutoTimedTank;
 import org.usfirst.frc3467.subsystems.LEDs.LEDs;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -45,7 +46,7 @@ public class Robot extends IterativeRobot {
 		// Add autonomous selector
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("Default Auto", new AutoNon());
-//		autoChooser.addObject("LIDAR Auto", new AutoLIDAR());
+		autoChooser.addObject("Timed Tank", new AutoTimedTank());
 		
 		SmartDashboard.putData("Auto", autoChooser);
 

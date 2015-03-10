@@ -14,6 +14,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddToteTopOfIndexer;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackTopOfIndexer;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackTopOfIndexerWithToteOnC;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGGoToTop;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexSidewaysRC;
@@ -119,6 +120,9 @@ public class OI {
 		// Deindex at top of indexers
 		new JoystickButton(operatorJoystick, 8)
 			.whenPressed(new elevatorCGDropStackTopOfIndexer());
+		// Deindex at top of indexers with tote on conveyor
+		new JoystickButton(operatorJoystick, 2)
+			.whenPressed(new elevatorCGDropStackTopOfIndexerWithToteOnC());
 		// Go to Step Level + 1
 		new JoystickButton(operatorJoystick, 9)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelStepOne));
@@ -140,7 +144,7 @@ public class OI {
 			.whenActive(new elevatorDriveToFloor());
 		
 		// Zero the Gyro Yaw
-		new JoystickButton(driveJoystick, 2)
+		new JoystickButton(driveJoystick, 7)
 			.whenPressed(new imuZeroYaw());
  		
 		/*
