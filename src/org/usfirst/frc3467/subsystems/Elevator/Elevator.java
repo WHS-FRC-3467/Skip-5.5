@@ -57,7 +57,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 250;  // Platform eject height
+	public static final int kLevelZero = 220;  // Platform eject height
 	public static final int kLevelStepZero = 700;
 	public static final int kLevelOne = 2500;
 	public static final int kLevelStepOne = 3450;
@@ -133,7 +133,7 @@ public class Elevator extends Subsystem {
 		//m_winchMotor1.setExpiration(1.0);
 
 		// Put a wrapper around winch motor 1 for managing the PID
-		m_pidfCAN = new PIDF_CANTalon("Elevator", m_winchMotor1, TOLERANCE, false);
+		m_pidfCAN = new PIDF_CANTalon("Elevator", m_winchMotor1, TOLERANCE, false, debugging);
 		m_pidfCAN.setPID(KP, KI, KD);
 		
 	}
@@ -159,6 +159,14 @@ public class Elevator extends Subsystem {
 	
 	public void driveManual(double speed) {
 		
+		// If trying to drive down and limit switch is hit, then stop...
+		if(isZero() && speed < 0.0) {
+			speed = 0.0;
+			zeroEncoder();
+			m_elevatorSetpoint = 0;
+			return;
+		}
+
 		m_winchMotor1.set(speed);
 		
 		// Update the elevator setpoint even while in manual mode
@@ -176,6 +184,7 @@ public class Elevator extends Subsystem {
 		if(isZero()) {
 			speed = 0.0;
 			zeroEncoder();
+			m_elevatorSetpoint = 0;
 			return true;
 		}
 		

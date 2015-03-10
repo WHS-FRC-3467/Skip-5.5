@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class DriveBase extends PIDSubsystem {
 	
-	public static final boolean debugging = true;
+	public static final boolean debugging = false;
 	
 	/* Default iZone
 	 * The iZone is the zone around the target setpoint in which the I term
@@ -121,10 +121,10 @@ public class DriveBase extends PIDSubsystem {
 		m_drive.setInvertedMotor(MotorType.kRearRight, false);
  
 	    // Create PID management wrappers around controllers
-	    m_pidfDriveFL = new PIDF_CANTalon("Drive FL", CANTalonFL, TOLERANCE, true);
-		m_pidfDriveRL = new PIDF_CANTalon("Drive RL", CANTalonRL, TOLERANCE, true);
-		m_pidfDriveFR = new PIDF_CANTalon("Drive FR", CANTalonFR, TOLERANCE, true);
-		m_pidfDriveRR = new PIDF_CANTalon("Drive RR", CANTalonRR, TOLERANCE, true);
+	    m_pidfDriveFL = new PIDF_CANTalon("Drive FL", CANTalonFL, TOLERANCE, true, debugging);
+		m_pidfDriveRL = new PIDF_CANTalon("Drive RL", CANTalonRL, TOLERANCE, true, debugging);
+		m_pidfDriveFR = new PIDF_CANTalon("Drive FR", CANTalonFR, TOLERANCE, true, debugging);
+		m_pidfDriveRR = new PIDF_CANTalon("Drive RR", CANTalonRR, TOLERANCE, true, debugging);
 
 		// Set PIDF constants for each controller
 		m_pidfDriveFL.setPID(KP_V, KI_V, KD_V, KF_V);
@@ -261,7 +261,7 @@ public class DriveBase extends PIDSubsystem {
 			 *
 			 *	If drive stick(s) max out too early, lower this value.
 		     */
-			m_drive.setMaxOutput(650.0);
+			m_drive.setMaxOutput(600.0);
 //			m_drive.setMaxOutput(780.0);
 		}
 		
