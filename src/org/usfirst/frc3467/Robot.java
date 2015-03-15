@@ -14,6 +14,7 @@ import org.usfirst.frc3467.commands.autonomous.AutoNon;
 import org.usfirst.frc3467.commands.autonomous.AutoTimedTank;
 import org.usfirst.frc3467.subsystems.LEDs.LEDs;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
@@ -32,6 +33,8 @@ public class Robot extends IterativeRobot {
 
 	Command autonomousCommand;
 	SendableChooser autoChooser;
+    CameraServer cServer;
+
 	public static Vector<PIDController> PIDList;
 	
 	public Robot() {
@@ -39,6 +42,13 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void robotInit() {
+
+		// Init camera and start camera server instance
+        cServer = CameraServer.getInstance();
+        cServer.setQuality(50);
+        cServer.setSize(1);
+        //the camera name (ex "cam0") can be found through the roborio web interface
+        cServer.startAutomaticCapture("cam0");
 
 		// Initialize all subsystems
 		CommandBase.init();

@@ -3,10 +3,17 @@ package org.usfirst.frc3467.subsystems.Elevator;
 import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Conveyor extends Subsystem {
+
+	private DigitalInput 	m_conveyorLimitSwitch;
+	
+	// Controls display to SmartDashboard
+	private static final boolean debugging = true;
 
 	// Constants for some useful speeds
 	public static final double kIntakeFast = -0.6;
@@ -40,6 +47,8 @@ public class Conveyor extends Subsystem {
 		instance = this;
 		conveyorMotor = new VictorSP(RobotMap.conveyorVSP);
 		flippyThingMotor = new VictorSP(RobotMap.flippyThingMotor);
+		m_conveyorLimitSwitch = new DigitalInput(RobotMap.elevConveyorLimitSwitch);
+
 	}
 	
 	protected void initDefaultCommand() {
@@ -47,6 +56,9 @@ public class Conveyor extends Subsystem {
 	}
 	
 	public void driveManual(double speed) {
+		if (debugging) {
+	    	SmartDashboard.putBoolean("Conveyor Limit", m_conveyorLimitSwitch.get());
+		}
 		conveyorMotor.set(speed);
 	}
 	

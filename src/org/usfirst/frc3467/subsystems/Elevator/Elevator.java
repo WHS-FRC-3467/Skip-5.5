@@ -1,8 +1,5 @@
 package org.usfirst.frc3467.subsystems.Elevator;
 
-import java.util.Vector;
-
-
 import org.usfirst.frc3467.RobotMap;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDrivePID;
 import org.usfirst.frc3467.pid.PIDF_CANTalon;
@@ -20,7 +17,7 @@ public class Elevator extends Subsystem {
 	private CANTalon 		m_winchMotor1;
 	private CANTalon 		m_winchMotor2;
 	private PIDF_CANTalon	m_pidfCAN;
-	private DigitalInput 	m_limitSwitch;
+	private DigitalInput 	m_elevatorLimitSwitch;
 	
 	// Controls display to SmartDashboard
 	private static final boolean debugging = true;
@@ -59,6 +56,7 @@ public class Elevator extends Subsystem {
 	// These sometimes act like enumerated values, but they also contain data
 	public static final int kLevelZero = 220;  // Platform eject height
 	public static final int kLevelStepZero = 700;
+	public static final int kLevelHumanFeed = 1350;
 	public static final int kLevelOne = 2500;
 	public static final int kLevelStepOne = 3450;
 	public static final int kLevelTwo = 4500;
@@ -102,7 +100,8 @@ public class Elevator extends Subsystem {
 		m_numTotes = 0;
 		m_haveBin = false;
 
-		m_limitSwitch = new DigitalInput(RobotMap.elevBottomLimitSwitch);
+		m_elevatorLimitSwitch = new DigitalInput(RobotMap.elevBottomLimitSwitch);
+
 		m_winchMotor1 = new CANTalon(RobotMap.winchDriveCANTalon);
 		m_winchMotor2 = new CANTalon(RobotMap.winchSlaveCANTalon);
 		
@@ -250,7 +249,7 @@ public class Elevator extends Subsystem {
 	}
 	
 	public boolean isZero() {
-		return m_limitSwitch.get();
+		return m_elevatorLimitSwitch.get();
 	}
 	
 	

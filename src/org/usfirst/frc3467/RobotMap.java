@@ -33,6 +33,7 @@ public class RobotMap {
 	
 	// Digital I/0
 	public static final int elevBottomLimitSwitch = 0;
+	public static final int elevConveyorLimitSwitch = 1;
 
 	// Constants
 	public static final double armMaxSpeed = 0.5;
