@@ -114,6 +114,9 @@ public class OI {
 		// Go to Level 0 (platform height)
 		new DPadRight(operatorGamepad)
 			.whenActive(new elevatorToPosition(Elevator.kLevelZero));
+ 		// Go to human feeding height
+		new JoystickButton(operatorJoystick, 2)
+			.whenPressed(new elevatorToPosition(Elevator.kLevelHumanFeed));
  		// Go to top of indexers
 		new JoystickButton(operatorJoystick, 7)
 			.whenPressed(new elevatorCGAddToteTopOfIndexer());
