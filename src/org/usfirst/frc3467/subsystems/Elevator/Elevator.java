@@ -17,7 +17,7 @@ public class Elevator extends Subsystem {
 	private CANTalon 		m_winchMotor1;
 	private CANTalon 		m_winchMotor2;
 	private PIDF_CANTalon	m_pidfCAN;
-	private DigitalInput 	m_elevatorLimitSwitch;
+	public DigitalInput 	m_elevatorLimitSwitch;
 	
 	// Controls display to SmartDashboard
 	private static final boolean debugging = true;
@@ -54,7 +54,7 @@ public class Elevator extends Subsystem {
 	
 	// Public constants for elevator levels
 	// These sometimes act like enumerated values, but they also contain data
-	public static final int kLevelZero = 220;  // Platform eject height
+	public static final int kLevelZero = 120;  // Platform eject height
 	public static final int kLevelStepZero = 700;
 	public static final int kLevelHumanFeed = 1350;
 	public static final int kLevelOne = 2500;
@@ -70,12 +70,11 @@ public class Elevator extends Subsystem {
 	
 	// Other useful levels
 	public static final int kLevelStep = 1150;
-	public static final int kLevelIndexTote = 3400;
-	public static final int kLevelIndexToteTopOfIndexers = 5660;
-	public static final int kLevelDropStackWithToteOnConveyor = 1400;
-	public static final int kLevelIndexUprightRC = 3600;
+	public static final int kLevelIndexTote = 6050;
+	public static final int kLevelDropStackWithToteOnConveyor = 4800;
+	public static final int kLevelIndexUprightRC = 4500;
 	public static final int kLevelIndexSidewaysRC = 6000;
-	public static final int kLevelIndexUpsideDownTote = 3800;
+
 	
 	// Constants for some useful speeds
 	public static final double kUp_FixedPlus = 0.3;
@@ -287,7 +286,7 @@ public class Elevator extends Subsystem {
 		return m_elevatorSetpoint;				
 
 	}
-	
+
 	public double getPosition() {
 	
 		return m_pidfCAN.getPosition();				

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Displayed on SmartDashboard/LiveWindow:
  * P:
  * I:
+ * I*100:
  * D:
  * F:
  * Setpoint:
@@ -70,6 +71,7 @@ public class PIDF_CANTalon implements LiveWindowSendable {
 		SmartDashboard.putNumber(m_name + " I", m_talon.getI());
 		SmartDashboard.putNumber(m_name + " D", m_talon.getD());
 		SmartDashboard.putNumber(m_name + " F", m_talon.getF());
+		SmartDashboard.putNumber(m_name + " I*100", (m_talon.getI())*100);
 		
     	SmartDashboard.putNumber(m_name + " Talon Setpoint", m_setpoint);
     	SmartDashboard.putNumber(m_name + " Position", m_talon.getPosition());

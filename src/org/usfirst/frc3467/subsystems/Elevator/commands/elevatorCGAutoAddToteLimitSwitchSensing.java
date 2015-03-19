@@ -1,22 +1,20 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
+import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  *
  */
-public class elevatorCGAddTote extends CommandGroup {
+public class elevatorCGAutoAddToteLimitSwitchSensing extends CommandGroup {
     
-
-	
-    public  elevatorCGAddTote() {
-        
-
-    	// Make sure Indexer is  engaged
+    public elevatorCGAutoAddToteLimitSwitchSensing() {
+    	
+    	addSequential(new conveyorSettleLimit());
+       	// Make sure Indexer is  engaged
     	addSequential(new indexerOperate(true));
     	
 
@@ -35,7 +33,8 @@ public class elevatorCGAddTote extends CommandGroup {
 
     	// Lower all the way to floor to be ready to get next tote
     	addSequential(new elevatorDriveToFloor());
-    	
-    	// TODO: Add command to add 1 to tote count in Elevator
+
     }
+
+
 }
