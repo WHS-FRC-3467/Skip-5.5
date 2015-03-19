@@ -13,8 +13,10 @@ import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.commands.autonomous.AutoNon;
 import org.usfirst.frc3467.commands.autonomous.AutoTimedTank;
 import org.usfirst.frc3467.subsystems.LEDs.LEDs;
+import org.usfirst.frc3467.subsystems.LIDAR.LIDAR;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
@@ -34,6 +36,7 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	SendableChooser autoChooser;
     CameraServer cServer;
+    LIDAR lidar;
 
 	public static Vector<PIDController> PIDList;
 	
@@ -49,7 +52,8 @@ public class Robot extends IterativeRobot {
         cServer.setSize(1);
         //the camera name (ex "cam0") can be found through the roborio web interface
         cServer.startAutomaticCapture("cam0");
-
+        lidar = new LIDAR(Port.kMXP);
+        lidar.start();
 		// Initialize all subsystems
 		CommandBase.init();
 		
@@ -105,6 +109,7 @@ public class Robot extends IterativeRobot {
 		if (CommandBase.leds != null) {
 			CommandBase.leds.setState("Disabled init", LEDs.REG3, 1);
 		}
+		
 	}
 	
 	/**

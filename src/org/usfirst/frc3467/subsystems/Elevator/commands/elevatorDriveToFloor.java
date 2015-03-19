@@ -25,7 +25,8 @@ public class elevatorDriveToFloor extends CommandBase {
     }
 
     // This method will never return true; this command must always be interrupted.
-     protected boolean isFinished() {
+     protected boolean isFinished() 
+     {
         return isFinished;
     }
 

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Conveyor extends Subsystem {
 
-	private DigitalInput 	m_conveyorLimitSwitch;
+	private static DigitalInput 	m_conveyorLimitSwitch;
 	
 	// Controls display to SmartDashboard
 	private static final boolean debugging = true;
@@ -55,6 +55,9 @@ public class Conveyor extends Subsystem {
 		this.setDefaultCommand(new conveyorDrive());
 	}
 	
+	public static boolean getLimitSwitch(){
+		return m_conveyorLimitSwitch.get();
+	}
 	public void driveManual(double speed) {
 		if (debugging) {
 	    	SmartDashboard.putBoolean("Conveyor Limit", m_conveyorLimitSwitch.get());

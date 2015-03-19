@@ -1,5 +1,6 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
+import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -12,17 +13,19 @@ public class elevatorCGDropStackWithToteOnConveyor extends CommandGroup {
     
     public  elevatorCGDropStackWithToteOnConveyor() {
 
+
+    	
+    	// Lift stack above Indexer
+    	addParallel(new conveyorDrive(Conveyor.kIntakeHold));
+    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.5, Elevator.kLevelDropStackWithToteOnConveyor - 50));
+    	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor));
     	// Unengage Indexer
     	addSequential(new indexerOperate(false));
     	
-    	// Lift stack above Indexer
-    	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor, 2.0));
-
-
-    	
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
-    	addSequential(new elevatorDriveToPosition((Elevator.kDown_Fixed), (Elevator.kLevelZero + 25)));
+    	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor - 160));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero + 195));
     	addSequential(new elevatorToPosition(Elevator.kLevelZero));
-    	
+    	addSequential(new conveyorDrive(0), 0.05);
     }
 }
