@@ -12,9 +12,7 @@ import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddToteTopOfIndexer;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackTopOfIndexer;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackTopOfIndexerWithToteOnC;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAutoAddToteLimitSwitchSensing;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGGoToTop;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexSidewaysRC;
@@ -77,10 +75,12 @@ public class OI {
 		new JoystickButton(operatorGamepad, Gamepad.rightBumper)
 			.whenPressed(new elevatorCGDropStack());
 		
-		// Index A Tote
+		// Index Routine:
 		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
 			.whenPressed(new elevatorCGAddTote());
-		
+		//Index and watch for conveyor hit:
+		new JoystickButton(operatorJoystick, 1)
+			.whenPressed(new elevatorCGAutoAddToteLimitSwitchSensing());
 		// DeIndex Stack with a tote on the conveyor
 		new JoystickButton(operatorGamepad, Gamepad.rightTrigger)
 			.whenPressed(new elevatorCGDropStackWithToteOnConveyor());
@@ -117,15 +117,7 @@ public class OI {
  		// Go to human feeding height
 		new JoystickButton(operatorJoystick, 2)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelHumanFeed));
- 		// Go to top of indexers
-		new JoystickButton(operatorJoystick, 7)
-			.whenPressed(new elevatorCGAddToteTopOfIndexer());
-		// Deindex at top of indexers
-		new JoystickButton(operatorJoystick, 8)
-			.whenPressed(new elevatorCGDropStackTopOfIndexer());
-		// Deindex at top of indexers with tote on conveyor
-		new JoystickButton(operatorJoystick, 2)
-			.whenPressed(new elevatorCGDropStackTopOfIndexerWithToteOnC());
+
 		// Go to Step Level + 1
 		new JoystickButton(operatorJoystick, 9)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelStepOne));
