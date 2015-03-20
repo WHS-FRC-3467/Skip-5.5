@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 /**
  *
  */
-public class elevatorCGAddTote extends CommandGroup {
+public class elevatorCGAddToteSlowHigh extends CommandGroup {
     
 
 	
-    public  elevatorCGAddTote() {
+    public  elevatorCGAddToteSlowHigh() {
         
 
     	// Make sure Indexer is  engaged
@@ -23,8 +23,8 @@ public class elevatorCGAddTote extends CommandGroup {
     	// Lift tote above Indexer (and drive conveyor in at same time)
     	addParallel(new conveyorDrive(Conveyor.kIntakeHold));
  
-    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.6, Elevator.kLevelIndexTote - 90));
-    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote));
+    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.35, Elevator.kLevelIndexTote));
+    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote + 290));
     	
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
     	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.65, Elevator.kLevelZero + 500));    	
