@@ -12,6 +12,7 @@ import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddToteSlowHigh;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAutoAddToteLimitSwitchSensing;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGGoToTop;
@@ -78,6 +79,9 @@ public class OI {
 		// Index Routine:
 		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
 			.whenPressed(new elevatorCGAddTote());
+		// Slow and High Index Routine (For RCs and last totes from the human fdr statn
+		new JoystickButton(operatorJoystick, 3)
+			.whenPressed(new elevatorCGAddToteSlowHigh());
 		//Index and watch for conveyor hit:
 		new JoystickButton(operatorJoystick, 1)
 			.whenPressed(new elevatorCGAutoAddToteLimitSwitchSensing());

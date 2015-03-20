@@ -21,11 +21,11 @@ public class elevatorCGAutoAddToteLimitSwitchSensing extends CommandGroup {
     	// Lift tote above Indexer (and drive conveyor in at same time)
     	addParallel(new conveyorDrive(Conveyor.kIntakeHold));
  
-    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.65, Elevator.kLevelIndexTote - 90));
+    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.6, Elevator.kLevelIndexTote - 90));
     	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote));
     	
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
-    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.55, Elevator.kLevelZero + 500));    	
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.65, Elevator.kLevelZero + 500));    	
     	addSequential(new elevatorToPosition(Elevator.kLevelZero));
 
     	// Turn off conveyor
