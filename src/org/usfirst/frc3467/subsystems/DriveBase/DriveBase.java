@@ -269,7 +269,6 @@ public class DriveBase extends PIDSubsystem {
 
 	// Use mecanum drive
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
-		m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
 		
 		if(m_fieldCentricEnabled == true){
 			m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
