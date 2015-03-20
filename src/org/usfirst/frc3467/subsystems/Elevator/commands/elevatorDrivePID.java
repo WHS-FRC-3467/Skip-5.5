@@ -19,7 +19,6 @@ public class elevatorDrivePID extends CommandBase {
 	
 	double m_pidSetpoint;
 	double m_positionDelta = 0;
-	boolean isZeroed;
 	
     public elevatorDrivePID() {
     	requires(elevator);
@@ -29,7 +28,7 @@ public class elevatorDrivePID extends CommandBase {
     // Called just before this Command runs the first time
     protected void initialize() {
     
-    	isZeroed = elevator.initPositionalMode();
+    	elevator.initPositionalMode();
 
     	// Get current elevator setpoint
 		m_pidSetpoint = elevator.getElevatorSetpoint();
@@ -39,10 +38,7 @@ public class elevatorDrivePID extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-    	if (!isZeroed)
-    		return;
-    	
-    	m_positionDelta = -(oi.getGamepad().getLeftStickY());
+		m_positionDelta = -(oi.getGamepad().getLeftStickY());
 
 		if (m_positionDelta < -0.08 || m_positionDelta > 0.08) {
 
@@ -56,13 +52,9 @@ public class elevatorDrivePID extends CommandBase {
 		
     }
 
-    // This method will only return true if the elevator has not  yet been zero'ed;
-    // otherwise, this command must always be interrupted.
+    // This method will never return true; this command must always be interrupted.
      protected boolean isFinished() {
-    	if (!isZeroed)
-    		return true;
-    	
-    	elevator.reportPosition();
+    	 elevator.reportPosition();
         return false;
     }
 

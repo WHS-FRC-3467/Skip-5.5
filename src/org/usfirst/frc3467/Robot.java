@@ -12,7 +12,6 @@ import java.util.Vector;
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.commands.autonomous.AutoNon;
 import org.usfirst.frc3467.commands.autonomous.AutoTimedTank;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.LEDs.LEDs;
 import org.usfirst.frc3467.subsystems.LIDAR.LIDAR;
 
@@ -53,11 +52,9 @@ public class Robot extends IterativeRobot {
         cServer.setSize(1);
         //the camera name (ex "cam0") can be found through the roborio web interface
         cServer.startAutomaticCapture("cam0");
-        
         lidar = new LIDAR(Port.kMXP);
         lidar.start();
-		
-        // Initialize all subsystems
+		// Initialize all subsystems
 		CommandBase.init();
 		
 		// Add autonomous selector
@@ -105,13 +102,6 @@ public class Robot extends IterativeRobot {
 		}
 		if (CommandBase.leds != null) {
 			CommandBase.leds.setState("Teleop init", LEDs.REG3, 0);
-		}
-		
-		if (CommandBase.elevator != null) {
-			// If elevator has not been zeroed, queue up a command to do it now
-			if (CommandBase.elevator.hasBeenZeroed() == false) {
-				Scheduler.getInstance().add(new elevatorDriveToFloor());
-			}
 		}
 	}
 	

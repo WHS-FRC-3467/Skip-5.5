@@ -23,7 +23,6 @@ public class Elevator extends Subsystem {
 	private static final boolean debugging = true;
 	
 	// State Info
-	private boolean			m_hasBeenZeroed;
 	private double			m_elevatorSetpoint;
 	private boolean			m_isPositional;
 	private int				m_numTotes;
@@ -95,7 +94,6 @@ public class Elevator extends Subsystem {
 		instance = this;
 		
 		// Init state info
-		m_hasBeenZeroed = false;
 		m_elevatorSetpoint = 0.0;
 		m_isPositional = true;
 		m_numTotes = 0;
@@ -116,8 +114,18 @@ public class Elevator extends Subsystem {
 
 		// Set parameters for master talon; slave will follow suit
 		m_winchMotor1.setIZone(IZONE);
+//		m_winchMotor1.setVoltageRampRate(RAMPRATE_PVB);
 		m_winchMotor1.setCloseLoopRampRate(RAMPRATE_CL);
 		
+		//m_winchMotor1.setForwardSoftLimit(12000);
+		// PID Testing mode - limit top
+//		m_winchMotor1.setForwardSoftLimit(8000);
+//		m_winchMotor1.enableForwardSoftLimit(true);
+
+		// For Testing Only - set bottom limit to position of conveyor on boot
+//		m_winchMotor1.setReverseSoftLimit(0);
+//		m_winchMotor1.enableReverseSoftLimit(true);
+
 	    // Turn off motor safety until we get the system tuned
 		m_winchMotor1.setSafetyEnabled(false);
 		//m_winchMotor1.setExpiration(1.0);
@@ -154,16 +162,14 @@ public class Elevator extends Subsystem {
 			speed = 0.0;
 			zeroEncoder();
 			m_elevatorSetpoint = 0;
-			m_hasBeenZeroed = true;
+			return;
 		}
-		else
-		{
-			m_winchMotor1.set(speed);
-			
-			// Update the elevator setpoint even while in manual mode
-			// to avoid surprises when returning to PID control
-			m_elevatorSetpoint = m_pidfCAN.getPosition();			
-		}
+
+		m_winchMotor1.set(speed);
+		
+		// Update the elevator setpoint even while in manual mode
+		// to avoid surprises when returning to PID control
+		m_elevatorSetpoint = m_pidfCAN.getPosition();
 
 		manualDriveSDUpdates(speed);
 			
@@ -172,37 +178,33 @@ public class Elevator extends Subsystem {
 	public boolean driveToPosition(double speed, double position) {
 
 		double currPos;
-		boolean retval = false;
 		
 		if(isZero()) {
 			speed = 0.0;
 			zeroEncoder();
 			m_elevatorSetpoint = 0;
-			m_hasBeenZeroed = true;
-			retval = true;
+			return true;
+		}
+		
+		currPos = m_pidfCAN.getPosition();
+		
+		// Update the elevator setpoint even while in manual mode
+		// to avoid surprises when returning to PID control
+		m_elevatorSetpoint = currPos;
+
+		// Look at direction and current position to determine if we need to stop
+		if ((speed >= 0.0 && currPos >= position) ||
+			(speed < 0.0 && currPos <= position)) {
+
+			m_winchMotor1.set(0.0);
+			return true;
 		}
 		else
-		{
-			currPos = m_pidfCAN.getPosition();
-			
-			// Update the elevator setpoint even while in manual mode
-			// to avoid surprises when returning to PID control
-			m_elevatorSetpoint = currPos;
-
-			// Look at direction and current position to determine if we need to stop
-			if ((speed >= 0.0 && currPos >= position) ||
-				(speed < 0.0 && currPos <= position)) {
-
-				m_winchMotor1.set(0.0);
-				retval = true;
-			}
-			else
-				m_winchMotor1.set(speed);
-		}
+			m_winchMotor1.set(speed);
 		
 		manualDriveSDUpdates(speed);
 		
-		return retval;
+		return false;
 	}
 
 	private void manualDriveSDUpdates(double speed) {
@@ -211,7 +213,6 @@ public class Elevator extends Subsystem {
 			SmartDashboard.putNumber("Elevator Speed Requested", speed);		
 			SmartDashboard.putNumber("Elevator Position", m_winchMotor1.getPosition());
 			SmartDashboard.putBoolean("Elevator At Bottom", isZero());
-			SmartDashboard.putBoolean("Elevator ZEROed", m_hasBeenZeroed);
 		}
 		
 	}
@@ -226,16 +227,8 @@ public class Elevator extends Subsystem {
 
 	}
 	
-	public boolean initPositionalMode() {
+	public void initPositionalMode() {
 
-		if (!m_hasBeenZeroed)
-		{
-			// Don't allow anything to happen until we have been zeroed
-			SmartDashboard.putBoolean("Elevator ZEROed", false);
-			return false;
-			
-		}
-		
 		if (!m_isPositional) {
 			m_isPositional = true;
 			m_winchMotor1.changeControlMode(ControlMode.Position);
@@ -246,7 +239,6 @@ public class Elevator extends Subsystem {
 			if (debugging)
 				SmartDashboard.putString("Elevator Mode", "Positional");
 		}
-		return true;
 		
 	}
 	
@@ -257,10 +249,6 @@ public class Elevator extends Subsystem {
 	
 	public boolean isZero() {
 		return m_elevatorLimitSwitch.get();
-	}
-	
-	public boolean hasBeenZeroed() {
-		return m_hasBeenZeroed;
 	}
 	
 	

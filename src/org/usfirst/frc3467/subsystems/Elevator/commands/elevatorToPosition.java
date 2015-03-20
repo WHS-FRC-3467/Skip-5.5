@@ -9,7 +9,6 @@ import org.usfirst.frc3467.commands.CommandBase;
 public class elevatorToPosition extends CommandBase {
 
 	double	position;
-	boolean isZeroed;
 	
     public elevatorToPosition(double pos) {
     	requires(elevator);
@@ -25,24 +24,18 @@ public class elevatorToPosition extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	isZeroed = elevator.initPositionalMode();
+    	elevator.initPositionalMode();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (isZeroed)
-    		elevator.gotoPosition(position);
+    	elevator.gotoPosition(position);
     }
 
-    /* 
-     * This command will finish if:
-     * 	- the elevator has not been zero'ed
-     *  - it is at the setpoint (or within tolerance)
-     *  - the command times out
-     *  - and of course, if it is interrupted
-     */
-     protected boolean isFinished() {
-    	if (!isZeroed || elevator.onTarget() || isTimedOut())
+    // Usually this command will never finish - it always must be interrupted.
+    // Exception - if a timeout is set
+    protected boolean isFinished() {
+    	if (elevator.onTarget() || isTimedOut())
     		return true;
     	else
         	return false;
