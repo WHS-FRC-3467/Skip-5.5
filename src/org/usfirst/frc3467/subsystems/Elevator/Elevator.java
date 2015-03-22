@@ -71,7 +71,7 @@ public class Elevator extends Subsystem {
 	
 	// Other useful levels
 	public static final int kLevelStep = 1150;
-	public static final int kLevelIndexTote = 6050;
+	public static final int kLevelIndexTote = 6250;
 	public static final int kLevelDropStackWithToteOnConveyor = 4800;
 	public static final int kLevelIndexUprightRC = 4500;
 	public static final int kLevelIndexSidewaysRC = 6000;

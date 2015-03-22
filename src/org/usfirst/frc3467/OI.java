@@ -146,14 +146,15 @@ public class OI {
 		new JoystickButton(driveJoystick, 7)
 			.whenPressed(new imuZeroYaw());
  		
-		// Disable field-centric driving
+/*
+ * 		// Disable field-centric driving
+ 
 		new JoystickButton(driveJoystick, 1)
-			.whenPressed(new DriveSetFieldCentricState(false));
-		
-		// Re-enable field-centric driving
-		 new JoystickButton(driveJoystick, 1)
-			.whenReleased(new DriveSetFieldCentricState(true));
+			.whileHeld(new DriveSetFieldCentricState(false));
 
+		new JoystickButton(driveJoystick, 1)
+			.whenReleased(new DriveSetFieldCentricState(true));		
+*/
 		
 		// SmartDashboard Buttons
 		
