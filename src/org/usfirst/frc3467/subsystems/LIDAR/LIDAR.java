@@ -69,13 +69,20 @@ public class LIDAR extends Subsystem{
 		public void run() {
 			while(true) {
 				update();
-				if(getDistance() < 93 && getDistance() > 86){
+				if(getDistance() < 90 && getDistance() > 84){
 					SmartDashboard.putBoolean("Correct distance from human feeder", true);
 				}
 				else{
 					SmartDashboard.putBoolean("Correct distance from human feeder", false);
 				}
-				SmartDashboard.putNumber("LIDAR distance", getDistance());
+				
+				if(getDistance() < 80 && getDistance() > 70){
+					SmartDashboard.putBoolean("Correct distance to stacks", true);
+				}
+				else{
+					SmartDashboard.putBoolean("Correct distance to stacks", false);
+				}
+				SmartDashboard.putNumber("LIDAR distance Inches", (getDistance() / 2.54));
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {

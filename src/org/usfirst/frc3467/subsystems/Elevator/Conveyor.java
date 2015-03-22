@@ -56,7 +56,7 @@ public class Conveyor extends Subsystem {
 	}
 	
 	public static boolean getLimitSwitch(){
-		return m_conveyorLimitSwitch.get();
+		return (m_conveyorLimitSwitch.get());
 	}
 	public void driveManual(double speed) {
 		if (debugging) {

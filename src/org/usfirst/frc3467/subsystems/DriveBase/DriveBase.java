@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveBase extends PIDSubsystem {
 	
@@ -261,7 +262,7 @@ public class DriveBase extends PIDSubsystem {
 			 *
 			 *	If drive stick(s) max out too early, lower this value.
 		     */
-			m_drive.setMaxOutput(600.0);
+			m_drive.setMaxOutput(650.0);
 //			m_drive.setMaxOutput(780.0);
 		}
 		
@@ -269,7 +270,7 @@ public class DriveBase extends PIDSubsystem {
 
 	// Use mecanum drive
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
-		
+		SmartDashboard.putBoolean("Field Centric Enabled?", m_fieldCentricEnabled);
 		if(m_fieldCentricEnabled == true){
 			m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
 		}
