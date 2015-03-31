@@ -41,6 +41,7 @@ public class DriveMecanum extends CommandBase {
 			drivebase.driveMecanum(x, y, rotation, 0);
 		else
 			drivebase.driveMecanum(x, y, rotation, imu.getYaw());
+	
 		
 	}
 	
@@ -48,7 +49,7 @@ public class DriveMecanum extends CommandBase {
 		
 		double val = input;
 		double change;
-		final double changeLimit = 0.30;
+		final double changeLimit = 0.20;
 		
 		/*
 		 *  Deadband limit
@@ -69,7 +70,7 @@ public class DriveMecanum extends CommandBase {
 		/*
          *  Slew rate limiter - limit rate of change
          */
-        /*
+        
 		change = val - lastVal;
 		
 		if (change > changeLimit)
@@ -78,8 +79,8 @@ public class DriveMecanum extends CommandBase {
 			change = -changeLimit;
 		
 		return (lastVal += change);
-		*/
-        return val;
+		
+        //return val;
 		
 	}
 	

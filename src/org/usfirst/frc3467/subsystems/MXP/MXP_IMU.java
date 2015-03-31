@@ -29,6 +29,8 @@ public class MXP_IMU extends Subsystem {
     
     private static final boolean debugging = true;
 	
+    // Gyro Offset (for starting matches with the robot NOT at zero)
+	private double 	m_gyroOffset = 0;
 	private static MXP_IMU instance;
 	
 	public static MXP_IMU getInstance() {
@@ -91,20 +93,29 @@ public class MXP_IMU extends Subsystem {
             LiveWindow.addSensor("IMU", "Gyro", imu);
         }
         first_iteration = true;
+        SmartDashboard.putNumber("Match START Gyro Offset", m_gyroOffset);
     }
 		   
     public double getYaw() {
-    
+    SmartDashboard.putNumber("Match START Gyro Offset", m_gyroOffset);
     	if (imu != null)
-    		return (double)(imu.getYaw());
+    		return (double)(imu.getYaw() + m_gyroOffset);
     	else
     		return 0.0;
     }
     
 	public void zeroYaw() {
-        imu.zeroYaw();
+        m_gyroOffset = 0;
+		imu.zeroYaw();
+	}
+	
+	public void getGyroOffset(){
+		m_gyroOffset = (SmartDashboard.getNumber("Match START Gyro Offset"));
 	}
 		
+	public void setGyroOffset(double offset){
+		m_gyroOffset = offset;
+	}
 		public void update() {
 
         // When calibration has completed, zero the yaw

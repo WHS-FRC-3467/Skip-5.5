@@ -30,6 +30,7 @@ public class DriveBase extends PIDSubsystem {
 	// Default Ramp Rate for Closed-Loop operation
 	private final double RAMPRATE = 2;
 	
+	
 	// Default CANTalon PID constants
 	private final double KP_V = 0.4;
 	private final double KI_V = 0.0;
@@ -46,8 +47,9 @@ public class DriveBase extends PIDSubsystem {
 	private RobotDrive 				m_drive;
 	private CANTalon.ControlMode	m_ctrlMode;
 	
+	// Field Centric State Boolean
 	public static boolean m_fieldCentricEnabled = true;
-	
+
 	private double					m_positionalDistance;
 	
 	private PIDF_CANTalon			m_pidfDriveFL;
@@ -164,6 +166,8 @@ public class DriveBase extends PIDSubsystem {
 		    CANTalonRL.changeControlMode(ControlMode.PercentVbus);
 		    CANTalonFR.changeControlMode(ControlMode.PercentVbus);
 		    CANTalonRR.changeControlMode(ControlMode.PercentVbus);
+		    m_drive.setInvertedMotor(MotorType.kFrontRight, true);
+		    m_drive.setInvertedMotor(MotorType.kRearRight, true);
 		    m_ctrlMode = ControlMode.PercentVbus;
 		}
         m_drive.setMaxOutput(1.0);
@@ -172,8 +176,8 @@ public class DriveBase extends PIDSubsystem {
 
 	// Use standard tank drive
 	public void driveTank(double left, double right) {
-		m_drive.tankDrive(left, right);
-
+		m_drive.tankDrive(left, -right);
+// negative to fix spinning
 	}
 
 	// Set up for distance driving by PercentVBus
@@ -241,9 +245,16 @@ public class DriveBase extends PIDSubsystem {
 
 			// Limit max speed
 			m_drive.setMaxOutput(0.75);
+			
+			
 		}
 		else
 		{
+		    CANTalonFL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		    CANTalonRL.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		    CANTalonFR.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		    CANTalonRR.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		    
 			if (m_ctrlMode != ControlMode.Speed) {
 	
 				CANTalonFL.changeControlMode(ControlMode.Speed);
@@ -253,6 +264,8 @@ public class DriveBase extends PIDSubsystem {
 			    m_ctrlMode = ControlMode.Speed;
 			}
 		    
+			m_drive.setInvertedMotor(MotorType.kFrontRight, false);
+			m_drive.setInvertedMotor(MotorType.kRearRight, false);
 	        /*
 	         *  Set maximum velocity of our wheels (in counts per 0.1 second)
 		     *	12fps -> ~780 counts/0.1 seconds
@@ -262,7 +275,7 @@ public class DriveBase extends PIDSubsystem {
 			 *
 			 *	If drive stick(s) max out too early, lower this value.
 		     */
-			m_drive.setMaxOutput(650.0);
+			m_drive.setMaxOutput(850.0);
 //			m_drive.setMaxOutput(780.0);
 		}
 		
@@ -271,6 +284,7 @@ public class DriveBase extends PIDSubsystem {
 	// Use mecanum drive
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
 		SmartDashboard.putBoolean("Field Centric Enabled?", m_fieldCentricEnabled);
+
 		if(m_fieldCentricEnabled == true){
 			m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
 		}

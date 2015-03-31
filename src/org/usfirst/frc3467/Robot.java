@@ -48,12 +48,12 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 
 		// Init camera and start camera server instance
-        cServer = CameraServer.getInstance();
+     /*   cServer = CameraServer.getInstance();
         cServer.setQuality(50);
         cServer.setSize(1);
         //the camera name (ex "cam0") can be found through the roborio web interface
         cServer.startAutomaticCapture("cam0");
-        
+        */
         lidar = new LIDAR(Port.kMXP);
         lidar.start();
 		
@@ -71,6 +71,7 @@ public class Robot extends IterativeRobot {
 	
 	public void autonomousInit() {
 		
+		CommandBase.imu.getGyroOffset();
 		// Reset all PID controllers
 		for (int i = 0; i < PIDList.size(); i++) {
 			PIDController controller = (PIDController) PIDList.elementAt(i);
@@ -120,6 +121,10 @@ public class Robot extends IterativeRobot {
 			CommandBase.leds.setState("Disabled init", LEDs.REG3, 1);
 		}
 		
+	}
+	
+	public void disabledPeriodic(){
+		CommandBase.imu.setGyroOffset(SmartDashboard.getNumber("Match START Gyro Offset"));
 	}
 	
 	/**
