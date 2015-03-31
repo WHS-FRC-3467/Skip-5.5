@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Timed Tank", new AutoTimedTank());
 		
 		SmartDashboard.putData("Auto", autoChooser);
-
+		SmartDashboard.putNumber("Scoring Platform Height: Default 150", 150);
 	}
 	
 	public void autonomousInit() {

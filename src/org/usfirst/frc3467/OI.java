@@ -23,6 +23,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveManual;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdateHeight;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
@@ -167,7 +168,7 @@ public class OI {
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
 		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
-
+		SmartDashboard.putData("Update Scoring Platform Height", new elevatorUpdateHeight());
 
 	}
 }
