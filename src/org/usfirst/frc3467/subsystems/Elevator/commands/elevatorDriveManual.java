@@ -32,7 +32,12 @@ public class elevatorDriveManual extends CommandBase {
     	double speed = 0;
     	
     	if (m_fixedSpeed == 0) {
-			speed = -((oi.getGamepad().getLeftStickY())/2.0);
+			speed = -((oi.getGamepad().getLeftStickY())/1.5);
+	        if (speed > 0.0)
+	            speed = (speed * speed);
+	        else
+	            speed = -(speed * speed);
+	        //deadband
 			if (speed > -0.08 && speed < 0.08)
 				speed = 0.0;
     	}

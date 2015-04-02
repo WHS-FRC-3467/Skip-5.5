@@ -2,24 +2,29 @@ package org.usfirst.frc3467.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Class for using the logitech F310 gamepad. DO NOT USE WITH DUAL ACTION!!
+ * @author Emile Hamwey
+ *
+ */
 public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
-	public static int xButton = 1;
-	public static int aButton = 2;
-	public static int bButton = 3;
+	public static int xButton = 3;
+	public static int aButton = 1;
+	public static int bButton = 2;
 	public static int yButton = 4;
 	public static int leftBumper = 5;
 	public static int rightBumper = 6;
-	public static int leftTrigger = 7;
-	public static int rightTrigger = 8;
-	public static int backButton = 9;
-	public static int startButton = 10;
-	public static int leftStickPress = 11;
-	public static int rightStickPress = 12;
+	public static int backButton = 7;
+	public static int startButton = 8;
+	public static int leftStickPress = 9;
+	public static int rightStickPress = 10;
 	
 	public static int leftStick_xAxis = 0;
 	public static int leftStick_yAxis = 1;
-	public static int rightStick_xAxis = 2;
-	public static int rightStick_yAxis = 3;
+	public static int leftTrigger_Axis = 2;
+	public static int rightTrigger_Axis = 3;
+	public static int rightStick_xAxis = 4;
+	public static int rightStick_yAxis = 5;
 	
 	public Gamepad(int port) {
 		super(port);
@@ -58,11 +63,25 @@ public class Gamepad extends edu.wpi.first.wpilibj.Joystick {
 	}
 	
 	public boolean getLeftTrigger() {
-		return getRawButton(leftTrigger);
+		boolean leftTrigger = false;
+		if(getRawAxis(leftTrigger_Axis) > .8 ){
+			leftTrigger = true;
+		}
+		else{
+			leftTrigger = false;
+		}
+		return leftTrigger;
 	}
 	
 	public boolean getRightTrigger() {
-		return getRawButton(rightTrigger);
+		boolean rightTrigger = false;
+		if(getRawAxis(rightTrigger_Axis) > .8 ){
+			rightTrigger = true;
+		}
+		else{
+			rightTrigger = false;
+		}
+		return rightTrigger;
 	}
 	
 	public boolean getXButton() {

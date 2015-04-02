@@ -12,13 +12,12 @@ public class AutoTimedTank extends CommandGroup {
 	
 	public AutoTimedTank() {
 		
-		addSequential(new elevatorDriveToFloor());
-    	addSequential(new elevatorToPosition(Elevator.kLevelZero, 1.0));
 
 		// DriveTimedTank (time (sec), speed (-1 -> +1))
-		addSequential(new DriveTimedTank(1.0, 0.2));
+		addSequential(new DriveTimedTank(.5, 0.2));
+		addSequential(new DriveTimedTank(.5, 0.5));
+		addSequential(new DriveTimedTank(4.0, 0.6));
+		
 		addSequential(new DriveTimedTank(1.0, 0.3));
-		addSequential(new DriveTimedTank(1.0, 0.4));
-		addSequential(new DriveTimedTank(3.0, 0.45));
 	}
 }

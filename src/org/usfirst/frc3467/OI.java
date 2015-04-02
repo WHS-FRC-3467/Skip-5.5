@@ -1,10 +1,13 @@
 package org.usfirst.frc3467;
 
 import org.usfirst.frc3467.triggers.DoubleButton;
+
 import org.usfirst.frc3467.triggers.DPadUp;
 import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
+import org.usfirst.frc3467.triggers.GamepadLeftTrigger;
+import org.usfirst.frc3467.triggers.GamepadRightTrigger;
 import org.usfirst.frc3467.control.Gamepad;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
@@ -23,6 +26,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveManual;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
+
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
@@ -30,6 +34,7 @@ import org.usfirst.frc3467.subsystems.MXP.commands.imuZeroYaw;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
@@ -77,8 +82,8 @@ public class OI {
 			.whenPressed(new elevatorCGDropStack());
 		
 		// Index Routine:
-		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
-			.whenPressed(new elevatorCGAddTote());
+		new GamepadLeftTrigger(operatorGamepad)
+			.whenActive(new elevatorCGAddTote());
 		// Slow and High Index Routine (For RCs and last totes from the human fdr statn
 		new JoystickButton(operatorJoystick, 3)
 			.whenPressed(new elevatorCGAddToteSlowHigh());
@@ -86,8 +91,9 @@ public class OI {
 		new JoystickButton(operatorJoystick, 1)
 			.whenPressed(new elevatorCGAutoAddToteLimitSwitchSensing());
 		// DeIndex Stack with a tote on the conveyor
-		new JoystickButton(operatorGamepad, Gamepad.rightTrigger)
-			.whenPressed(new elevatorCGDropStackWithToteOnConveyor());
+		
+		new GamepadRightTrigger(operatorGamepad)
+		    .whenActive(new elevatorCGDropStackWithToteOnConveyor());
 		
 		// Conveyor - Eject Slow
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
@@ -117,7 +123,7 @@ public class OI {
 
 		// Go to Level 0 (platform height)
 		new DPadRight(operatorGamepad)
-			.whenActive(new elevatorToPosition(Elevator.kLevelZero));
+			.whenActive(new elevatorToPosition(SmartDashboard.getNumber("Scoring Platform Height: Default 150")));
  		// Go to human feeding height
 		new JoystickButton(operatorJoystick, 2)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelHumanFeed));
@@ -167,6 +173,7 @@ public class OI {
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
 		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
+
 
 	}
 }
