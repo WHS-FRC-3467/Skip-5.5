@@ -5,15 +5,20 @@ import org.usfirst.frc3467.triggers.DPadUp;
 import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
+import org.usfirst.frc3467.triggers.GamepadLeftTrigger;
+import org.usfirst.frc3467.triggers.GamepadRightTrigger;
+import org.usfirst.frc3467.triggers.SingleButtonandIgnoreOtherButton;
 import org.usfirst.frc3467.control.Gamepad;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
+import org.usfirst.frc3467.subsystems.Elevator.commands.cangrabbersSetState;
 import org.usfirst.frc3467.subsystems.Elevator.commands.conveyorDrive;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddTote;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAddToteSlowHigh;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGAutoAddToteLimitSwitchSensing;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWith2ToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStackWithToteOnConveyor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGGoToTop;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGIndexSidewaysRC;
@@ -23,40 +28,43 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveManual;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
-import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdateHeight;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuZeroYaw;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
 	
 	//inputs
 	public static Joystick driveJoystick;
-	public static Joystick operatorJoystick;
+
 	public static Gamepad operatorGamepad;
+	public static Joystick mspLaunchpad;
 	
 	public OI() {
-		driveJoystick = new Joystick(0);
-		operatorJoystick = new Joystick(2);
+		driveJoystick = new Joystick(0);	;
 		operatorGamepad = new Gamepad(1);
-		
+		mspLaunchpad = new Joystick(2);
 	}
 
 	public Joystick getDrJoystick() {
 		return driveJoystick;
 	}
 	
-	public Joystick getOpJoystick() {
-		return operatorJoystick;
-	}
+
 		
 	public Gamepad getGamepad() {
 		return operatorGamepad;
+	}
+	
+	public Joystick getLaunchpad(){
+		return mspLaunchpad;
 	}
 	
 	public void BindCommands() {
@@ -66,29 +74,70 @@ public class OI {
 		 */
 		
 		// Calibrate
-		new DoubleButton(operatorGamepad, 11, 12)
-			.whenActive(new elevatorCalibrate());
+		new JoystickButton(mspLaunchpad, 9)
+			.whenPressed(new elevatorCalibrate());
+		//MSP LAUNCHPAD 
+		new JoystickButton(mspLaunchpad, 1)
+			.whenPressed(new elevatorToPosition(Elevator.kLevelOne));
 
+		new JoystickButton(mspLaunchpad, 2)
+		.whenPressed(new elevatorToPosition(Elevator.kLevelTwo));
+		
+		new JoystickButton(mspLaunchpad, 3)
+		.whenPressed(new elevatorToPosition(Elevator.kLevelThree));
+		
+		new JoystickButton(mspLaunchpad, 4)
+		.whenPressed(new elevatorToPosition(Elevator.kLevelFour));
+	
+		new JoystickButton(mspLaunchpad, 5)
+		.whenPressed(new elevatorToPosition(Elevator.kLevelFive));
+		
+		new JoystickButton(mspLaunchpad, 6)
+		.whenPressed(new elevatorToPosition(Elevator.kLevelTop));
+		
+		new JoystickButton(mspLaunchpad, 7)
+		.whenPressed(new elevatorCGAddToteSlowHigh());
+		
+		new JoystickButton(mspLaunchpad, 12)
+		.whenPressed(new elevatorToPosition(3600));
+		
+		new JoystickButton(mspLaunchpad, 13)
+		.whenPressed(new cangrabbersSetState(2));
+		
+		new JoystickButton(mspLaunchpad, 8)
+		.whenPressed(new cangrabbersSetState(1));
+		
+		new SingleButtonandIgnoreOtherButton(mspLaunchpad, 10, 14)
+		.whileActive(new elevatorDriveManual(Elevator.kUp_FixedPlus + 0.1));
+		
+		new SingleButtonandIgnoreOtherButton(mspLaunchpad, 11, 14)
+		.whileActive(new elevatorDriveManual(Elevator.kDown_FixedPlus));		
+
+		new DoubleButton(mspLaunchpad, 10, 14)
+		.whileActive(new elevatorDriveManual(Elevator.kUp_FixedPlus));
+		
+		new DoubleButton(mspLaunchpad, 11, 14)
+		.whileActive(new elevatorDriveManual(Elevator.kDown_Fixed));
+		
+		
 		// Halt Elevator PID and switch to manual mode
 		new JoystickButton(operatorGamepad, Gamepad.leftBumper)
 			.whileHeld(new elevatorDriveManual(0));
+		
 		
 		// DeIndex Stack with NO tote on conveyor
 		new JoystickButton(operatorGamepad, Gamepad.rightBumper)
 			.whenPressed(new elevatorCGDropStack());
 		
 		// Index Routine:
-		new JoystickButton(operatorGamepad, Gamepad.leftTrigger)
-			.whenPressed(new elevatorCGAddTote());
+		new GamepadLeftTrigger(operatorGamepad)
+			.whenActive(new elevatorCGAddTote());
 		// Slow and High Index Routine (For RCs and last totes from the human fdr statn
-		new JoystickButton(operatorJoystick, 3)
-			.whenPressed(new elevatorCGAddToteSlowHigh());
-		//Index and watch for conveyor hit:
-		new JoystickButton(operatorJoystick, 1)
-			.whenPressed(new elevatorCGAutoAddToteLimitSwitchSensing());
+
 		// DeIndex Stack with a tote on the conveyor
-		new JoystickButton(operatorGamepad, Gamepad.rightTrigger)
-			.whenPressed(new elevatorCGDropStackWithToteOnConveyor());
+		
+		new GamepadRightTrigger(operatorGamepad)
+		    .whenActive(new elevatorCGDropStackWithToteOnConveyor());
 		
 		// Conveyor - Eject Slow
 		new JoystickButton(operatorGamepad, Gamepad.xButton)
@@ -114,27 +163,14 @@ public class OI {
 	 
 		// Go to Top
 		new DPadUp(operatorGamepad)
-			.whenActive(new elevatorCGGoToTop());
+			.whenActive(new elevatorToPosition(1750));
 
 		// Go to Level 0 (platform height)
 		new DPadRight(operatorGamepad)
-			.whenActive(new elevatorToPosition(Elevator.kLevelZero));
+			.whenActive(new elevatorToPosition(SmartDashboard.getNumber("Scoring Platform Height: Default 150")));
  		// Go to human feeding height
-		new JoystickButton(operatorJoystick, 2)
-			.whenPressed(new elevatorToPosition(Elevator.kLevelHumanFeed));
 
-		// Go to Step Level + 1
-		new JoystickButton(operatorJoystick, 9)
-			.whenPressed(new elevatorToPosition(Elevator.kLevelStepOne));
-		// Go to Step Level + 2
-		new JoystickButton(operatorJoystick, 10)
-			.whenPressed(new elevatorToPosition(Elevator.kLevelStepTwo));
-		// Go to Step Level + 3
-		new JoystickButton(operatorJoystick, 11)
-			.whenPressed(new elevatorToPosition(Elevator.kLevelStepThree));
-		// Index Upright RC
-		new JoystickButton(operatorJoystick, 12)
-			.whenPressed(new elevatorCGIndexUprightRC());
+
 		// Go to Step Height
 		new DPadDown(operatorGamepad)
 			.whenActive(new elevatorToPosition(Elevator.kLevelStep));
@@ -158,7 +194,6 @@ public class OI {
 */
 		
 		// SmartDashboard Buttons
-		
 		SmartDashboard.putData("Elevator Calibrate", new elevatorCalibrate());
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		SmartDashboard.putData("Update IMU Display", new imuUpdateDisplay());
@@ -168,7 +203,7 @@ public class OI {
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
 		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
-		SmartDashboard.putData("Update Scoring Platform Height", new elevatorUpdateHeight());
+
 
 	}
 }
