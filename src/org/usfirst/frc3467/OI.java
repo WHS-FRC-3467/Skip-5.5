@@ -2,16 +2,14 @@ package org.usfirst.frc3467;
 
 import org.usfirst.frc3467.triggers.DoubleButton;
 
+
 import org.usfirst.frc3467.triggers.DPadUp;
 import org.usfirst.frc3467.triggers.DPadRight;
 import org.usfirst.frc3467.triggers.DPadDown;
 import org.usfirst.frc3467.triggers.DPadLeft;
 import org.usfirst.frc3467.triggers.GamepadLeftTrigger;
 import org.usfirst.frc3467.triggers.GamepadRightTrigger;
-<<<<<<< HEAD
 import org.usfirst.frc3467.triggers.SingleButtonandIgnoreOtherButton;
-=======
->>>>>>> d0584778d13aa69e7e584fb9d4d89d8d0f418b31
 import org.usfirst.frc3467.control.Gamepad;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
@@ -32,10 +30,6 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveManual;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
-<<<<<<< HEAD
-=======
-
->>>>>>> d0584778d13aa69e7e584fb9d4d89d8d0f418b31
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
 import org.usfirst.frc3467.subsystems.MXP.commands.imuUpdateDisplay;
@@ -175,7 +169,7 @@ public class OI {
 
 		// Go to Level 0 (platform height)
 		new DPadRight(operatorGamepad)
-			.whenActive(new elevatorToPosition(SmartDashboard.getNumber("Scoring Platform Height: Default 150")));
+			.whenActive(new elevatorToPosition(SmartDashboard.getNumber("Scoring Platform Height: Default 150", 150)));
  		// Go to human feeding height
 
 
