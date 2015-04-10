@@ -21,7 +21,7 @@ public class elevatorDriveToFloor extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	isFinished = elevator.driveToPosition(Elevator.kDown_Fixed, 0.0);
+    	isFinished = elevator.driveToPosition(Elevator.kDown_FixedPlus, 0.0);
     }
 
     // This method will never return true; this command must always be interrupted.

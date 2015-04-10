@@ -3,7 +3,10 @@ package org.usfirst.frc3467.subsystems.LIDAR;
 import java.util.TimerTask;
 
 
+
+import org.usfirst.frc3467.OI;
 import org.usfirst.frc3467.commands.CommandBase;
+
 
 
 import edu.wpi.first.wpilibj.I2C;
@@ -16,7 +19,7 @@ import edu.wpi.first.wpilibj.SensorBase;
  
 public class LIDAR extends Subsystem{
 	private I2C i2c;
-	private byte[] distance;
+	private static byte[] distance;
 	private java.util.Timer updater;
 	private LIDARUpdater task;
 	
@@ -34,7 +37,7 @@ public class LIDAR extends Subsystem{
 	}
 	
 	// Distance in cm
-	public int getDistance() {
+	public static int getDistance() {
 		return (int)Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
 	}
  
