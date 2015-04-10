@@ -75,9 +75,7 @@ public class OI {
 		 * Elevator/Conveyor/Indexer Commands
 		 */
 		
-		// Calibrate
-		new JoystickButton(mspLaunchpad, 9)
-			.whenPressed(new elevatorCalibrate());
+
 		//MSP LAUNCHPAD 
 		new JoystickButton(mspLaunchpad, 1)
 			.whenPressed(new elevatorToPosition(Elevator.kLevelOne));
@@ -101,13 +99,16 @@ public class OI {
 		.whenPressed(new elevatorCGAddToteSlowHigh());
 		
 		new JoystickButton(mspLaunchpad, 12)
-		.whenPressed(new elevatorToPosition(3600));
+		.whenPressed(new elevatorCGDropStackWith2ToteOnConveyor());
 		
 		new JoystickButton(mspLaunchpad, 13)
-		.whenPressed(new cangrabbersSetState(2));
+		.whenPressed(new cangrabbersSetState(false)); 
 		
 		new JoystickButton(mspLaunchpad, 8)
-		.whenPressed(new cangrabbersSetState(1));
+			.whenPressed(new cangrabbersSetState(true));
+		
+		new JoystickButton(mspLaunchpad, 9)
+		.whenPressed(new elevatorToPosition(3300));
 		
 		new SingleButtonandIgnoreOtherButton(mspLaunchpad, 10, 14)
 		.whileActive(new elevatorDriveManual(Elevator.kUp_FixedPlus + 0.1));
@@ -205,6 +206,8 @@ public class OI {
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());
 		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
+		SmartDashboard.putData("CanGrabbers Out", new cangrabbersSetState(true));	
+		SmartDashboard.putData("CanGrabbers In", new cangrabbersSetState(false));	
 
 
 	}

@@ -1,58 +1,76 @@
 package org.usfirst.frc3467.subsystems.LEDs;
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
+import org.usfirst.frc3467.OI;
+
+import org.usfirst.frc3467.commands.CommandBase;
+import org.usfirst.frc3467.subsystems.LIDAR.LIDAR;
+import org.usfirst.frc3467.subsystems.Power.PowerMgr;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LEDs extends Subsystem {
+
 	
-	private final int I2C_ADDRESS = 0x62;
-	public static final int REG1 = 0x0;
-	public static final int REG2 = 0x1;
-	public static final int REG3 = 0x2;
-	public static final int REG4 = 0x3;
-	public static final int REG5 = 0x4;
-	
-	public static final int IDLE = 0;
-	public static final int HIGH_CURRENT = 1;
-	public static final int ONE_THIRTY = 2;
-	public static final int TRUSS = 3;
-	public static final int CLOSE = 4;
-	public static final int TRUSS2 = 5;
-	
-	private final boolean DEBUGGING = true;
-	
-	public I2C leds;
-	
-	public LEDs() {
-		leds = new I2C(Port.kOnboard, I2C_ADDRESS);
+	private boolean brownout;
+	private boolean hmfdrdist;
+	private boolean stackdist;
+
+		public LEDs() {
+
 	}
+
 	
+	public void start() {
+
+		
+		if(PowerMgr.getBrownoutState() == true){
+			OI.mspLaunchpad.setOutput(3, true);
+			brownout = true;
+			SmartDashboard.putString("LED State", "BROWNOUT!");
+		}
+		else{
+			if(!stackdist && !hmfdrdist && !brownout){
+				OI.mspLaunchpad.setOutput(4, true);
+				SmartDashboard.putString("LED State", "Normal/Idle");
+			}
+			
+			
+			if(LIDAR.getDistance() < 93 && LIDAR.getDistance() > 84){
+		
+				OI.mspLaunchpad.setOutput(1, true);
+				hmfdrdist = true;
+				SmartDashboard.putString("LED State", "HumanFeed");
+				
+			}
+			if(LIDAR.getDistance() > 93 || LIDAR.getDistance() < 84){
+				OI.mspLaunchpad.setOutput(1, false);
+				hmfdrdist = false;
+			}
+			
+			if(LIDAR.getDistance() < 83 && LIDAR.getDistance() > 70){
+
+				OI.mspLaunchpad.setOutput(2, true);
+				stackdist = true;
+				SmartDashboard.putString("LED State", "StackDist");
+				
+			}
+			if(LIDAR.getDistance() > 83 || LIDAR.getDistance() < 70){
+				OI.mspLaunchpad.setOutput(2, false);
+				stackdist = false;
+			}
+		}
+		
+		
+		}
+
+	protected void setOff(){
+		OI.mspLaunchpad.setOutput(4, true);
+	}
+	@Override
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new UpdateLEDs());
-		SmartDashboard.putData("Forward", new SetLEDs(0));
-		SmartDashboard.putData("Reverse", new SetLEDs(1));
-		SmartDashboard.putData("Idle", new SetLEDs(2));
-		SmartDashboard.putData("HC", new SetLEDs(3));
-		SmartDashboard.putData("130", new SetLEDs(4));
-		SmartDashboard.putData("Truss", new SetLEDs(5));
-		SmartDashboard.putData("Close", new SetLEDs(6));
+		// TODO Auto-generated method stub
+		this.setDefaultCommand(new RunLeds());
 	}
 	
-	public void setState(String location, int state) {
-		// if (DEBUGGING) {
-		// System.out.println("Location: " + location + "	State: " + state);
-		// }
-		setState(location, REG2, state);
-	}
-	
-	public void setState(String location, int reg, int state) {
-		if (DEBUGGING) {
-			System.out.println("Location: " + location + "	State: " + state);
-		}
-		if (leds.write(reg, state)) {
-			System.out.println("Transaction failed");
-		}
-	}
 }
