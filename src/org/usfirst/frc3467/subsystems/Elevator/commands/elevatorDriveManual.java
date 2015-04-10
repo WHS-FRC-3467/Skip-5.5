@@ -43,7 +43,7 @@ public class elevatorDriveManual extends CommandBase {
     	}
     	else
 			speed = m_fixedSpeed;
-
+    	
     	elevator.driveManual(speed);
  
     }

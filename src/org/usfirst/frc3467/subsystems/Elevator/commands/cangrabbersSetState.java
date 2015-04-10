@@ -1,24 +1,26 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
-import org.usfirst.frc3467.subsystems.Elevator.Elevator;
+import org.usfirst.frc3467.commands.CommandBase;
+import org.usfirst.frc3467.subsystems.Elevator.CanGrabbers;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class elevatorUpdateHeight extends Command {
-
-    public elevatorUpdateHeight() {
+public class cangrabbersSetState extends CommandBase {
+ public static int m_state;
+    public cangrabbersSetState(int state) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(cangrabbers);
+    	state = m_state;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
-    	Elevator.kLevelZero = SmartDashboard.getNumber("Scoring Platform Height: Default 150"); 
+    	cangrabbers.setState(m_state);
+    	this.end();
     }
 
     // Called repeatedly when this Command is scheduled to run
