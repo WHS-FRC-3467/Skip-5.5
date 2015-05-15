@@ -58,8 +58,8 @@ public abstract class CommandBase extends Command {
 		pdp = new PowerMgr();
 		subsystemList.addElement(pdp);
 		
-//		leds = new LEDs(); 
-//		subsystemList.addElement(leds);
+		leds = new LEDs(); 
+		subsystemList.addElement(leds);
 		
 		imu = new MXP_IMU();
 		subsystemList.addElement(imu);

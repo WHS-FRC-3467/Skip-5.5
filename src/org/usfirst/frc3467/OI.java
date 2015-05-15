@@ -10,6 +10,7 @@ import org.usfirst.frc3467.triggers.DPadLeft;
 import org.usfirst.frc3467.triggers.GamepadLeftTrigger;
 import org.usfirst.frc3467.triggers.GamepadRightTrigger;
 import org.usfirst.frc3467.triggers.SingleButtonandIgnoreOtherButton;
+import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.control.Gamepad;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveDistance;
 import org.usfirst.frc3467.subsystems.DriveBase.commands.DriveSetFieldCentricState;
@@ -29,6 +30,7 @@ import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCalibrate;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveManual;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorCGDropStack;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
+import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToPosition;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorToPosition;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorUpdatePIDF;
 import org.usfirst.frc3467.subsystems.Elevator.commands.indexerOperate;
@@ -108,7 +110,7 @@ public class OI {
 			.whenPressed(new cangrabbersSetState(true));
 		
 		new JoystickButton(mspLaunchpad, 9)
-		.whenPressed(new elevatorToPosition(3300));
+		.whenPressed(new elevatorToPosition(1300));
 		
 		new SingleButtonandIgnoreOtherButton(mspLaunchpad, 10, 14)
 		.whileActive(new elevatorDriveManual(Elevator.kUp_FixedPlus + 0.1));
@@ -163,7 +165,10 @@ public class OI {
 	
 		new JoystickButton(operatorGamepad, Gamepad.backButton)
 			.whenPressed(new indexerOperate(false));
-	 
+ 
+		new JoystickButton(driveJoystick, 3)
+			.whileHeld(new elevatorDriveManual(0.35));
+ 
 		// Go to Top
 		new DPadUp(operatorGamepad)
 			.whenActive(new elevatorToPosition(1750));
@@ -208,7 +213,7 @@ public class OI {
 		SmartDashboard.putData("DriveDistance Test", new DriveDistance(1000));
 		SmartDashboard.putData("CanGrabbers Out", new cangrabbersSetState(true));	
 		SmartDashboard.putData("CanGrabbers In", new cangrabbersSetState(false));	
-
+		SmartDashboard.putData("Ready For Match Start", new CommandReadyForMatch());
 
 	}
 }

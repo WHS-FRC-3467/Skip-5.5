@@ -3,6 +3,7 @@ package org.usfirst.frc3467.subsystems.DriveBase.commands;
 import org.usfirst.frc3467.OI;
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveMecanum extends CommandBase {
@@ -37,10 +38,11 @@ public class DriveMecanum extends CommandBase {
 		rotation = m_lastRot = adjustStick(rotation, m_lastRot);
 		
 		SmartDashboard.putNumber(   "IMU_Yaw", imu.getYaw());
+		
 		if (OI.driveJoystick.getTrigger()  )
-			drivebase.driveMecanum(x, y, rotation, 0);
+			drivebase.driveMecanum(x, y, rotation/1.2, 0);
 		else
-			drivebase.driveMecanum(x, y, rotation, imu.getYaw());
+			drivebase.driveMecanum(x, y, rotation/1.2, imu.getYaw());
 	
 		
 	}

@@ -14,10 +14,11 @@ public class AutoCanGrabbersDriveAndRetract extends CommandGroup {
 	public AutoCanGrabbersDriveAndRetract() {
 		
 
-		addSequential(new cangrabbersSetState(true), 1.5);
+		addSequential(new cangrabbersSetState(true), 0.9);
 		addParallel(new elevatorToPosition(1100));
 		addSequential(new DriveTimedTank(0.3, 0.3));
 		addSequential(new DriveTimedTank(1.8, 0.75));
+		addParallel(new cangrabbersSetState(false));
 		addSequential(new DriveTimedTank(0.6, 0.3));
 	}
 }

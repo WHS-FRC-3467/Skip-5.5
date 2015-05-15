@@ -1,5 +1,6 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
+import org.usfirst.frc3467.OI;
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
@@ -55,7 +56,7 @@ public class elevatorDrivePID extends CommandBase {
 		elevator.gotoPosition(m_pidSetpoint);							
 		
     }
-
+   
     // This method will only return true if the elevator has not  yet been zero'ed;
     // otherwise, this command must always be interrupted.
      protected boolean isFinished() {
