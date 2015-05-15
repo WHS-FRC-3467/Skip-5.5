@@ -31,7 +31,7 @@ public class RunLeds extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
-   
+         leds.setOff();
     }
 
     // Called when another command which requires one or more of the same

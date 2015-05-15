@@ -1,5 +1,6 @@
 package org.usfirst.frc3467.subsystems.Elevator.commands;
 
+import org.usfirst.frc3467.OI;
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 
@@ -32,7 +33,7 @@ public class elevatorDriveManual extends CommandBase {
     	double speed = 0;
     	
     	if (m_fixedSpeed == 0) {
-			speed = -((oi.getGamepad().getLeftStickY())/1.5);
+			speed = -((oi.getGamepad().getLeftStickY())/1.2);
 	        if (speed > 0.0)
 	            speed = (speed * speed);
 	        else
@@ -43,8 +44,10 @@ public class elevatorDriveManual extends CommandBase {
     	}
     	else
 			speed = m_fixedSpeed;
+
     	
     	elevator.driveManual(speed);
+    	
  
     }
 
