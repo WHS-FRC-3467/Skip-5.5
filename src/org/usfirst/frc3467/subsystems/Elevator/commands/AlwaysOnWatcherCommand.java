@@ -2,41 +2,30 @@ package org.usfirst.frc3467.subsystems.Elevator.commands;
 
 import org.usfirst.frc3467.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
-public class indexerOperate extends CommandBase {
+public class AlwaysOnWatcherCommand extends Command {
 
-	private Boolean cmd;
-	
-	public indexerOperate(Boolean engageCmd) {
-        requires(indexer);
-        cmd = engageCmd;
+    public AlwaysOnWatcherCommand() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if (cmd == true){
-    		if(indexer.engaged){
-    			indexer.engageCrushMode();
-    		}
-    		if(indexer.engaged == false){
-    			indexer.engageIndexer();
-    		}
-    	}
-    		
-    	else{
-    		indexer.disengageIndexer();    
-    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	CommandBase.elevatorWatcher.thisVoidIsAlwaysRunning();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true

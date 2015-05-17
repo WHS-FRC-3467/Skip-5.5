@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.usfirst.frc3467.OI;
 import org.usfirst.frc3467.Robot;
 import org.usfirst.frc3467.subsystems.DriveBase.DriveBase;
+import org.usfirst.frc3467.subsystems.Elevator.AlwaysOnLoop;
 import org.usfirst.frc3467.subsystems.Elevator.CanGrabbers;
 import org.usfirst.frc3467.subsystems.Elevator.Conveyor;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
@@ -25,6 +26,7 @@ public abstract class CommandBase extends Command {
 	public static CommandBase cb;
 	public static DriveBase drivebase;
 	public static Elevator elevator;
+	public static AlwaysOnLoop elevatorWatcher;
 	public static Indexer indexer;
 	public static Conveyor conveyor;
 	public static CanGrabbers cangrabbers;
@@ -51,6 +53,9 @@ public abstract class CommandBase extends Command {
 		
 		conveyor = new Conveyor();
 		subsystemList.addElement(conveyor);
+		
+		elevatorWatcher = new AlwaysOnLoop();
+		subsystemList.addElement(elevatorWatcher);
 		
 		cangrabbers = new CanGrabbers();
 		subsystemList.addElement(cangrabbers);
