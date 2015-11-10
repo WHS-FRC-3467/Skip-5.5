@@ -285,12 +285,10 @@ public class DriveBase extends PIDSubsystem {
 	public void driveMecanum(double x, double y, double rotation, double gyroAngle) {
 		SmartDashboard.putBoolean("Field Centric Enabled?", m_fieldCentricEnabled);
 
-		if(m_fieldCentricEnabled == true){
 			m_drive.mecanumDrive_Cartesian(x, y, rotation, gyroAngle);
-		}
-		else{
+
 			m_drive.mecanumDrive_Cartesian(x, y, rotation, 0);
-		}
+		
 	}
 	
 	public void setFieldCentricState(boolean state)

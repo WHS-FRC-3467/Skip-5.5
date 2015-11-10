@@ -22,12 +22,15 @@ import java.util.Vector;
 
 
 
+
+
 import org.usfirst.frc3467.commands.CommandBase;
 import org.usfirst.frc3467.commands.autonomous.AutoCanGrabbersDrive;
 import org.usfirst.frc3467.commands.autonomous.AutoCanGrabbersDriveAndRetract;
 import org.usfirst.frc3467.commands.autonomous.AutoCanGrabbersStayPut;
 import org.usfirst.frc3467.commands.autonomous.AutoKanKicker;
 import org.usfirst.frc3467.commands.autonomous.AutoNon;
+import org.usfirst.frc3467.commands.autonomous.AutoPickUpRCUpright;
 import org.usfirst.frc3467.commands.autonomous.AutoTimedTank;
 import org.usfirst.frc3467.subsystems.Elevator.Elevator;
 import org.usfirst.frc3467.subsystems.Elevator.commands.elevatorDriveToFloor;
@@ -40,6 +43,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -82,24 +86,27 @@ public class Robot extends IterativeRobotCustom {
         // Initialize all subsystems
 		CommandBase.init();
 
-		if(OI.driveJoystick.getZ() > 0.08 || OI.driveJoystick.getZ() < -0.08){
+		if(OI.driveJoystick.getZ() > 0.18 || OI.driveJoystick.getZ() < -0.18){
 			SmartDashboard.putBoolean("Z Rotation Miscalibration!", true);
 			OI.mspLaunchpad.setOutput(5, true);
 			zaxisgood = false;
+			new WaitCommand(5);
 			throw new NullPointerException();
 
 		}
-		if(OI.driveJoystick.getY() > 0.08 || OI.driveJoystick.getY() < -0.08){
+		if(OI.driveJoystick.getY() > 0.18 || OI.driveJoystick.getY() < -0.18){
 			SmartDashboard.putBoolean("Y Axis Miscalibration!", true);
 			OI.mspLaunchpad.setOutput(5, true);
 			yaxisgood = false;
+			new WaitCommand(5);
 			throw new NullPointerException();
 
 		}
-		if(OI.driveJoystick.getX() > 0.08 || OI.driveJoystick.getX() < -0.08){
+		if(OI.driveJoystick.getX() > 0.18 || OI.driveJoystick.getX() < -0.18){
 			SmartDashboard.putBoolean("X Axis Miscalibration!", true);
 			OI.mspLaunchpad.setOutput(5, true);
 			xaxisgood = false;
+			new WaitCommand(5);
 			throw new NullPointerException();
 		}
 		if((zaxisgood == true) && (yaxisgood == true) && (xaxisgood == true)){
@@ -118,6 +125,7 @@ public class Robot extends IterativeRobotCustom {
 		autoChooser.addObject("Can Grabber Auto - No Moving", new AutoCanGrabbersStayPut());
 		autoChooser.addObject("Can Grabber Auto - Move Right and Retract", new AutoCanGrabbersDriveAndRetract());
 		autoChooser.addObject("Kan Kicker", new AutoKanKicker());
+		autoChooser.addObject("RC Pickup Upright", new AutoPickUpRCUpright());
 		
 		SmartDashboard.putData("Auto", autoChooser);
 		SmartDashboard.putNumber("Scoring Platform Height: Default 150", 150);

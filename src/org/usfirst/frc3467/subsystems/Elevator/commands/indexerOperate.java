@@ -7,26 +7,33 @@ import org.usfirst.frc3467.commands.CommandBase;
  */
 public class indexerOperate extends CommandBase {
 
-	private Boolean cmd;
+	private int cmd;
 	
-	public indexerOperate(Boolean engageCmd) {
+	public indexerOperate(int engageMode) {
         requires(indexer);
-        cmd = engageCmd;
-    }
+        cmd = engageMode;
+        		
+	}
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if (cmd == true){
-    		if(indexer.engaged){
+    	if (cmd == 2){
+    		if(CommandBase.indexer.getEngagedStatus()){
     			indexer.engageCrushMode();
+    			System.out.println("Crush Mode");
     		}
-    		if(indexer.engaged == false){
+    		if(!CommandBase.indexer.getEngagedStatus()){
     			indexer.engageIndexer();
+    			System.out.println("Engaged");
     		}
-    	}
-    		
-    	else{
+    		}
+    		if(cmd == 1){
+    			indexer.engageIndexer();
+    			System.out.println("Engaged");
+    		}
+    		if(cmd == 0){
     		indexer.disengageIndexer();    
+    		System.out.println("Disengaged");
     	}
     }
 

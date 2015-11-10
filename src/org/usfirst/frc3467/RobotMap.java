@@ -29,7 +29,8 @@ public class RobotMap {
 	public static final int indexerEngage = 1;
 	public static final int cangrabberOut = 2;
 	public static final int cangrabberIn = 3;
-	public static final int indexerClamp = 4;
+	public static final int indexerClamp1 = 4;
+	public static final int indexerClamp2 = 5;
 	
 	// Analog
 	public static final int dbGyro = 1; // ////////// Gyro

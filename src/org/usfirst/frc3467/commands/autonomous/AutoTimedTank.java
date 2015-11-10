@@ -13,7 +13,7 @@ public class AutoTimedTank extends CommandGroup {
 	public AutoTimedTank() {
 		
 
-		// DriveTimedTank (time (sec), speed (-1 -> +1))
+		//DriveTimedTank (time (sec), speed (-1 -> +1))
 		addSequential(new DriveTimedTank(.5, 0.2));
 		addSequential(new DriveTimedTank(.5, 0.5));
 		addSequential(new DriveTimedTank(3.6, 0.6));

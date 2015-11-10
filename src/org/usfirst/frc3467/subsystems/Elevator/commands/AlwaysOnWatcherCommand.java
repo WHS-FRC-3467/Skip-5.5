@@ -12,6 +12,7 @@ public class AlwaysOnWatcherCommand extends Command {
     public AlwaysOnWatcherCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(CommandBase.elevatorWatcher);
     }
 
     // Called just before this Command runs the first time

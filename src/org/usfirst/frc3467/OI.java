@@ -161,10 +161,10 @@ public class OI {
 			.whileHeld(new conveyorDrive(Conveyor.kEjectFast - 0.1));
 		
 		new JoystickButton(operatorGamepad, Gamepad.startButton)
-			.whenPressed(new indexerOperate(true));
+			.whenPressed(new indexerOperate(2));
 	
 		new JoystickButton(operatorGamepad, Gamepad.backButton)
-			.whenPressed(new indexerOperate(false));
+			.whenPressed(new indexerOperate(0));
  
 		new JoystickButton(driveJoystick, 3)
 			.whileHeld(new elevatorDriveManual(0.35));
@@ -205,8 +205,6 @@ public class OI {
 		SmartDashboard.putData("Elevator Calibrate", new elevatorCalibrate());
 		SmartDashboard.putData("Update Elevator PID", new elevatorUpdatePIDF());
 		SmartDashboard.putData("Update IMU Display", new imuUpdateDisplay());
-		SmartDashboard.putData("Indexer Engage", new indexerOperate(true));
-		SmartDashboard.putData("Indexer Retract", new indexerOperate(false));
 		SmartDashboard.putData("Drop Stack (no tote on conveyor)", new elevatorCGDropStack());
 		SmartDashboard.putData("IndexUprightRC", new elevatorCGIndexSidewaysRC());
 		SmartDashboard.putData("IndexSidewaysRC", new elevatorCGIndexUprightRC());

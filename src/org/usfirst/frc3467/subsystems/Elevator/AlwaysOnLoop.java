@@ -20,12 +20,12 @@ public class AlwaysOnLoop extends Subsystem {
     }
     
     public void thisVoidIsAlwaysRunning(){
-    	if((CommandBase.elevator.getPosition() > 5500) && (CommandBase.elevator.getPosition() < 6700)){
+    	if((CommandBase.elevator.getPosition() > 6650) && (CommandBase.elevator.getPosition() < 8000)){
     		CommandBase.indexer.disengageIndexer();
-    		CommandBase.indexer.disabled = true;
+    		CommandBase.indexer.disable(true);
     	}
     	else{
-    		CommandBase.indexer.disabled = false;
+    		CommandBase.indexer.disable(false);
     	}
     }
 }

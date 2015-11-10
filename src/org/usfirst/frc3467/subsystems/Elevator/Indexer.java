@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Indexer extends Subsystem {
 
 	private DoubleSolenoid sIndexer;
-	private Solenoid sClampPressure;
-	public boolean engaged;
-	public boolean disabled; //Boolean for disabling the usage of the indexer while the elevator is in the 
+	private DoubleSolenoid sClampPressure;
+	public boolean engaged = false;
+	public boolean disabled = false; //Boolean for disabling the usage of the indexer while the elevator is in the 
 							  //specified range to protect the centering mechanism.
 	private static Indexer instance;
 	private Compressor mainCompressor;
@@ -26,9 +26,9 @@ public class Indexer extends Subsystem {
 
 		instance = this;		
 		sIndexer = new DoubleSolenoid(RobotMap.indexerEngage, RobotMap.indexerDisengage);
-		sClampPressure = new Solenoid(RobotMap.indexerClamp);
+		sClampPressure = new DoubleSolenoid(RobotMap.indexerClamp1, RobotMap.indexerClamp2);
 		sIndexer.set(DoubleSolenoid.Value.kReverse);
-		sClampPressure.set(false);
+		sClampPressure.set(DoubleSolenoid.Value.kReverse);
 		engaged = false;
 		mainCompressor = new Compressor(0);
 		disabled = false;
@@ -37,9 +37,9 @@ public class Indexer extends Subsystem {
 	
 	public void disengageIndexer() {
 		
-		if ((engaged == true) && (disabled == false)) {
+		if ((disabled == false)) {
 			sIndexer.set(DoubleSolenoid.Value.kReverse);
-			sClampPressure.set(false);
+			sClampPressure.set(DoubleSolenoid.Value.kReverse);
 			engaged = false;
 			clamped = false;
 		}
@@ -47,18 +47,18 @@ public class Indexer extends Subsystem {
 	
 	public void engageIndexer() {
 
-		if ((engaged == false) && (disabled == false)) {
+		if ((disabled == false)) {
 			sIndexer.set(DoubleSolenoid.Value.kForward);
-			sClampPressure.set(false);
+			sClampPressure.set(DoubleSolenoid.Value.kReverse);
 			engaged = true;
 			clamped = false;
 		}
 	}
 
 	public void engageCrushMode(){
-		if((clamped = false) && (engaged == true) && (disabled == false)){
+		if((disabled == false)){
 			sIndexer.set(DoubleSolenoid.Value.kForward);
-			sClampPressure.set(true);
+			sClampPressure.set(DoubleSolenoid.Value.kForward);
 			engaged = true;
 			clamped = true;
 		}
@@ -66,5 +66,14 @@ public class Indexer extends Subsystem {
 	protected void initDefaultCommand() {
 		
 	}
+	public boolean getEngagedStatus(){
+		return engaged;
+		
+	}
+	public void disable(boolean disabledlocal){
+		disabled = disabledlocal;
+		
+	}
+	
 	
 }

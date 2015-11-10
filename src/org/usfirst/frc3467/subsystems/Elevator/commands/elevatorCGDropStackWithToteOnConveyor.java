@@ -20,12 +20,12 @@ public class elevatorCGDropStackWithToteOnConveyor extends CommandGroup {
     	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.5, Elevator.kLevelDropStackWithToteOnConveyor - 50));
     	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor));
     	// Unengage Indexer
-    	addSequential(new indexerOperate(false));
+    	addSequential(new indexerOperate(0));
     	
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
     	addSequential(new elevatorToPosition(Elevator.kLevelDropStackWithToteOnConveyor - 160));
-    	addSequential(new elevatorDriveToPosition(Elevator.kDown_FixedPlus, Elevator.kLevelZero + 250));
-    	addSequential(new elevatorToPosition(Elevator.kLevelZero));
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_FixedPlus, Elevator.kLevelZero + 550));
+    	addSequential(new elevatorToPosition(Elevator.kLevelZero - 50));
     	addSequential(new conveyorDrive(0), 0.05);
     }
 }
