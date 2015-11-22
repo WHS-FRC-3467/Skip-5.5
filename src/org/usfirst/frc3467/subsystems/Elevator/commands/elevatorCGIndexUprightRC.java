@@ -20,7 +20,7 @@ public class elevatorCGIndexUprightRC extends CommandGroup {
     	addSequential(new elevatorToPosition(Elevator.kLevelIndexUprightRC, 2.0));
 
     	// Make sure Indexer is  engaged
-    	addSequential(new indexerOperate(true));
+    	addSequential(new indexerOperate(1));
     	
     	// Wait half a sec
     	addSequential(new WaitCommand(0.5));

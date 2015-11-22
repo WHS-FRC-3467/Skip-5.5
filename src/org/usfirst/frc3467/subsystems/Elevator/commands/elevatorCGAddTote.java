@@ -17,18 +17,18 @@ public class elevatorCGAddTote extends CommandGroup {
         
 
     	// Make sure Indexer is  engaged
-    	addSequential(new indexerOperate(true));
+    	addSequential(new indexerOperate(1));
     	
 
     	// Lift tote above Indexer (and drive conveyor in at same time)
     	addParallel(new conveyorDrive(Conveyor.kIntakeHold));
  
-    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.7, Elevator.kLevelIndexTote - 1450));
-    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.55, Elevator.kLevelIndexTote));
-    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote));
+    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.7, Elevator.kLevelIndexTote - 3150));
+    	addSequential(new elevatorDriveToPosition(Elevator.kUp_FixedPlus + 0.5, Elevator.kLevelIndexTote - 150));
+    	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote - 150));
     	
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
-    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.2, Elevator.kLevelIndexTote - 800));
+    	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.2, Elevator.kLevelIndexTote - 1500));
     	addSequential(new elevatorDriveToPosition(Elevator.kDown_Fixed - 0.8, Elevator.kLevelZero + 500));
     	addSequential(new elevatorToPosition(Elevator.kLevelZero));
 

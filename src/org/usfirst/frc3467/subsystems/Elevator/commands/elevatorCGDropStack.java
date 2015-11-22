@@ -17,7 +17,7 @@ public class elevatorCGDropStack extends CommandGroup {
     	// Lift stack above Indexer
     	addParallel(new conveyorDrive(Conveyor.kIntakeHold));
     	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote));
-    	addSequential(new indexerOperate(false));
+    	addSequential(new indexerOperate(0));
     	// Lower conveyor back to "resting position" in two steps: manual@fixed speed, then PID to hold
     	addSequential(new elevatorToPosition(Elevator.kLevelIndexTote - 160), 0.4);
     	addSequential(new elevatorToPosition(Elevator.kLevelZero + 160));

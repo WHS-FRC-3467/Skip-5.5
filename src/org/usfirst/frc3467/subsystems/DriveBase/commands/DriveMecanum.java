@@ -38,11 +38,8 @@ public class DriveMecanum extends CommandBase {
 		rotation = m_lastRot = adjustStick(rotation, m_lastRot);
 		
 		SmartDashboard.putNumber(   "IMU_Yaw", imu.getYaw());
-		
-		if (OI.driveJoystick.getTrigger()  )
-			drivebase.driveMecanum(x, y, rotation/1.2, 0);
-		else
-			drivebase.driveMecanum(x, y, rotation/1.2, imu.getYaw());
+
+			drivebase.driveMecanum(x*1.15, y, rotation/1.35, 0);
 	
 		
 	}

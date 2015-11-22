@@ -10,7 +10,7 @@ public class AutoNon extends CommandGroup {
 	
 	public AutoNon() {
 		addSequential(new elevatorDriveToFloor());
-		addSequential(new elevatorToPosition(Elevator.kLevelOne + 700)); // for can knockover hight
+		addSequential(new elevatorToPosition(Elevator.kLevelHumanFeed)); // for can knockover hight
 	}
 
 }

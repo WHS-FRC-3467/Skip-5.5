@@ -17,7 +17,7 @@ public class elevatorCGAddToteSlowHigh extends CommandGroup {
         
 
     	// Make sure Indexer is  engaged
-    	addSequential(new indexerOperate(true));
+    	addSequential(new indexerOperate(1));
     	
 
     	// Lift tote above Indexer (and drive conveyor in at same time)
